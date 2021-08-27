@@ -6,3 +6,7 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       database: ${MONGO_DB}
+tmdb:
+  api-key: ${API_KEY}
+  api-url: https://api.themoviedb.org/3
+  images-url: https://image.tmdb.org/t/p/original

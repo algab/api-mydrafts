@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.mydrafts</groupId>
-	<artifactId>ApiMyDrafts</artifactId>
+	<artifactId>api-mydrafts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api-mydrafts</name>
 	<description>API MyDrafts</description>
