@@ -3,9 +3,7 @@ spring:
     name: api-mydrafts
   data:
     mongodb:
-      host: ${MONGO_HOST}
-      port: ${MONGO_PORT}
-      database: ${MONGO_DB}
+      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.t9nms.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority
 tmdb:
   api-key: ${API_KEY}
   api-url: https://api.themoviedb.org/3
