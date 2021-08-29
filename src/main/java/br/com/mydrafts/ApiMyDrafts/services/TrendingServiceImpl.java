@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -27,16 +29,31 @@ public class TrendingServiceImpl implements TrendingService {
 
     @Override
     public Page<TMDBResultDTO> trendingTMDB(Pageable page) {
-        Integer init = Long.valueOf(page.getOffset()).intValue();
-        Integer end = init + page.getPageSize();
-        if (end > 20) {
-            Integer rest = end - 20;
-            end -= rest;
-        }
-        TMDBResponseDTO movies = this.client.trendingMovie(apiKey, language);
-        TMDBResponseDTO tv = this.client.trendingTv(apiKey, language);
-        List<TMDBResultDTO> content = movies.getResults().subList(0, 10);
+        List<TMDBResultDTO> content = new ArrayList<>();
+        this.trendingMovie(content);
+        this.trendingTV(content);
+        Collections.shuffle(content);
+        Integer initSize = Long.valueOf(page.getOffset()).intValue();
+        Integer endSize = endPageSize(initSize, page.getPageSize());
+        return new PageImpl<>(content.subList(initSize, endSize), page, 20);
+    }
+
+    private void trendingMovie(List<TMDBResultDTO> content) {
+        TMDBResponseDTO movies = this.client.trendingMovie(this.apiKey, this.language);
+        content.addAll(movies.getResults().subList(0, 10));
+    }
+
+    private void trendingTV(List<TMDBResultDTO> content) {
+        TMDBResponseDTO tv = this.client.trendingTv(this.apiKey, this.language);
         content.addAll(tv.getResults().subList(0, 10));
-        return new PageImpl<>(content.subList(init, end), page, 20);
+    }
+
+    private Integer endPageSize(Integer initSize, Integer pageSize) {
+        Integer endSize = initSize + pageSize;
+        if (endSize > 20) {
+            int rest = endSize - 20;
+            endSize -= rest;
+        }
+        return endSize;
     }
 }

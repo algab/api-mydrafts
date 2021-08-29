@@ -8,4 +8,4 @@ tmdb:
   language: pt-BR
   api-key: ${API_KEY}
   api-url: https://api.themoviedb.org/3
-  images-url: https://image.tmdb.org/t/p/original
+  imgs-url: https://image.tmdb.org/t/p/original

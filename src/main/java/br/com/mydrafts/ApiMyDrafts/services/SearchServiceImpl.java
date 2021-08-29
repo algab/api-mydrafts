@@ -28,27 +28,40 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<TMDBResultDTO> searchTMDB(Pageable page, String name) {
-        Integer init = Long.valueOf(page.getOffset()).intValue();
-        Integer end = init + page.getPageSize();
-        TMDBResponseDTO movies = this.client.searchMovie(apiKey, language, name);
-        TMDBResponseDTO tv = this.client.searchTv(apiKey, language, name);
         List<TMDBResultDTO> content = new ArrayList<>();
+        this.searchMovie(content, name);
+        this.searchTV(content, name);
+        Integer initSize = Long.valueOf(page.getOffset()).intValue();
+        Integer endSize = endPageSize(initSize, page.getPageSize(), content.size());
+        return new PageImpl<>(content.subList(initSize, endSize), page, content.size());
+    }
+
+    private void searchMovie(List<TMDBResultDTO> content, String name) {
+        TMDBResponseDTO movies = this.client.searchMovie(this.apiKey, this.language, name);
         if (movies.getResults().size() > 10) {
             content.addAll(movies.getResults().subList(0, 10));
         } else {
             content.addAll(movies.getResults().subList(0, movies.getResults().size()));
         }
+    }
+
+    private void searchTV(List<TMDBResultDTO> content, String name) {
+        TMDBResponseDTO tv = this.client.searchTv(this.apiKey, this.language, name);
         if (tv.getResults().size() > 10) {
             content.addAll(tv.getResults().subList(0, 10));
         } else {
             content.addAll(tv.getResults().subList(0, tv.getResults().size()));
         }
-        if (end > 20) {
-            Integer rest = end - 20;
-            end -= rest;
+    }
+
+    private Integer endPageSize(Integer initSize, Integer pageSize, Integer total) {
+        Integer endSize = initSize + pageSize;
+        if (endSize > 20) {
+            Integer rest = endSize - 20;
+            endSize -= rest;
         } else {
-            end = content.size();
+            endSize = total;
         }
-        return new PageImpl<>(content.subList(init, end), page, content.size());
+        return endSize;
     }
 }

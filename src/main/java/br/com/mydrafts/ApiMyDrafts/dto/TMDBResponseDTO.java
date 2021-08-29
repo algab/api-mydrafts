@@ -6,5 +6,7 @@ import java.util.List;
 
 @Data
 public class TMDBResponseDTO {
+
     private List<TMDBResultDTO> results;
+
 }
