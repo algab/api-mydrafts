@@ -2,16 +2,9 @@ package br.com.mydrafts.ApiMyDrafts.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class TMDBResponseDTO {
-    private Integer id;
-    private String title;
-    private String titleOriginal;
-    private String overview;
-    private String language;
-    private String posterPath;
-    private String mediaType;
-    private LocalDate dateRelease;
+    private List<TMDBResultDTO> results;
 }

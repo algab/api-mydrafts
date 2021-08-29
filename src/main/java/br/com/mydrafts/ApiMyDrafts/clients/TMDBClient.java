@@ -1,9 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.clients;
 
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseTvDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,20 +10,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name="TMDB", url="${tmdb.api-url}")
 public interface TMDBClient {
     @GetMapping(value="/trending/movie/day", produces= MediaType.APPLICATION_JSON_VALUE)
-    Page<TMDBResponseDTO> trendingMovie(@RequestParam("api_key") String apiKey, @RequestParam("language") String language);
+    TMDBResponseDTO trendingMovie(@RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
     @GetMapping(value="/trending/tv/day", produces= MediaType.APPLICATION_JSON_VALUE)
-    Page<TMDBResponseTvDTO> trendingTv(@RequestParam("api_key") String apiKey, @RequestParam("language") String language);
+    TMDBResponseDTO trendingTv(@RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
     @GetMapping(value="/search/movie", produces= MediaType.APPLICATION_JSON_VALUE)
-    Page<TMDBResponseDTO> searchMovie(@RequestParam("api_key") String apiKey,
-                                      @RequestParam("language") String language,
-                                      @RequestParam("query") String query);
+    TMDBResponseDTO searchMovie(
+            @RequestParam("api_key") String apiKey,
+            @RequestParam("language") String language,
+            @RequestParam("query") String query
+    );
 
     @GetMapping(value="/search/tv", produces= MediaType.APPLICATION_JSON_VALUE)
-    Page<TMDBResponseTvDTO> searchTv(@RequestParam("api_key") String apiKey,
-                                   @RequestParam("language") String language,
-                                   @RequestParam("query") String query);
+    TMDBResponseDTO searchTv(
+            @RequestParam("api_key") String apiKey,
+            @RequestParam("language") String language,
+            @RequestParam("query") String query
+    );
 
     @GetMapping(value="/movie/${id}", produces= MediaType.APPLICATION_JSON_VALUE)
     void movie(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
