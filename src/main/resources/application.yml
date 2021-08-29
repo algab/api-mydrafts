@@ -5,6 +5,7 @@ spring:
     mongodb:
       uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.t9nms.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority
 tmdb:
+  language: pt-BR
   api-key: ${API_KEY}
   api-url: https://api.themoviedb.org/3
   images-url: https://image.tmdb.org/t/p/original
