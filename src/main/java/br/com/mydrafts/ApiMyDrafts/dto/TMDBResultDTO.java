@@ -1,6 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import br.com.mydrafts.ApiMyDrafts.mapper.PosterMapper;
+import br.com.mydrafts.ApiMyDrafts.config.PosterSerializer;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class TMDBResultDTO {
     private String titleOriginal;
 
     @JsonAlias({"poster_path"})
-    @JsonSerialize(using = PosterMapper.class)
+    @JsonSerialize(using = PosterSerializer.class)
     private String poster;
 
     @JsonAlias({"media_type"})

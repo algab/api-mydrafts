@@ -1,6 +1,5 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.services.TrendingService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package br.com.mydrafts.ApiMyDrafts.mapper;
+package br.com.mydrafts.ApiMyDrafts.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
-public class PosterMapper extends JsonSerializer<String> {
+public class PosterSerializer extends JsonSerializer<String> {
     @Value("${tmdb.imgs-url}")
     private String imgsUrl;
 
