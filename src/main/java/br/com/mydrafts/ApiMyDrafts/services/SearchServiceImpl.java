@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,6 +39,10 @@ public class SearchServiceImpl implements SearchService {
 
     private void searchMovie(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO movies = this.client.searchMovie(this.apiKey, this.language, name);
+        movies.getResults().stream().map(result -> {
+            result.setMedia("movie");
+            return result;
+        }).collect(Collectors.toList());
         if (movies.getResults().size() > 10) {
             content.addAll(movies.getResults().subList(0, 10));
         } else {
@@ -47,11 +52,16 @@ public class SearchServiceImpl implements SearchService {
 
     private void searchTV(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO tv = this.client.searchTv(this.apiKey, this.language, name);
+        tv.getResults().stream().map(result -> {
+            result.setMedia("tv");
+            return result;
+        }).collect(Collectors.toList());
         if (tv.getResults().size() > 10) {
             content.addAll(tv.getResults().subList(0, 10));
         } else {
             content.addAll(tv.getResults().subList(0, tv.getResults().size()));
         }
+
     }
 
     private Integer endPageSize(Integer initSize, Integer pageSize, Integer total) {
@@ -59,8 +69,6 @@ public class SearchServiceImpl implements SearchService {
         if (endSize > 20) {
             Integer rest = endSize - 20;
             endSize -= rest;
-        } else {
-            endSize = total;
         }
         return endSize;
     }

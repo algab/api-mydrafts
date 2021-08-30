@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +32,7 @@ public class TrendingServiceImpl implements TrendingService {
         List<TMDBResultDTO> content = new ArrayList<>();
         this.trendingMovie(content);
         this.trendingTV(content);
-        Collections.shuffle(content);
+        content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
         Integer initSize = Long.valueOf(page.getOffset()).intValue();
         Integer endSize = endPageSize(initSize, page.getPageSize());
         return new PageImpl<>(content.subList(initSize, endSize), page, 20);
