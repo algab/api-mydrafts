@@ -1,5 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,12 @@ public class SearchController {
     private SearchService service;
 
     @GetMapping
-    public ResponseEntity<Page<TMDBResultDTO>> searchTMDB(@PageableDefault Pageable page, @RequestParam("name") String name) {
-        Page<TMDBResultDTO> response = this.service.searchTMDB(page, name);
+    public ResponseEntity<Page<TMDBResultDTO>> searchTMDB(
+            @PageableDefault Pageable page,
+            @RequestParam(value = "media", required = false) Media media,
+            @RequestParam("name") String name
+    ) {
+        Page<TMDBResultDTO> response = this.service.searchTMDB(page, media, name);
         return ResponseEntity.ok(response);
     }
 }

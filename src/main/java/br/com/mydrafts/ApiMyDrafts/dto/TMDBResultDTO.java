@@ -2,8 +2,8 @@ package br.com.mydrafts.ApiMyDrafts.dto;
 
 import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
 import br.com.mydrafts.ApiMyDrafts.config.PosterSerializer;
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class TMDBResultDTO {
     private String poster;
 
     @JsonAlias({"media_type"})
-    private String media;
+    private Media media;
 
     @JsonAlias({"release_date", "first_air_date"})
     @JsonSerialize(using = LocalDateSerializer.class)

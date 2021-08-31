@@ -1,6 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBClient;
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +30,14 @@ public class SearchServiceImpl implements SearchService {
     private TMDBClient client;
 
     @Override
-    public Page<TMDBResultDTO> searchTMDB(Pageable page, String name) {
+    public Page<TMDBResultDTO> searchTMDB(Pageable page, Media media, String name) {
         List<TMDBResultDTO> content = new ArrayList<>();
-        this.searchMovie(content, name);
-        this.searchTV(content, name);
+        if (media == Media.tv) {
+            this.searchTV(content, name);
+        } else {
+            this.searchMovie(content, name);
+        }
+        content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
         Integer initSize = Long.valueOf(page.getOffset()).intValue();
         Integer endSize = endPageSize(initSize, page.getPageSize(), content.size());
         return new PageImpl<>(content.subList(initSize, endSize), page, content.size());
@@ -40,35 +46,28 @@ public class SearchServiceImpl implements SearchService {
     private void searchMovie(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO movies = this.client.searchMovie(this.apiKey, this.language, name);
         movies.getResults().stream().map(result -> {
-            result.setMedia("movie");
+            result.setMedia(Media.movie);
             return result;
         }).collect(Collectors.toList());
-        if (movies.getResults().size() > 10) {
-            content.addAll(movies.getResults().subList(0, 10));
-        } else {
-            content.addAll(movies.getResults().subList(0, movies.getResults().size()));
-        }
+        content.addAll(movies.getResults());
     }
 
     private void searchTV(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO tv = this.client.searchTv(this.apiKey, this.language, name);
         tv.getResults().stream().map(result -> {
-            result.setMedia("tv");
+            result.setMedia(Media.tv);
             return result;
         }).collect(Collectors.toList());
-        if (tv.getResults().size() > 10) {
-            content.addAll(tv.getResults().subList(0, 10));
-        } else {
-            content.addAll(tv.getResults().subList(0, tv.getResults().size()));
-        }
-
+        content.addAll(tv.getResults());
     }
 
     private Integer endPageSize(Integer initSize, Integer pageSize, Integer total) {
         Integer endSize = initSize + pageSize;
-        if (endSize > 20) {
-            Integer rest = endSize - 20;
+        if (endSize > total) {
+            Integer rest = endSize - total;
             endSize -= rest;
+        } else {
+            endSize = total;
         }
         return endSize;
     }
