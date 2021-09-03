@@ -1,9 +1,12 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBMovieDTO;
+import br.com.mydrafts.ApiMyDrafts.dto.TMDBMovieResponseDTO;
+import br.com.mydrafts.ApiMyDrafts.dto.TMDBTvResponseDTO;
 
 public interface MediaService {
 
-    TMDBMovieDTO getMovie(Integer id);
+    TMDBMovieResponseDTO getMovie(Integer id);
+
+    TMDBTvResponseDTO getTV(Integer id);
 
 }

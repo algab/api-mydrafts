@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
-public class PosterSerializer extends JsonSerializer<String> {
+public class ImageSerializer extends JsonSerializer<String> {
     @Value("${tmdb.imgs-url}")
     private String imgsUrl;
 

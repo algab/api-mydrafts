@@ -1,7 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
 import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
-import br.com.mydrafts.ApiMyDrafts.config.PosterSerializer;
+import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +22,7 @@ public class TMDBResultDTO {
     private String titleOriginal;
 
     @JsonAlias({"poster_path"})
-    @JsonSerialize(using = PosterSerializer.class)
+    @JsonSerialize(using = ImageSerializer.class)
     private String poster;
 
     @JsonAlias({"media_type"})

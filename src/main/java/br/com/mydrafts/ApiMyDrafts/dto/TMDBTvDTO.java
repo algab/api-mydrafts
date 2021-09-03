@@ -1,7 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
 import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
+import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
@@ -10,14 +10,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class TMDBMovieDTO {
+public class TMDBTvDTO {
 
     private Integer id;
 
     @JsonAlias({"name"})
     private String title;
 
-    @JsonAlias({"original_title"})
+    @JsonAlias({"original_name"})
     private String titleOriginal;
 
     private String tagline;
@@ -32,7 +32,7 @@ public class TMDBMovieDTO {
     @JsonSerialize(using = ImageSerializer.class)
     private String backdrop;
 
-    @JsonAlias({"release_date"})
+    @JsonAlias({"first_air_date"})
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateRelease;
 
@@ -43,5 +43,7 @@ public class TMDBMovieDTO {
 
     @JsonAlias({"production_companies"})
     private List<TMDBCompaniesDTO> companies;
+
+    private List<TMDBNetworkDTO> networks;
 
 }
