@@ -16,6 +16,8 @@ public class PageSerializer extends JsonSerializer<Page<?>> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeNumberField("page", page.getNumber());
         jsonGenerator.writeObjectField("content", page.getContent());
+        jsonGenerator.writeObjectField("first", page.isFirst());
+        jsonGenerator.writeObjectField("last", page.isLast());
         jsonGenerator.writeNumberField("pageSize", page.getSize());
         jsonGenerator.writeNumberField("totalPages", page.getTotalPages());
         jsonGenerator.writeNumberField("totalElements", page.getTotalElements());
