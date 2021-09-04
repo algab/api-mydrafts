@@ -3,7 +3,7 @@ spring:
     name: api-mydrafts
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.t9nms.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority
+      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority
 tmdb:
   language: pt-BR
   api-key: ${API_KEY}
