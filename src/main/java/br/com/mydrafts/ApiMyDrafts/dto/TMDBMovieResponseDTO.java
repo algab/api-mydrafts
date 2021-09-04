@@ -38,4 +38,6 @@ public class TMDBMovieResponseDTO {
 
     private List<String> companies;
 
+    private List<TMDBCrewDTO> crew;
+
 }

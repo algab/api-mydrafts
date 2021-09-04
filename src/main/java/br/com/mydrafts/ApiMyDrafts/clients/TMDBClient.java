@@ -1,5 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.clients;
 
+import br.com.mydrafts.ApiMyDrafts.dto.TMDBCreditsDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBMovieDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBTvDTO;
@@ -35,7 +36,7 @@ public interface TMDBClient {
     TMDBMovieDTO movie(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
     @GetMapping(value="/movie/{id}/credits", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-    TMDBMovieDTO movieCredits(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
+    TMDBCreditsDTO movieCredits(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
     @GetMapping(value="/tv/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     TMDBTvDTO tv(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
