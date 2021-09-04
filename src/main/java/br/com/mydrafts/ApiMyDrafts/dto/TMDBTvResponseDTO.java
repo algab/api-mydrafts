@@ -1,5 +1,8 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
+import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
+import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,13 +23,21 @@ public class TMDBTvResponseDTO {
 
     private String overview;
 
+    @JsonSerialize(using = ImageSerializer.class)
     private String poster;
 
+    @JsonSerialize(using = ImageSerializer.class)
     private String backdrop;
 
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateRelease;
 
+    @JsonSerialize(using = LocalDateSerializer.class)
+    private LocalDate lastEpisode;
+
     private String language;
+
+    private List<String> created;
 
     private List<String> genres;
 

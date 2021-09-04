@@ -34,14 +34,10 @@ public interface TMDBClient {
     @GetMapping(value="/movie/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     TMDBMovieDTO movie(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
+    @GetMapping(value="/movie/{id}/credits", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
+    TMDBMovieDTO movieCredits(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
+
     @GetMapping(value="/tv/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     TMDBTvDTO tv(@PathVariable("id") Integer id, @RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
-    @GetMapping(value="/tv/{id}/season/{season_number}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-    void tvSeason(
-            @PathVariable("id") Integer id,
-            @PathVariable("season_number") Integer number,
-            @RequestParam("api_key") String apiKey,
-            @RequestParam("language") String language
-    );
 }

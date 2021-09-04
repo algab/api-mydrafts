@@ -1,9 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
-import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -25,19 +22,22 @@ public class TMDBTvDTO {
     private String overview;
 
     @JsonAlias({"poster_path"})
-    @JsonSerialize(using = ImageSerializer.class)
     private String poster;
 
     @JsonAlias({"backdrop_path"})
-    @JsonSerialize(using = ImageSerializer.class)
     private String backdrop;
 
     @JsonAlias({"first_air_date"})
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateRelease;
+
+    @JsonAlias({"last_air_date"})
+    private LocalDate lastEpisode;
 
     @JsonAlias({"original_language"})
     private String language;
+
+    @JsonAlias({"created_by"})
+    private List<TMDBCreatedDTO> created;
 
     private List<TMDBGenresDTO> genres;
 
