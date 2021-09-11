@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: api-mydrafts
+tmdb:
+  language: pt-BR
+  api-key: d8jhokg0t41d0wyma7e87slzho5aggbj
+  api-url: https://api.themoviedb.org/3
+  imgs-url: https://image.tmdb.org/t/p/original

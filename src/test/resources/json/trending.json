@@ -1,0 +1,19 @@
+{
+  "page": 0,
+  "content": [
+    {
+      "id": 1,
+      "title": "Spider-Man Far From Home",
+      "titleOriginal": "Spider-Man Far From Home",
+      "poster": "http://test.com/spider.jpg",
+      "media": "movie",
+      "dateRelease": "04/07/2019",
+      "language": "en"
+    }
+  ],
+  "first": true,
+  "last": true,
+  "pageSize": 10,
+  "totalPages": 1,
+  "totalElements": 1
+}
