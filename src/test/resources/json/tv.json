@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "title": "The Office",
+  "titleOriginal": "The Office",
+  "tagline": "The Office",
+  "overview": "The Office",
+  "poster": "https://image.tmdb.org/t/p/original/oNZAJgcGVDxjv4PtJ2xU6MPZlHh.jpg",
+  "backdrop": "https://image.tmdb.org/t/p/original/vNpuAxGTl9HsUbHqam3E9CzqCvX.jpg",
+  "dateRelease": "24/03/2005",
+  "lastEpisode": "16/05/2013",
+  "language": "en",
+  "created": ["Greg Daniels"],
+  "genres": ["Comédia"],
+  "networks": ["NBC"],
+  "companies": []
+}

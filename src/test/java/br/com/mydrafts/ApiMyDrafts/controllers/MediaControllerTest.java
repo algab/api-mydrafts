@@ -54,6 +54,23 @@ public class MediaControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaUtil.getMovie().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     }
 
+    @Test
+    @DisplayName("Get tv show by id")
+    public void getTVSuccessful() throws Exception {
+        String json = readFileAsString("/json/tv.json");
+        when(this.service.getTV(any(Integer.class))).thenReturn(MediaUtil.getTV());
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", ENDPOINT))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(jsonPath("title").value(MediaUtil.getTV().getTitle()));
+        mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaUtil.getTV().getOverview()));
+        mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaUtil.getTV().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+        mockMvc.perform(request).andExpect(jsonPath("lastEpisode").value(MediaUtil.getTV().getLastEpisode().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+    }
+
     private static String readFileAsString(String file) throws Exception {
         return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
     }

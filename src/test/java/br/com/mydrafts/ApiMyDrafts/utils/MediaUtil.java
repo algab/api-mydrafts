@@ -26,7 +26,21 @@ public final class MediaUtil {
     }
 
     public static TMDBTvResponseDTO getTV() {
-        return TMDBTvResponseDTO.builder().build();
+        return TMDBTvResponseDTO.builder()
+                .id(1)
+                .title("The Office")
+                .titleOriginal("The Office")
+                .tagline("The Office")
+                .overview("The Office")
+                .poster("https://image.tmdb.org/t/p/original/oNZAJgcGVDxjv4PtJ2xU6MPZlHh.jpg")
+                .backdrop("https://image.tmdb.org/t/p/original/vNpuAxGTl9HsUbHqam3E9CzqCvX.jpg")
+                .dateRelease(LocalDate.of(2005, 03, 24))
+                .lastEpisode(LocalDate.of(2013, 05, 16))
+                .language("en")
+                .created(Arrays.asList("Greg Daniels"))
+                .genres(Arrays.asList("Comédia"))
+                .networks(Arrays.asList("NBC"))
+                .build();
     }
 
     public static TMDBCrewDTO crew() {
