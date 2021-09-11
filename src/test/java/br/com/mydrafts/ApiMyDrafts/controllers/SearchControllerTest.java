@@ -3,7 +3,7 @@ package br.com.mydrafts.ApiMyDrafts.controllers;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.services.SearchService;
-import br.com.mydrafts.ApiMyDrafts.utils.TrendingUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.SearchUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,11 +46,11 @@ public class SearchControllerTest {
     @Test
     @DisplayName("Search movie")
     public void searchMovieTMDB() throws Exception {
-        String json = readFileAsString("/json/trending.json");
-        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "spider")).thenReturn(searchMovie());
+        String json = readFileAsString("/json/searchMovie.json");
+        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(ENDPOINT)
-                .param("name", "spider")
+                .param("name", "shang")
                 .param("media", "movie")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -64,11 +64,11 @@ public class SearchControllerTest {
     @Test
     @DisplayName("Search tv show")
     public void searchTVTMDB() throws Exception {
-        String json = readFileAsString("/json/trending.json");
-        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "spider")).thenReturn(searchMovie());
+        String json = readFileAsString("/json/searchTV.json");
+        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(ENDPOINT)
-                .param("name", "spider")
+                .param("name", "what")
                 .param("media", "tv")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -81,7 +81,13 @@ public class SearchControllerTest {
 
     private Page<TMDBResultDTO> searchMovie() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(TrendingUtil.trending());
+        List<TMDBResultDTO> contents = Arrays.asList(SearchUtil.searchMovie());
+        return new PageImpl<>(contents, page, 1);
+    }
+
+    private Page<TMDBResultDTO> searchTV() {
+        PageRequest page = PageRequest.of(0, 10);
+        List<TMDBResultDTO> contents = Arrays.asList(SearchUtil.searchTV());
         return new PageImpl<>(contents, page, 1);
     }
 

@@ -1,0 +1,19 @@
+{
+  "page": 0,
+  "content": [
+    {
+      "id": 91363,
+      "title": "What If...?",
+      "titleOriginal": "What If...?",
+      "poster": "https://image.tmdb.org/t/p/original/e7n55C4027aRPHNmjE8XIk8nKvZ.jpg",
+      "media": "tv",
+      "dateRelease": "11/08/2021",
+      "language": "en"
+    }
+  ],
+  "first": true,
+  "last": true,
+  "pageSize": 10,
+  "totalPages": 1,
+  "totalElements": 1
+}
