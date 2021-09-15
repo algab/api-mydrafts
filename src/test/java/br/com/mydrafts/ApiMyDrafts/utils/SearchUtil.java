@@ -1,9 +1,11 @@
 package br.com.mydrafts.ApiMyDrafts.utils;
 
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
+import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public final class SearchUtil {
     public static TMDBResultDTO searchMovie() {
@@ -29,6 +31,18 @@ public final class SearchUtil {
                 .dateRelease(LocalDate.of(2021, 8, 11))
                 .language("en")
                 .popularity(100L)
+                .build();
+    }
+
+    public static TMDBResponseDTO responseSearchMovie() {
+        return TMDBResponseDTO.builder()
+                .results(Arrays.asList(SearchUtil.searchMovie()))
+                .build();
+    }
+
+    public static TMDBResponseDTO responseSearchTV() {
+        return TMDBResponseDTO.builder()
+                .results(Arrays.asList(SearchUtil.searchTV()))
                 .build();
     }
 }

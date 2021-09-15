@@ -1,12 +1,14 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@Builder
 public class TMDBTvDTO {
 
     private Integer id;
