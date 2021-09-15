@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<model-mapper.version>2.4.2</model-mapper.version>
+		<jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
 	</properties>
 
@@ -87,6 +88,25 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
