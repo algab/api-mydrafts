@@ -46,11 +46,22 @@ public class SearchServiceTest {
     public void searchTV() {
         when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
 
-        Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 40), Media.tv, "What");
+        Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.tv, "What");
 
         assertThat(page.getTotalPages()).isEqualTo(1);
         assertThat(page.getTotalElements()).isEqualTo(1L);
         assertThat(page.getContent()).isNotEmpty();
         assertThat(page.getContent().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Search content empty")
+    public void searchEmpty() {
+        when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
+
+        Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(5, 20), Media.tv, "What");
+
+        assertThat(page.getContent()).isEmpty();
+        assertThat(page.getNumber()).isEqualTo(5);
     }
 }

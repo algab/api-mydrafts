@@ -19,7 +19,7 @@ public final class MediaUtil {
                 .language("en")
                 .genres(Arrays.asList("Ação"))
                 .companies(Arrays.asList("Warner Bros. Pictures"))
-                .crew(Arrays.asList(crew()))
+                .crew(Arrays.asList(MediaUtil.crewDirector()))
                 .build();
     }
 
@@ -79,16 +79,46 @@ public final class MediaUtil {
     public static TMDBCreditsDTO credits() {
         return TMDBCreditsDTO.builder()
                 .id(1)
-                .crew(Arrays.asList(MediaUtil.crew()))
+                .crew(Arrays.asList(MediaUtil.crewDirector(), MediaUtil.crewActor(), MediaUtil.crewWriter(), MediaUtil.crewExecutiveProducer()))
                 .build();
     }
 
-    public static TMDBCrewDTO crew() {
+    public static TMDBCrewDTO crewDirector() {
         return TMDBCrewDTO.builder()
                 .id(1)
                 .gender(2)
                 .name("James Gunn")
                 .job("Director")
+                .photo("https://image.tmdb.org/t/p/original/nHr6yzPF15jQz5eBke1SDNWectu.jpg")
+                .build();
+    }
+
+    public static TMDBCrewDTO crewActor() {
+        return TMDBCrewDTO.builder()
+                .id(2)
+                .gender(2)
+                .name("James Gunn")
+                .job("Actor")
+                .photo("https://image.tmdb.org/t/p/original/nHr6yzPF15jQz5eBke1SDNWectu.jpg")
+                .build();
+    }
+
+    public static TMDBCrewDTO crewWriter() {
+        return TMDBCrewDTO.builder()
+                .id(2)
+                .gender(2)
+                .name("James Gunn")
+                .job("Writer")
+                .photo("https://image.tmdb.org/t/p/original/nHr6yzPF15jQz5eBke1SDNWectu.jpg")
+                .build();
+    }
+
+    public static TMDBCrewDTO crewExecutiveProducer() {
+        return TMDBCrewDTO.builder()
+                .id(2)
+                .gender(2)
+                .name("James Gunn")
+                .job("Executive Producer")
                 .photo("https://image.tmdb.org/t/p/original/nHr6yzPF15jQz5eBke1SDNWectu.jpg")
                 .build();
     }

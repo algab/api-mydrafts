@@ -10,4 +10,9 @@ class MyDraftsApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	public void main() {
+		MyDraftsApplication.main(new String[] {});
+	}
+
 }
