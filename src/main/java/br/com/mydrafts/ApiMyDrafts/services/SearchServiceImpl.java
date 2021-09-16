@@ -4,11 +4,11 @@ import br.com.mydrafts.ApiMyDrafts.clients.TMDBClient;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.ApiMyDrafts.utils.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +38,7 @@ public class SearchServiceImpl implements SearchService {
             this.searchMovie(content, name);
         }
         content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
-        Integer initSize = Long.valueOf(page.getOffset()).intValue();
-        Integer endSize = endPageSize(initSize, page.getPageSize(), content.size());
-        return new PageImpl<>(content.subList(initSize, endSize), page, content.size());
+        return Pagination.applyPage(content, page);
     }
 
     private void searchMovie(List<TMDBResultDTO> content, String name) {
@@ -59,16 +57,5 @@ public class SearchServiceImpl implements SearchService {
             return result;
         }).collect(Collectors.toList());
         content.addAll(tv.getResults());
-    }
-
-    private Integer endPageSize(Integer initSize, Integer pageSize, Integer total) {
-        Integer endSize = initSize + pageSize;
-        if (endSize > total) {
-            Integer rest = endSize - total;
-            endSize -= rest;
-        } else {
-            endSize = total;
-        }
-        return endSize;
     }
 }

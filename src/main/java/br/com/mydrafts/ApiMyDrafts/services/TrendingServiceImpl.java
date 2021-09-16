@@ -3,11 +3,11 @@ package br.com.mydrafts.ApiMyDrafts.services;
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBClient;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.ApiMyDrafts.utils.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +33,7 @@ public class TrendingServiceImpl implements TrendingService {
         this.trendingMovie(content);
         this.trendingTV(content);
         content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
-        Integer initSize = Long.valueOf(page.getOffset()).intValue();
-        Integer endSize = endPageSize(initSize, page.getPageSize());
-        return new PageImpl<>(content.subList(initSize, endSize), page, 20);
+        return Pagination.applyPage(content, page);
     }
 
     private void trendingMovie(List<TMDBResultDTO> content) {
@@ -46,14 +44,5 @@ public class TrendingServiceImpl implements TrendingService {
     private void trendingTV(List<TMDBResultDTO> content) {
         TMDBResponseDTO tv = this.client.trendingTv(this.apiKey, this.language);
         content.addAll(tv.getResults().subList(0, 10));
-    }
-
-    private Integer endPageSize(Integer initSize, Integer pageSize) {
-        Integer endSize = initSize + pageSize;
-        if (endSize > 20) {
-            int rest = endSize - 20;
-            endSize -= rest;
-        }
-        return endSize;
     }
 }
