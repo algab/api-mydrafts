@@ -95,9 +95,9 @@ public final class MediaUtil {
 
     public static TMDBCrewDTO crewActor() {
         return TMDBCrewDTO.builder()
-                .id(2)
-                .gender(2)
-                .name("James Gunn")
+                .id(1)
+                .gender(1)
+                .name("Margot Robbie")
                 .job("Actor")
                 .photo("https://image.tmdb.org/t/p/original/nHr6yzPF15jQz5eBke1SDNWectu.jpg")
                 .build();
