@@ -17,7 +17,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<model-mapper.version>2.4.2</model-mapper.version>
-		<jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
+		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
 	</properties>
 
