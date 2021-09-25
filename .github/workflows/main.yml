@@ -1,0 +1,22 @@
+name: API MyDrafts
+on: ["push"]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.2
+        with:
+          maven-version: 3.8.2
+      - run: mvn clean install
+      - run: mvn clean test jacoco:report
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./target/site/jacoco/jacoco.xml
