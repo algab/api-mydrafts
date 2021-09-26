@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 @Getter
 public class UserFormDTO {
 
+    @Size(min = 6, message = "name needs at least 6 characters")
     @NotEmpty(message = "name is required")
     private String name;
 
@@ -20,8 +21,8 @@ public class UserFormDTO {
     @NotEmpty(message = "email is required")
     private String email;
 
-    @NotEmpty(message = "password is required")
     @Size(min = 6, message = "password needs at least 6 characters")
+    @NotEmpty(message = "password is required")
     private String password;
 
     @NotNull(message = "gender is required")
