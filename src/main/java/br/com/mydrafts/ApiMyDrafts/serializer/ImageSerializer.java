@@ -1,4 +1,4 @@
-package br.com.mydrafts.ApiMyDrafts.config;
+package br.com.mydrafts.ApiMyDrafts.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

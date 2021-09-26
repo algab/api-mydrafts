@@ -1,7 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
-import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
+import br.com.mydrafts.ApiMyDrafts.serializer.LocalDateSerializer;
+import br.com.mydrafts.ApiMyDrafts.serializer.ImageSerializer;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;

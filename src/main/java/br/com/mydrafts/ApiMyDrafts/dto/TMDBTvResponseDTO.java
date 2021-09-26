@@ -1,7 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import br.com.mydrafts.ApiMyDrafts.config.ImageSerializer;
-import br.com.mydrafts.ApiMyDrafts.config.LocalDateSerializer;
+import br.com.mydrafts.ApiMyDrafts.serializer.ImageSerializer;
+import br.com.mydrafts.ApiMyDrafts.serializer.LocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Data;
