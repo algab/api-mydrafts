@@ -31,14 +31,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO searchUser(String id) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "BAD REQUEST", "User not found"));
+                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
         return modelMapper.map(user, UserDTO.class);
     }
 
     @Override
     public UserDTO updateUser(String id, UserFormDTO body) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "BAD REQUEST", "User not found"));
+                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
         user.setName(body.getName());
         user.setGender(body.getGender());
         if (user.getEmail().equals(body.getEmail())) {
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String id) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "BAD REQUEST", "User not found"));
+                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
         this.repository.delete(user);
     }
 }
