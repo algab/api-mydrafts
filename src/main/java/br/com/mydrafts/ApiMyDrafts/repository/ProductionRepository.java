@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface ProductionRepository extends MongoRepository<Production, String> {
 
-    Optional<Production> findByTmdbID(String tmdbID);
+    Optional<Production> findByTmdbID(Integer tmdbID);
 
 }

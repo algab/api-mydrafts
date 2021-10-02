@@ -17,7 +17,7 @@ public class Production {
     @Id
     private String id;
 
-    private String tmdbID;
+    private Integer tmdbID;
 
     private String media;
 
