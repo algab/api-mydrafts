@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name="TMDB", url="${tmdb.api-url}")
 public interface TMDBClient {
+
     @GetMapping(value="/trending/movie/day", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     TMDBResponseDTO trendingMovie(@RequestParam("api_key") String apiKey, @RequestParam("language") String language);
 
