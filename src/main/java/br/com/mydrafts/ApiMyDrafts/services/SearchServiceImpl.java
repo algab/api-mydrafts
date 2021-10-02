@@ -1,13 +1,12 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
-import br.com.mydrafts.ApiMyDrafts.clients.TMDBClient;
+import br.com.mydrafts.ApiMyDrafts.clients.TMDBProxy;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.utils.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class SearchServiceImpl implements SearchService {
-    @Value("${tmdb.api-key}")
-    private String apiKey;
-
-    @Value("${tmdb.language}")
-    private String language;
 
     @Autowired
-    private TMDBClient client;
+    private TMDBProxy tmdbProxy;
 
     @Override
     public Page<TMDBResultDTO> searchTMDB(Pageable page, Media media, String name) {
@@ -42,7 +36,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private void searchMovie(List<TMDBResultDTO> content, String name) {
-        TMDBResponseDTO movies = this.client.searchMovie(this.apiKey, this.language, name);
+        TMDBResponseDTO movies = this.tmdbProxy.searchMovie(name);
         movies.getResults().stream().map(result -> {
             result.setMedia(Media.movie);
             return result;
@@ -51,7 +45,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private void searchTV(List<TMDBResultDTO> content, String name) {
-        TMDBResponseDTO tv = this.client.searchTv(this.apiKey, this.language, name);
+        TMDBResponseDTO tv = this.tmdbProxy.searchTV(name);
         tv.getResults().stream().map(result -> {
             result.setMedia(Media.tv);
             return result;
