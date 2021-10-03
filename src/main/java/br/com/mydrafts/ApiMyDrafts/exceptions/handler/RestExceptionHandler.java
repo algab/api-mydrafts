@@ -48,4 +48,5 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return ResponseEntity.status(status.value()).body(responseException);
     }
+
 }

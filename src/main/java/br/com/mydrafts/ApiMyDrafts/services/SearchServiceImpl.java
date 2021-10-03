@@ -52,4 +52,5 @@ public class SearchServiceImpl implements SearchService {
         }).collect(Collectors.toList());
         content.addAll(tv.getResults());
     }
+
 }

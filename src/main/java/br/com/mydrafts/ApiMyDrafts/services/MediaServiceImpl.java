@@ -31,4 +31,5 @@ public class MediaServiceImpl implements MediaService {
         TMDBTvDTO tv = this.tmdbProxy.getTV(id);
         return mapper.map(tv, TMDBTvResponseDTO.class);
     }
+
 }

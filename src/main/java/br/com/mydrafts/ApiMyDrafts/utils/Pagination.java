@@ -9,6 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pagination {
+
     public static <T> PageImpl<T> applyPage(List<T> content, Pageable page) {
         Integer initSize = initPage(Long.valueOf(page.getOffset()).intValue(), content.size());
         Integer endSize = endPage(initSize, page.getPageSize(), content.size());
@@ -33,4 +34,5 @@ public class Pagination {
         }
         return endSize;
     }
+
 }

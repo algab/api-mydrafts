@@ -43,10 +43,10 @@ public class DraftServiceImpl implements DraftService {
         Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
         User user = this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        draft.setUser(mapper.map(user, UserDTO.class));
+        draft.setUser(user);
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
         if (!production.isEmpty()) {
-            if (this.draftRepository.existsByUserAndProduction(mapper.map(user, UserDTO.class), production.get())) {
+            if (this.draftRepository.existsByUserAndProduction(user, production.get())) {
                 throw new BusinessException(409, "CONFLICT", "Draft already registered");
             }
             draft.setProduction(production.get());
@@ -60,7 +60,7 @@ public class DraftServiceImpl implements DraftService {
     public Page<DraftDTO> getDrafts(Pageable page, String userID) {
         User user = this.userRepository.findById(userID)
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        Page<Draft> drafts = this.draftRepository.findByUser(mapper.map(user, UserDTO.class), page);
+        Page<Draft> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
                 .map(draft -> mapper.map(draft, DraftDTO.class))
                 .collect(Collectors.toList());
@@ -78,14 +78,10 @@ public class DraftServiceImpl implements DraftService {
     public DraftDTO updateDraft(String id, DraftFormDTO body) {
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Draft not found"));
-        User user = this.userRepository.findById(body.getUserID())
+        this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        Production production = this.productionRepository.findByTmdbID(body.getTmdbID())
-                        .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Production not found"));
         draft.setRating(body.getRating());
         draft.setDescription(body.getDescription());
-        draft.setProduction(production);
-        draft.setUser(mapper.map(user, UserDTO.class));
         return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
     }
 

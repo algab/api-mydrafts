@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 
 public class ImageSerializer extends JsonSerializer<String> {
+
     @Value("${tmdb.imgs-url}")
     private String imgsUrl;
 
@@ -15,4 +16,5 @@ public class ImageSerializer extends JsonSerializer<String> {
     public void serialize(String poster, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeString(String.format("%s%s", this.imgsUrl, poster));
     }
+
 }

@@ -45,10 +45,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         Favorite favorite = Favorite.builder().build();
         User user = this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        favorite.setUser(mapper.map(user, UserDTO.class));
+        favorite.setUser(user);
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
         if (!production.isEmpty()) {
-            if (this.favoriteRepository.existsByUserAndProduction(mapper.map(user, UserDTO.class), production.get())) {
+            if (this.favoriteRepository.existsByUserAndProduction(user, production.get())) {
                 throw new BusinessException(409, "CONFLICT", "Favorite already registered");
             }
             favorite.setProduction(production.get());
@@ -62,7 +62,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public Page<FavoriteDTO> getFavorites(Pageable page, String userID) {
         User user = this.userRepository.findById(userID)
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        Page<Favorite> favorites = this.favoriteRepository.findByUser(mapper.map(user, UserDTO.class), page);
+        Page<Favorite> favorites = this.favoriteRepository.findByUser(user, page);
         List<FavoriteDTO> content = favorites.getContent().stream()
                 .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
                 .collect(Collectors.toList());
@@ -99,4 +99,5 @@ public class FavoriteServiceImpl implements FavoriteService {
     private TMDBTvResponseDTO getTV(Integer id) {
         return mapper.map(this.tmdbProxy.getTV(id), TMDBTvResponseDTO.class);
     }
+
 }

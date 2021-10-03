@@ -61,4 +61,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
         this.repository.delete(user);
     }
+
 }

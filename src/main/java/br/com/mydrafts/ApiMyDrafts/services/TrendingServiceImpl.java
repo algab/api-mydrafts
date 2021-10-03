@@ -39,4 +39,5 @@ public class TrendingServiceImpl implements TrendingService {
         TMDBResponseDTO tv = this.tmdbProxy.trendingTV();
         content.addAll(tv.getResults().subList(0, 10));
     }
+
 }

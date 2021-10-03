@@ -11,7 +11,7 @@ public class ProductionDTO {
 
     private String id;
 
-    private String tmdbID;
+    private Integer tmdbID;
 
     private String media;
 
