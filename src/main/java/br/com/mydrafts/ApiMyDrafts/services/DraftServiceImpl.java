@@ -9,6 +9,7 @@ import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
 import br.com.mydrafts.ApiMyDrafts.repository.DraftRepository;
 import br.com.mydrafts.ApiMyDrafts.repository.ProductionRepository;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class DraftServiceImpl implements DraftService {
 
@@ -45,7 +47,7 @@ public class DraftServiceImpl implements DraftService {
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
         if (!production.isEmpty()) {
             if (this.draftRepository.existsByUserAndProduction(mapper.map(user, UserDTO.class), production.get())) {
-                throw new BusinessException(409, "CONFLICT", "Draft Conflict");
+                throw new BusinessException(409, "CONFLICT", "Draft already registered");
             }
             draft.setProduction(production.get());
         } else {

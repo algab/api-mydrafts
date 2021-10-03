@@ -5,10 +5,12 @@ import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserFormDTO;
 import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
