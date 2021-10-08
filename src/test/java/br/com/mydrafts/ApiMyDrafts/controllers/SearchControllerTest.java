@@ -35,13 +35,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests for Search Controller")
 public class SearchControllerTest {
 
-    private static final String ENDPOINT = "/v1/search";
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private SearchService service;
+
+    private static final String uriSearch = "/v1/search";
 
     @Test
     @DisplayName("Search movie")
@@ -49,7 +49,7 @@ public class SearchControllerTest {
         String json = readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(ENDPOINT)
+        RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
                 .param("name", "shang")
                 .param("media", "movie")
                 .content(json)
@@ -67,7 +67,7 @@ public class SearchControllerTest {
         String json = readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(ENDPOINT)
+        RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
                 .param("name", "what")
                 .param("media", "tv")
                 .content(json)

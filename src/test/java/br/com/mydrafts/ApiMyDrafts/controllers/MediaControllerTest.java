@@ -30,13 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests for Media Controller")
 public class MediaControllerTest {
 
-    private static final String ENDPOINT = "/v1/media";
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private MediaService service;
+
+    private static final String uriMedia = "/v1/media";
 
     @Test
     @DisplayName("Get movie by id")
@@ -44,7 +44,7 @@ public class MediaControllerTest {
         String json = readFileAsString("/json/movie.json");
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaUtil.getMovie());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", ENDPOINT))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", uriMedia))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -60,7 +60,7 @@ public class MediaControllerTest {
         String json = readFileAsString("/json/tv.json");
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaUtil.getTV());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", ENDPOINT))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", uriMedia))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 

@@ -1,0 +1,26 @@
+{
+  "content": [
+    {
+      "id": "6158fb48b7179927e035ae7c",
+      "description": "Teste",
+      "rating": 10.0,
+      "production": {
+        "id": "6158fb48b7179927e035ae7b",
+        "tmdbID": 550988,
+        "media": "movie"
+      },
+      "user": {
+        "id": "61586ad5362766670067edd5",
+        "name": "Álvaro",
+        "email": "alvaro@email.com",
+        "gender": "MASCULINO"
+      }
+    }
+  ],
+  "page": 0,
+  "first": true,
+  "last": true,
+  "pageSize": 10,
+  "totalPages": 1,
+  "totalElements": 1
+}

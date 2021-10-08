@@ -34,21 +34,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Tests for Trending Controller")
 public class TrendingControllerTest {
 
-    private static final String ENDPOINT = "/v1/trending";
-
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private TrendingService service;
 
+    private static final String uriTrending = "/v1/trending";
+
     @Test
-    @DisplayName("Trending Movies and TV")
+    @DisplayName("Controller trending movies and tv")
     public void trendingTMDB() throws Exception {
         String json = readFileAsString("/json/trending.json");
         when(this.service.trendingTMDB(PageRequest.of(0, 10))).thenReturn(trending());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(ENDPOINT).content(json).contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.get(uriTrending).content(json).contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));

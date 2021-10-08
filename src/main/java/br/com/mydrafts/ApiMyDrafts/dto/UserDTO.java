@@ -1,11 +1,12 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
 import br.com.mydrafts.ApiMyDrafts.constants.Gender;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
 
     private String id;
