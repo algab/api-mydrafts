@@ -1,6 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBProxy;
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.documents.Draft;
 import br.com.mydrafts.ApiMyDrafts.documents.Production;
 import br.com.mydrafts.ApiMyDrafts.documents.User;
@@ -45,13 +46,14 @@ public class DraftServiceImpl implements DraftService {
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
         draft.setUser(user);
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
-        if (!production.isEmpty()) {
+        if (production.isPresent()) {
             if (this.draftRepository.existsByUserAndProduction(user, production.get())) {
                 throw new BusinessException(409, "CONFLICT", "Draft already registered");
             }
             draft.setProduction(production.get());
         } else {
-            draft.setProduction(findProduction(body.getMedia(), body.getTmdbID()));
+            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(Media.valueOf(body.getMedia()), body.getTmdbID()));
+            draft.setProduction(saveProduction);
         }
         return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
     }
@@ -90,30 +92,6 @@ public class DraftServiceImpl implements DraftService {
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Draft not found"));
         this.draftRepository.delete(draft);
-    }
-
-    private Production findProduction(String media, Integer tmdbID) {
-        Production production = Production.builder().media(media).tmdbID(tmdbID).build();
-        if (media.equals("movie")) {
-            TMDBMovieResponseDTO movie = getMovie(tmdbID);
-            production.setMovie(movie);
-        } else {
-            TMDBTvResponseDTO tv = getTV(tmdbID);
-            production.setTv(tv);
-        }
-        return this.productionRepository.save(production);
-    }
-
-    private TMDBMovieResponseDTO getMovie(Integer id) {
-        TMDBMovieDTO movie = this.tmdbProxy.getMovie(id);
-        TMDBCreditsDTO credits = this.tmdbProxy.getMovieCredits(id);
-        TMDBMovieResponseDTO response = mapper.map(movie, TMDBMovieResponseDTO.class);
-        response.setCrew(credits.getCrew());
-        return response;
-    }
-
-    private TMDBTvResponseDTO getTV(Integer id) {
-        return mapper.map(this.tmdbProxy.getTV(id), TMDBTvResponseDTO.class);
     }
 
 }

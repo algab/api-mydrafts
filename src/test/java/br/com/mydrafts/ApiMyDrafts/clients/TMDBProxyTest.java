@@ -1,5 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.clients;
 
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
+import br.com.mydrafts.ApiMyDrafts.documents.Production;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBCreditsDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBMovieDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
@@ -161,6 +163,29 @@ public class TMDBProxyTest {
         when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> tmdbProxy.getTV(1));
+    }
+
+    @Test
+    public void findProductionMovieShouldReturnSuccessful() {
+        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
+        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.credits());
+
+        Production production = tmdbProxy.findProduction(Media.movie, 1);
+
+        assertThat(production.getTv()).isNull();
+        assertThat(production.getMedia()).isEqualTo(Media.movie.toString());
+        assertThat(production.getMovie().getTitle()).isEqualTo(MediaUtil.movie().getTitle());
+    }
+
+    @Test
+    public void findProductionTVShouldReturnSuccessful() {
+        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.tv());
+
+        Production production = tmdbProxy.findProduction(Media.tv, 1);
+
+        assertThat(production.getMovie()).isNull();
+        assertThat(production.getMedia()).isEqualTo(Media.tv.toString());
+        assertThat(production.getTv().getTitle()).isEqualTo(MediaUtil.tv().getTitle());
     }
 
 }

@@ -1,11 +1,11 @@
 package br.com.mydrafts.ApiMyDrafts.clients;
 
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBCreditsDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBMovieDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBTvDTO;
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
+import br.com.mydrafts.ApiMyDrafts.documents.Production;
+import br.com.mydrafts.ApiMyDrafts.dto.*;
 import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
 import feign.FeignException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,9 @@ public class TMDBProxy {
 
     @Autowired
     private TMDBClient client;
+
+    @Autowired
+    private ModelMapper mapper;
 
     private static final Integer codeServerError = 500;
     private static final String messageServerError = "INTERNAL SERVER ERROR";
@@ -85,6 +88,21 @@ public class TMDBProxy {
         } catch (FeignException exception) {
             throw new BusinessException(codeServerError, messageServerError, exception.contentUTF8());
         }
+    }
+
+    public Production findProduction(Media media, Integer tmdbID) {
+        Production production = Production.builder().media(media.toString()).tmdbID(tmdbID).build();
+        if (media.equals(Media.movie)) {
+            TMDBMovieDTO movie = getMovie(tmdbID);
+            TMDBCreditsDTO credits = getMovieCredits(tmdbID);
+            TMDBMovieResponseDTO response = mapper.map(movie, TMDBMovieResponseDTO.class);
+            response.setCrew(credits.getCrew());
+            production.setMovie(response);
+        } else {
+            TMDBTvResponseDTO tv = mapper.map(getTV(tmdbID), TMDBTvResponseDTO.class);
+            production.setTv(tv);
+        }
+        return production;
     }
 
 }
