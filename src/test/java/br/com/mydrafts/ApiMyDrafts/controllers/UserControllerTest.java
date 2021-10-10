@@ -54,6 +54,20 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Controller save user bad request")
+    public void saveUserShouldReturnBadRequest() throws Exception {
+        String json = readFileAsString("/json/userBadRequest.json");
+        when(this.service.saveUser(any())).thenReturn(user());
+
+        RequestBuilder request = MockMvcRequestBuilders.post(uriUser)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("Controller search user by id")
     public void searchUserShouldReturnSuccessful() throws Exception {
         String json = readFileAsString("/json/user.json");

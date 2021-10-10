@@ -59,11 +59,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>de.flapdoodle.embed</groupId>
-			<artifactId>de.flapdoodle.embed.mongo</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -114,6 +109,7 @@
 				<configuration>
 					<excludes>
 						<exclude>**/dto/*</exclude>
+						<exclude>**/documents/*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
