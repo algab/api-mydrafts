@@ -1,6 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
 import br.com.mydrafts.ApiMyDrafts.constants.Gender;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 
 @Setter
 @Getter
+@Builder
 public class UserFormDTO {
 
     @Size(min = 6, message = "name needs at least 6 characters")

@@ -1,12 +1,12 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteDTO {
 
     private String id;
