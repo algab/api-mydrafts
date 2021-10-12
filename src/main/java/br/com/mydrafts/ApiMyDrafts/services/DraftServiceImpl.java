@@ -1,7 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBProxy;
-import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.documents.Draft;
 import br.com.mydrafts.ApiMyDrafts.documents.Production;
 import br.com.mydrafts.ApiMyDrafts.documents.User;
@@ -52,7 +51,7 @@ public class DraftServiceImpl implements DraftService {
             }
             draft.setProduction(production.get());
         } else {
-            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(Media.valueOf(body.getMedia()), body.getTmdbID()));
+            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
             draft.setProduction(saveProduction);
         }
         return mapper.map(this.draftRepository.save(draft), DraftDTO.class);

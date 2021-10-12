@@ -1,5 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -14,7 +15,7 @@ public class ProductionDTO {
 
     private Integer tmdbID;
 
-    private String media;
+    private Media media;
 
     private TMDBMovieResponseDTO movie;
 

@@ -2,6 +2,7 @@ package br.com.mydrafts.ApiMyDrafts.controllers;
 
 import br.com.mydrafts.ApiMyDrafts.services.MediaService;
 import br.com.mydrafts.ApiMyDrafts.utils.MediaUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -41,7 +40,7 @@ public class MediaControllerTest {
     @Test
     @DisplayName("Get movie by id")
     public void getMovieSuccessful() throws Exception {
-        String json = readFileAsString("/json/movie.json");
+        String json = TestUtil.readFileAsString("/json/movie.json");
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaUtil.getMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", uriMedia))
@@ -57,7 +56,7 @@ public class MediaControllerTest {
     @Test
     @DisplayName("Get tv show by id")
     public void getTVSuccessful() throws Exception {
-        String json = readFileAsString("/json/tv.json");
+        String json = TestUtil.readFileAsString("/json/tv.json");
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaUtil.getTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", uriMedia))
@@ -69,10 +68,6 @@ public class MediaControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaUtil.getTV().getOverview()));
         mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaUtil.getTV().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
         mockMvc.perform(request).andExpect(jsonPath("lastEpisode").value(MediaUtil.getTV().getLastEpisode().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-    }
-
-    private static String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
     }
 
 }

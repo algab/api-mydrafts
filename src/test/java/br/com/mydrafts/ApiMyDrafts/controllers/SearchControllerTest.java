@@ -4,6 +4,7 @@ import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.services.SearchService;
 import br.com.mydrafts.ApiMyDrafts.utils.SearchUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class SearchControllerTest {
     @Test
     @DisplayName("Search movie")
     public void searchMovieTMDB() throws Exception {
-        String json = readFileAsString("/json/searchMovie.json");
+        String json = TestUtil.readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
@@ -64,7 +63,7 @@ public class SearchControllerTest {
     @Test
     @DisplayName("Search tv show")
     public void searchTVTMDB() throws Exception {
-        String json = readFileAsString("/json/searchTV.json");
+        String json = TestUtil.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
@@ -91,7 +90,4 @@ public class SearchControllerTest {
         return new PageImpl<>(contents, page, 1);
     }
 
-    private static String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
-    }
 }

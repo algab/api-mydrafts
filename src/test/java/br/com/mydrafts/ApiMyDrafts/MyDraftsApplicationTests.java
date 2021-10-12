@@ -7,10 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MyDraftsApplicationTests {
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	public void main() {
 		MyDraftsApplication.main(new String[] {});
 	}

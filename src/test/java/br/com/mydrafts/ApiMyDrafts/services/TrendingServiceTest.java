@@ -1,7 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBClient;
-import br.com.mydrafts.ApiMyDrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.utils.TrendingUtil;
 import org.junit.jupiter.api.DisplayName;

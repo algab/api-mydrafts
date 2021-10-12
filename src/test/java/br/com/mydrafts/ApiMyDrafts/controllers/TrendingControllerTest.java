@@ -2,6 +2,7 @@ package br.com.mydrafts.ApiMyDrafts.controllers;
 
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.ApiMyDrafts.services.TrendingService;
+import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
 import br.com.mydrafts.ApiMyDrafts.utils.TrendingUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class TrendingControllerTest {
     @Test
     @DisplayName("Controller trending movies and tv")
     public void trendingTMDB() throws Exception {
-        String json = readFileAsString("/json/trending.json");
+        String json = TestUtil.readFileAsString("/json/trending.json");
         when(this.service.trendingTMDB(PageRequest.of(0, 10))).thenReturn(trending());
 
         RequestBuilder request = MockMvcRequestBuilders.get(uriTrending).content(json).contentType(MediaType.APPLICATION_JSON);
@@ -62,7 +61,4 @@ public class TrendingControllerTest {
         return new PageImpl<>(contents, page, 1);
     }
 
-    private static String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
-    }
 }

@@ -1,8 +1,8 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
-import br.com.mydrafts.ApiMyDrafts.constants.Gender;
-import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.services.UserService;
+import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,8 +39,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("Controller save user")
     public void saveUserShouldReturnSuccessful() throws Exception {
-        String json = readFileAsString("/json/userRequest.json");
-        when(this.service.saveUser(any())).thenReturn(user());
+        String json = TestUtil.readFileAsString("/json/userRequest.json");
+        when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(uriUser)
                 .content(json)
@@ -56,8 +53,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("Controller save user bad request")
     public void saveUserShouldReturnBadRequest() throws Exception {
-        String json = readFileAsString("/json/userBadRequest.json");
-        when(this.service.saveUser(any())).thenReturn(user());
+        String json = TestUtil.readFileAsString("/json/userBadRequest.json");
+        when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(uriUser)
                 .content(json)
@@ -70,8 +67,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("Controller search user by id")
     public void searchUserShouldReturnSuccessful() throws Exception {
-        String json = readFileAsString("/json/user.json");
-        when(this.service.searchUser(anyString())).thenReturn(user());
+        String json = TestUtil.readFileAsString("/json/user.json");
+        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/1", uriUser))
                 .content(json)
@@ -83,8 +80,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("Controller update user by id")
     public void updateUserShouldReturnSuccessful() throws Exception {
-        String json = readFileAsString("/json/userRequest.json");
-        when(this.service.updateUser(anyString(), any())).thenReturn(user());
+        String json = TestUtil.readFileAsString("/json/userRequest.json");
+        when(this.service.updateUser(anyString(), any())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/1", uriUser))
                 .content(json)
@@ -101,19 +98,6 @@ public class UserControllerTest {
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/1", uriUser)).contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isNoContent());
-    }
-
-    private UserDTO user() {
-        return UserDTO.builder()
-                .id("1")
-                .name("Alvaro Oliveira")
-                .email("alvaro@email.com")
-                .gender(Gender.MASCULINO)
-                .build();
-    }
-
-    private static String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
     }
 
 }

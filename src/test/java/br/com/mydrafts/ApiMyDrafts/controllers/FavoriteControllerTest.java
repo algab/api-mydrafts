@@ -1,10 +1,8 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
-import br.com.mydrafts.ApiMyDrafts.constants.Gender;
-import br.com.mydrafts.ApiMyDrafts.dto.FavoriteDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.ProductionDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.services.FavoriteService;
+import br.com.mydrafts.ApiMyDrafts.utils.FavoriteUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -47,8 +43,8 @@ public class FavoriteControllerTest {
     @Test
     @DisplayName("Controller save favorite")
     public void saveFavoriteShouldReturnSuccessful() throws Exception {
-        String json = readFileAsString("/json/favoriteRequest.json");
-        when(this.service.save(any())).thenReturn(favorite());
+        String json = TestUtil.readFileAsString("/json/favoriteRequest.json");
+        when(this.service.save(any())).thenReturn(FavoriteUtil.getFavoriteDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(uriFavorite)
                 .content(json)
@@ -61,8 +57,8 @@ public class FavoriteControllerTest {
     @Test
     @DisplayName("Controller get favorites by user")
     public void getFavoritesShouldReturnSuccessful() throws Exception {
-        String json = readFileAsString("/json/favoritesUser.json");
-        when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(favorite()), PageRequest.of(0, 10), 1));
+        String json = TestUtil.readFileAsString("/json/favoritesUser.json");
+        when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteUtil.getFavoriteDTO()), PageRequest.of(0, 10), 1));
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/users/6158fb48b7179927e035ae7c", uriFavorite))
                 .content(json)
@@ -80,35 +76,6 @@ public class FavoriteControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isNoContent());
-    }
-
-    private FavoriteDTO favorite() {
-        return FavoriteDTO.builder()
-                .id("1")
-                .user(user())
-                .production(production())
-                .build();
-    }
-
-    private UserDTO user() {
-        return UserDTO.builder()
-                .id("61586ad5362766670067edd5")
-                .name("Álvaro")
-                .email("alvaro@email.com")
-                .gender(Gender.MASCULINO)
-                .build();
-    }
-
-    private ProductionDTO production() {
-        return ProductionDTO.builder()
-                .id("6158fb48b7179927e035ae7b")
-                .tmdbID(550988)
-                .media("movie")
-                .build();
-    }
-
-    private static String readFileAsString(String file) throws Exception {
-        return new String(Files.readAllBytes(Paths.get(String.format("src/test/resources%s", file))));
     }
 
 }

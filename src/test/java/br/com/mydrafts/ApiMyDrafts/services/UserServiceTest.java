@@ -1,11 +1,11 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
-import br.com.mydrafts.ApiMyDrafts.constants.Gender;
 import br.com.mydrafts.ApiMyDrafts.documents.User;
 import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserFormDTO;
 import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
+import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,12 +34,12 @@ public class UserServiceTest {
     @DisplayName("Service save user")
     public void saveUserShouldReturnSuccessful() {
         when(repository.existsByEmail(anyString())).thenReturn(false);
-        when(repository.save(any())).thenReturn(user());
+        when(repository.save(any())).thenReturn(UserUtil.getUser());
 
-        UserDTO user = service.saveUser(userForm());
+        UserDTO user = service.saveUser(UserUtil.userForm());
 
-        assertThat(user.getName()).isEqualTo(user().getName());
-        assertThat(user.getEmail()).isEqualTo(user().getEmail());
+        assertThat(user.getName()).isEqualTo(UserUtil.getUser().getName());
+        assertThat(user.getEmail()).isEqualTo(UserUtil.getUser().getEmail());
     }
 
     @Test
@@ -47,18 +47,18 @@ public class UserServiceTest {
     public void saveUserShouldReturnEmailConflict() {
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(userForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(UserUtil.userForm()));
     }
 
     @Test
     @DisplayName("Service search user")
     public void searchUserShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(user()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
 
         UserDTO user = service.searchUser("61586ad5362766670067edd5");
 
-        assertThat(user.getName()).isEqualTo(user().getName());
-        assertThat(user.getEmail()).isEqualTo(user().getEmail());
+        assertThat(user.getName()).isEqualTo(UserUtil.getUser().getName());
+        assertThat(user.getEmail()).isEqualTo(UserUtil.getUser().getEmail());
     }
 
     @Test
@@ -72,9 +72,9 @@ public class UserServiceTest {
     @Test
     @DisplayName("Service update user")
     public void updateUserShouldReturnSuccessful() {
-        User user = user();
+        User user = UserUtil.getUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
-        UserFormDTO userForm = userForm();
+        UserFormDTO userForm = UserUtil.userForm();
         userForm.setName("Alvaro Test");
         user.setName("Alvaro Test");
         when(repository.save(any())).thenReturn(user);
@@ -87,10 +87,10 @@ public class UserServiceTest {
     @Test
     @DisplayName("Service update user email")
     public void updateUserEmailShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(user()));
-        UserFormDTO userForm = userForm();
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        UserFormDTO userForm = UserUtil.userForm();
         userForm.setEmail("alvarotest@email.com");
-        User user = user();
+        User user = UserUtil.getUser();
         user.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(user);
@@ -103,8 +103,8 @@ public class UserServiceTest {
     @Test
     @DisplayName("Service update user email conflict")
     public void updateUserShouldReturnEmailConflict() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(user()));
-        UserFormDTO userForm = userForm();
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        UserFormDTO userForm = UserUtil.userForm();
         userForm.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
@@ -116,13 +116,13 @@ public class UserServiceTest {
     public void updateUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", userForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", UserUtil.userForm()));
     }
 
     @Test
     @DisplayName("Service delete user")
     public void deleteUserShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(user()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         doNothing().when(repository).delete(any());
 
         service.deleteUser("61586ad5362766670067edd5");
@@ -136,25 +136,6 @@ public class UserServiceTest {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.deleteUser("1"));
-    }
-
-    private UserFormDTO userForm() {
-        return UserFormDTO.builder()
-                .name("Alvaro")
-                .gender(Gender.MASCULINO)
-                .email("alvaro@email.com")
-                .password("12345678")
-                .build();
-    }
-
-    private User user() {
-        User user = new User();
-        user.setId("61586ad5362766670067edd5");
-        user.setName("Alvaro");
-        user.setGender(Gender.MASCULINO);
-        user.setEmail("alvaro@email.com");
-        user.setPassword("12345678");
-        return user;
     }
 
 }

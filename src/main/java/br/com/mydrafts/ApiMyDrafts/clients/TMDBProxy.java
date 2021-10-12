@@ -91,7 +91,7 @@ public class TMDBProxy {
     }
 
     public Production findProduction(Media media, Integer tmdbID) {
-        Production production = Production.builder().media(media.toString()).tmdbID(tmdbID).build();
+        Production production = Production.builder().media(media).tmdbID(tmdbID).build();
         if (media.equals(Media.movie)) {
             TMDBMovieDTO movie = getMovie(tmdbID);
             TMDBCreditsDTO credits = getMovieCredits(tmdbID);

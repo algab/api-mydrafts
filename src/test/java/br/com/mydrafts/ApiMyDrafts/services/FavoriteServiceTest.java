@@ -1,17 +1,16 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBProxy;
-import br.com.mydrafts.ApiMyDrafts.constants.Gender;
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.documents.Favorite;
-import br.com.mydrafts.ApiMyDrafts.documents.Production;
-import br.com.mydrafts.ApiMyDrafts.documents.User;
 import br.com.mydrafts.ApiMyDrafts.dto.FavoriteDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.FavoriteFormDTO;
 import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
 import br.com.mydrafts.ApiMyDrafts.repository.FavoriteRepository;
 import br.com.mydrafts.ApiMyDrafts.repository.ProductionRepository;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
+import br.com.mydrafts.ApiMyDrafts.utils.FavoriteUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.ProductionUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,29 +51,29 @@ public class FavoriteServiceTest {
     @Test
     @DisplayName("Service save favorite")
     public void saveFavoriteShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(user()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(production(Media.movie)));
-        when(favoriteRepository.save(any())).thenReturn(favorite(Media.movie));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.movie)));
+        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.movie));
 
-        FavoriteDTO favoriteDTO = service.save(favoriteForm());
+        FavoriteDTO favoriteDTO = service.save(FavoriteUtil.favoriteForm());
 
-        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(production(Media.movie).getId());
-        assertThat(favoriteDTO.getUser().getId()).isEqualTo(user().getId());
+        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.movie).getId());
+        assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserUtil.getUser().getId());
     }
 
     @Test
     @DisplayName("Service save favorite find movie tmdb")
     public void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(user()));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
-        when(tmdbProxy.findProduction(any(), any())).thenReturn(production(Media.movie));
-        when(productionRepository.save(any())).thenReturn(production(Media.movie));
-        when(favoriteRepository.save(any())).thenReturn(favorite(Media.movie));
+        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.movie));
+        when(productionRepository.save(any())).thenReturn(ProductionUtil.getProduction(Media.movie));
+        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.movie));
 
-        FavoriteDTO favoriteDTO = service.save(favoriteForm());
+        FavoriteDTO favoriteDTO = service.save(FavoriteUtil.favoriteForm());
 
-        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(production(Media.movie).getId());
-        assertThat(favoriteDTO.getUser().getId()).isEqualTo(user().getId());
+        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.movie).getId());
+        assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserUtil.getUser().getId());
     }
 
     @Test
@@ -82,30 +81,30 @@ public class FavoriteServiceTest {
     public void saveFavoriteShouldReturnUserNotFound() {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(favoriteForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(FavoriteUtil.favoriteForm()));
     }
 
     @Test
     @DisplayName("Service favorite already registered")
     public void saveFavoriteShouldReturnAlreadyRegistered() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(user()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(production(Media.movie)));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.movie)));
         when(favoriteRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(favoriteForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(FavoriteUtil.favoriteForm()));
     }
 
     @Test
     @DisplayName("Service get favorites by user")
     public void getFavoritesShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(user()));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(favoriteRepository.findByUser(any(), any())).thenReturn(pageFavorite());
 
         Page<FavoriteDTO> page = service.getFavorites(PageRequest.of(0, 10), "61586ad5362766670067edd5");
 
         assertThat(page.getTotalElements()).isEqualTo(1);
         assertThat(page.getTotalPages()).isEqualTo(1);
-        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.movie.toString());
+        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.movie);
     }
 
     @Test
@@ -119,7 +118,7 @@ public class FavoriteServiceTest {
     @Test
     @DisplayName("Service delete favorite")
     public void deleteFavoriteShouldReturnSuccessful() {
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(favorite(Media.movie)));
+        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteUtil.getFavorite(Media.movie)));
         doNothing().when(favoriteRepository).delete(any());
 
         service.delete("1");
@@ -135,42 +134,8 @@ public class FavoriteServiceTest {
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.delete("10"));
     }
 
-    private FavoriteFormDTO favoriteForm() {
-        return FavoriteFormDTO.builder()
-                .media("movie")
-                .tmdbID(550988)
-                .userID("61586ad5362766670067edd5")
-                .build();
-    }
-
-    private Favorite favorite(Media media) {
-        return Favorite.builder()
-                .id("1000")
-                .user(user())
-                .production(production(media))
-                .build();
-    }
-
     private Page<Favorite> pageFavorite() {
-        return new PageImpl<>(Arrays.asList(favorite(Media.movie)), PageRequest.of(0, 10), 1);
-    }
-
-    private User user() {
-        User user = new User();
-        user.setId("61586ad5362766670067edd5");
-        user.setName("Alvaro");
-        user.setGender(Gender.MASCULINO);
-        user.setEmail("alvaro@email.com");
-        user.setPassword("12345678");
-        return user;
-    }
-
-    private Production production(Media media) {
-        return Production.builder()
-                .id("6158fb48b7179927e035ae7b")
-                .tmdbID(550988)
-                .media(media.toString())
-                .build();
+        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.movie)), PageRequest.of(0, 10), 1);
     }
 
 }

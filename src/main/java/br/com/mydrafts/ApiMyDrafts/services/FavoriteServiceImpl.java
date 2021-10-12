@@ -1,7 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
 import br.com.mydrafts.ApiMyDrafts.clients.TMDBProxy;
-import br.com.mydrafts.ApiMyDrafts.constants.Media;
 import br.com.mydrafts.ApiMyDrafts.documents.Favorite;
 import br.com.mydrafts.ApiMyDrafts.documents.Production;
 import br.com.mydrafts.ApiMyDrafts.documents.User;
@@ -54,7 +53,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             }
             favorite.setProduction(production.get());
         } else {
-            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(Media.valueOf(body.getMedia()), body.getTmdbID()));
+            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
             favorite.setProduction(saveProduction);
         }
         return mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
