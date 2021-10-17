@@ -38,16 +38,24 @@ public class DraftServiceImpl implements DraftService {
     @Autowired
     private ModelMapper mapper;
 
+    private static final Integer statusConflict = 409;
+    private static final Integer statusNotFound = 404;
+    private static final String conflict = "CONFLICT";
+    private static final String notFound = "NOT FOUND";
+    private static final String messageConflict = "Draft already registered";
+    private static final String messageDraftNotFound = "Draft not found";
+    private static final String messageUserNotFound = "User not found";
+
     @Override
     public DraftDTO save(DraftFormDTO body) {
         Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
         User user = this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
         draft.setUser(user);
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
         if (production.isPresent()) {
             if (this.draftRepository.existsByUserAndProduction(user, production.get())) {
-                throw new BusinessException(409, "CONFLICT", "Draft already registered");
+                throw new BusinessException(statusConflict, conflict, messageConflict);
             }
             draft.setProduction(production.get());
         } else {
@@ -60,7 +68,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public Page<DraftDTO> getDrafts(Pageable page, String userID) {
         User user = this.userRepository.findById(userID)
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
         Page<Draft> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
                 .map(draft -> mapper.map(draft, DraftDTO.class))
@@ -71,16 +79,16 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public DraftDTO searchDraft(String id) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Draft not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
         return mapper.map(draft, DraftDTO.class);
     }
 
     @Override
     public DraftDTO updateDraft(String id, DraftFormDTO body) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Draft not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
         this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
         draft.setRating(body.getRating());
         draft.setDescription(body.getDescription());
         return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
@@ -89,7 +97,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public void deleteDraft(String id) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Draft not found"));
+                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
         this.draftRepository.delete(draft);
     }
 
