@@ -1,7 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
+import br.com.mydrafts.ApiMyDrafts.dto.LoginDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.LoginFormDTO;
-import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.services.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ public class LoginController {
     private LoginService service;
 
     @PostMapping
-    public ResponseEntity<UserDTO> login(@RequestBody @Valid LoginFormDTO form) {
-        UserDTO user = service.login(form);
+    public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginFormDTO form) {
+        LoginDTO user = service.login(form);
         return ResponseEntity.ok(user);
     }
 
