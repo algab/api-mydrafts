@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private ModelMapper mapper;
 
-    @Value("${secret-jwt}")
+    @Value("${secret.jwt}")
     private String secret;
 
     private static final String BAD_REQUEST = "BAD REQUEST";
