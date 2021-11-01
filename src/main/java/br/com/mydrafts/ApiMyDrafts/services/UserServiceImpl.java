@@ -19,37 +19,37 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper mapper;
 
-    private static final Integer statusConflict = 409;
-    private static final Integer statusNotFound = 404;
-    private static final String conflict = "CONFLICT";
-    private static final String notFound = "NOT FOUND";
-    private static final String messageConflict = "Email is conflict";
-    private static final String messageNotFound = "User not found";
+    private static final String CONFLICT = "CONFLICT";
+    private static final String NOT_FOUND = "NOT FOUND";
+    private static final Integer STATUS_CONFLICT = 409;
+    private static final Integer STATUS_NOT_FOUND = 404;
+    private static final String MESSAGE_EMAIL_CONFLICT = "Email is conflict";
+    private static final String MESSAGE_USER_NOT_FOUND = "User not found";
 
     @Override
     public UserDTO saveUser(UserFormDTO body) {
         if (!this.repository.existsByEmail(body.getEmail())) {
             body.setPassword(new BCryptPasswordEncoder().encode(body.getPassword()));
-            User user = this.repository.save(modelMapper.map(body, User.class));
-            return modelMapper.map(user, UserDTO.class);
+            User user = this.repository.save(mapper.map(body, User.class));
+            return mapper.map(user, UserDTO.class);
         } else {
-            throw new BusinessException(statusConflict, conflict, messageConflict);
+            throw new BusinessException(STATUS_CONFLICT, CONFLICT, MESSAGE_EMAIL_CONFLICT);
         }
     }
 
     @Override
     public UserDTO searchUser(String id) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageNotFound));
-        return modelMapper.map(user, UserDTO.class);
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+        return mapper.map(user, UserDTO.class);
     }
 
     @Override
     public UserDTO updateUser(String id, UserFormDTO body) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         user.setName(body.getName());
         user.setGender(body.getGender());
         if (user.getEmail().equals(body.getEmail())) {
@@ -58,16 +58,16 @@ public class UserServiceImpl implements UserService {
             if (!this.repository.existsByEmail(body.getEmail())) {
                 user.setEmail(body.getEmail());
             } else {
-                throw new BusinessException(statusConflict, conflict, messageConflict);
+                throw new BusinessException(STATUS_CONFLICT, CONFLICT, MESSAGE_EMAIL_CONFLICT);
             }
         }
-        return modelMapper.map(this.repository.save(user), UserDTO.class);
+        return mapper.map(this.repository.save(user), UserDTO.class);
     }
 
     @Override
     public void deleteUser(String id) {
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         this.repository.delete(user);
     }
 

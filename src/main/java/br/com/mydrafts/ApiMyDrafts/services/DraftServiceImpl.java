@@ -38,24 +38,24 @@ public class DraftServiceImpl implements DraftService {
     @Autowired
     private ModelMapper mapper;
 
-    private static final Integer statusConflict = 409;
-    private static final Integer statusNotFound = 404;
-    private static final String conflict = "CONFLICT";
-    private static final String notFound = "NOT FOUND";
-    private static final String messageConflict = "Draft already registered";
-    private static final String messageDraftNotFound = "Draft not found";
-    private static final String messageUserNotFound = "User not found";
+    private static final String CONFLICT = "CONFLICT";
+    private static final String NOT_FOUND = "NOT FOUND";
+    private static final Integer STATUS_CONFLICT = 409;
+    private static final Integer STATUS_NOT_FOUND = 404;
+    private static final String MESSAGE_EMAIL_CONFLICT = "Email is conflict";
+    private static final String MESSAGE_USER_NOT_FOUND = "User not found";
+    private static final String MESSAGE_DRAFT_NOT_FOUND = "Draft not found";
 
     @Override
     public DraftDTO save(DraftFormDTO body) {
         Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
         User user = this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         draft.setUser(user);
         Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
         if (production.isPresent()) {
             if (this.draftRepository.existsByUserAndProduction(user, production.get())) {
-                throw new BusinessException(statusConflict, conflict, messageConflict);
+                throw new BusinessException(STATUS_CONFLICT, CONFLICT, MESSAGE_EMAIL_CONFLICT);
             }
             draft.setProduction(production.get());
         } else {
@@ -68,7 +68,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public Page<DraftDTO> getDrafts(Pageable page, String userID) {
         User user = this.userRepository.findById(userID)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         Page<Draft> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
                 .map(draft -> mapper.map(draft, DraftDTO.class))
@@ -79,16 +79,16 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public DraftDTO searchDraft(String id) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND));
         return mapper.map(draft, DraftDTO.class);
     }
 
     @Override
     public DraftDTO updateDraft(String id, DraftFormDTO body) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND));
         this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageUserNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         draft.setRating(body.getRating());
         draft.setDescription(body.getDescription());
         return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
@@ -97,7 +97,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public void deleteDraft(String id) {
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(statusNotFound, notFound, messageDraftNotFound));
+                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND));
         this.draftRepository.delete(draft);
     }
 
