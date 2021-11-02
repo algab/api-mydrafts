@@ -22,7 +22,7 @@ public final class UserUtil {
                 .name("Alvaro")
                 .gender(Gender.MASCULINO)
                 .email("alvaro@email.com")
-                .password("12345678")
+                .password("$2a$10$Em8McmNwrOTvMu2Xelw0e.i33d5RTMVkciU74H5XmjpbCyREqvrrG")
                 .build();
     }
 

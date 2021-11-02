@@ -1,6 +1,7 @@
 package br.com.mydrafts.ApiMyDrafts.exceptions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -16,7 +17,6 @@ public class AuthException implements AuthenticationEntryPoint, AccessDeniedHand
 
     private static final Integer STATUS_UNAUTHORIZED = 401;
     private static final String MESSAGE_UNAUTHORIZED = "Unauthorized";
-    private static final String CONTENT_TYPE = "application/json";
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
@@ -38,7 +38,7 @@ public class AuthException implements AuthenticationEntryPoint, AccessDeniedHand
 
     public ResponseException createResponse(HttpServletResponse response) {
         response.setStatus(STATUS_UNAUTHORIZED);
-        response.setContentType(CONTENT_TYPE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return ResponseException.builder()
                 .status(STATUS_UNAUTHORIZED)
                 .error(MESSAGE_UNAUTHORIZED)

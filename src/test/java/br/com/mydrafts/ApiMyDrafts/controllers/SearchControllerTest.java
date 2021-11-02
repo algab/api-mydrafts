@@ -1,12 +1,18 @@
 package br.com.mydrafts.ApiMyDrafts.controllers;
 
 import br.com.mydrafts.ApiMyDrafts.constants.Media;
+import br.com.mydrafts.ApiMyDrafts.dto.LoginDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
 import br.com.mydrafts.ApiMyDrafts.services.SearchService;
 import br.com.mydrafts.ApiMyDrafts.utils.SearchUtil;
 import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,12 +24,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Search Controller")
 public class SearchControllerTest {
 
@@ -40,7 +50,27 @@ public class SearchControllerTest {
     @MockBean
     private SearchService service;
 
-    private static final String uriSearch = "/v1/search";
+    @MockBean
+    private UserRepository userRepository;
+
+    private String token;
+
+    private static final String PATH_LOGIN = "/v1/login";
+    private static final String PATH_SEARCH = "/v1/search";
+
+    @BeforeAll
+    public void init() throws Exception {
+        String json = TestUtil.readFileAsString("/json/login.json");
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+
+        RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request).andReturn();
+        token = new ObjectMapper().readValue(result.getResponse().getContentAsString(), LoginDTO.class).getToken();
+    }
 
     @Test
     @DisplayName("Search movie")
@@ -48,7 +78,8 @@ public class SearchControllerTest {
         String json = TestUtil.readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
+        RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
+                .header("Authorization", String.format("Bearer %s", token))
                 .param("name", "shang")
                 .param("media", "movie")
                 .content(json)
@@ -66,7 +97,8 @@ public class SearchControllerTest {
         String json = TestUtil.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(uriSearch)
+        RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
+                .header("Authorization", String.format("Bearer %s", token))
                 .param("name", "what")
                 .param("media", "tv")
                 .content(json)
