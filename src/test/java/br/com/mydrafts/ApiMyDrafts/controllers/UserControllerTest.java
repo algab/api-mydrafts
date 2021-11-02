@@ -3,6 +3,8 @@ package br.com.mydrafts.ApiMyDrafts.controllers;
 import br.com.mydrafts.ApiMyDrafts.dto.LoginDTO;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
 import br.com.mydrafts.ApiMyDrafts.services.UserService;
+import br.com.mydrafts.ApiMyDrafts.utils.DraftUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.FavoriteUtil;
 import br.com.mydrafts.ApiMyDrafts.utils.TestUtil;
 import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +26,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -100,6 +105,34 @@ public class UserControllerTest {
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+                .header("Authorization", String.format("Bearer %s", token))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Controller get drafts by user")
+    public void getDraftsByUserShouldReturnSuccessful() throws Exception {
+        String json = TestUtil.readFileAsString("/json/draftsUser.json");
+        when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftUtil.getDraftDTO()), PageRequest.of(0, 10), 1));
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/drafts", PATH_USER, UserUtil.getUser().getId()))
+                .header("Authorization", String.format("Bearer %s", token))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Controller get favorites by user")
+    public void getFavoritesByUserShouldReturnSuccessful() throws Exception {
+        String json = TestUtil.readFileAsString("/json/favoritesUser.json");
+        when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteUtil.getFavoriteDTO()), PageRequest.of(0, 10), 1));
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/favorites", PATH_USER, UserUtil.getUser().getId()))
                 .header("Authorization", String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
