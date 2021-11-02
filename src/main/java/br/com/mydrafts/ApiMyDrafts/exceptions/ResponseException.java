@@ -15,6 +15,6 @@ public class ResponseException {
 
     private String message;
 
-    private LocalDateTime timestamp;
+    private String timestamp;
 
 }

@@ -13,19 +13,18 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity handleBusinessException(BusinessException exception) {
+    public ResponseEntity<ResponseException> handleBusinessException(BusinessException exception) {
         ResponseException responseException = ResponseException.builder()
                 .status(exception.getStatus())
                 .error(exception.getError())
                 .message(exception.getMessage())
-                .timestamp(LocalDateTime.now())
+                .timestamp(LocalDateTime.now().toString())
                 .build();
         return ResponseEntity.status(exception.getStatus()).body(responseException);
     }
@@ -44,7 +43,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(status.value())
                 .error("BAD REQUEST")
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(LocalDateTime.now().toString())
                 .build();
         return ResponseEntity.status(status.value()).body(responseException);
     }
