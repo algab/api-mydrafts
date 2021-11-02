@@ -26,11 +26,13 @@ public class AuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authorization  = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        String token = authorization.substring(7);
-        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        String id = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
-        UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(id, null, null);
-        SecurityContextHolder.getContext().setAuthentication(user);
+        if (authorization != null) {
+            String token = authorization.substring(7);
+            SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+            String id = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
+            UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(id, null, null);
+            SecurityContextHolder.getContext().setAuthentication(user);
+        }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
