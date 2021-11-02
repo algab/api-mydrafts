@@ -4,9 +4,6 @@ import br.com.mydrafts.ApiMyDrafts.dto.DraftDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.DraftFormDTO;
 import br.com.mydrafts.ApiMyDrafts.services.DraftService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +21,6 @@ public class DraftController {
     public ResponseEntity<DraftDTO> save(@RequestBody @Valid DraftFormDTO body) {
         DraftDTO draft = this.service.save(body);
         return ResponseEntity.status(201).body(draft);
-    }
-
-    @GetMapping("/users/{id}")
-    public ResponseEntity<Page<DraftDTO>> getDraftsByUser(@PathVariable("id") String id, @PageableDefault Pageable page) {
-        Page<DraftDTO> pageDraft = this.service.getDrafts(page, id);
-        return ResponseEntity.ok(pageDraft);
     }
 
     @GetMapping("/{id}")

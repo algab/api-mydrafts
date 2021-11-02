@@ -115,27 +115,6 @@ public class DraftServiceTest {
     }
 
     @Test
-    @DisplayName("Service get drafts by user")
-    public void getDraftsShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(draftRepository.findByUser(any(User.class), any())).thenReturn(pageDraft());
-
-        Page<DraftDTO> page = service.getDrafts(PageRequest.of(0, 10), "61586ad5362766670067edd5");
-
-        assertThat(page.getTotalElements()).isEqualTo(1);
-        assertThat(page.getTotalPages()).isEqualTo(1);
-        assertThat(page.getContent().size()).isEqualTo(1);
-    }
-
-    @Test
-    @DisplayName("Service get drafts return user not found")
-    public void getDraftsShouldReturnUserNotFound() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getDrafts(PageRequest.of(0, 10), "61586ad5362766670067edd5"));
-    }
-
-    @Test
     @DisplayName("Service search draft by id")
     public void searchDraftShouldReturnSuccessful() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.movie)));

@@ -66,17 +66,6 @@ public class DraftServiceImpl implements DraftService {
     }
 
     @Override
-    public Page<DraftDTO> getDrafts(Pageable page, String userID) {
-        User user = this.userRepository.findById(userID)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
-        Page<Draft> drafts = this.draftRepository.findByUser(user, page);
-        List<DraftDTO> draftsDTO = drafts.getContent().stream()
-                .map(draft -> mapper.map(draft, DraftDTO.class))
-                .collect(Collectors.toList());
-        return new PageImpl<>(draftsDTO, page, drafts.getTotalElements());
-    }
-
-    @Override
     public DraftDTO searchDraft(String id) {
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND));

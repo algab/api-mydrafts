@@ -54,19 +54,6 @@ public class DraftControllerTest {
     }
 
     @Test
-    @DisplayName("Controller get drafts by user")
-    public void getDraftsByUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/draftsUser.json");
-        when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftUtil.getDraftDTO()), PageRequest.of(0, 10), 1));
-
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/users/61586ad5362766670067edd5", uriDraft))
-                .content(json)
-                .contentType(MediaType.APPLICATION_JSON);
-
-        mockMvc.perform(request).andExpect(status().isOk());
-    }
-
-    @Test
     @DisplayName("Controller search draft by id")
     public void searchDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draft.json");

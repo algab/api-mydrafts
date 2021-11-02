@@ -60,17 +60,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Page<FavoriteDTO> getFavorites(Pageable page, String userID) {
-        User user = this.userRepository.findById(userID)
-                .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "User not found"));
-        Page<Favorite> favorites = this.favoriteRepository.findByUser(user, page);
-        List<FavoriteDTO> content = favorites.getContent().stream()
-                .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
-                .collect(Collectors.toList());
-        return new PageImpl<>(content, page, favorites.getTotalElements());
-    }
-
-    @Override
     public void delete(String id) {
         Favorite favorite = this.favoriteRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT FOUND", "Favorite not found"));

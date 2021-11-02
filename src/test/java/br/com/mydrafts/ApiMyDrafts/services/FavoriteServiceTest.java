@@ -95,27 +95,6 @@ public class FavoriteServiceTest {
     }
 
     @Test
-    @DisplayName("Service get favorites by user")
-    public void getFavoritesShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(favoriteRepository.findByUser(any(), any())).thenReturn(pageFavorite());
-
-        Page<FavoriteDTO> page = service.getFavorites(PageRequest.of(0, 10), "61586ad5362766670067edd5");
-
-        assertThat(page.getTotalElements()).isEqualTo(1);
-        assertThat(page.getTotalPages()).isEqualTo(1);
-        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.movie);
-    }
-
-    @Test
-    @DisplayName("Service get favorites return user not found")
-    public void getFavoritesShouldReturnUserNotFound() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getFavorites(PageRequest.of(0, 10), "61586ad5362766670067edd5"));
-    }
-
-    @Test
     @DisplayName("Service delete favorite")
     public void deleteFavoriteShouldReturnSuccessful() {
         when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteUtil.getFavorite(Media.movie)));

@@ -9,8 +9,6 @@ public interface DraftService {
 
     DraftDTO save(DraftFormDTO body);
 
-    Page<DraftDTO> getDrafts(Pageable page, String userID);
-
     DraftDTO searchDraft(String id);
 
     DraftDTO updateDraft(String id, DraftFormDTO body);

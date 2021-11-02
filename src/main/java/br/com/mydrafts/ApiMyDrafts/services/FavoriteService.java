@@ -9,8 +9,6 @@ public interface FavoriteService {
 
     FavoriteDTO save(FavoriteFormDTO body);
 
-    Page<FavoriteDTO> getFavorites(Pageable page, String userID);
-
     void delete(String id);
 
 }
