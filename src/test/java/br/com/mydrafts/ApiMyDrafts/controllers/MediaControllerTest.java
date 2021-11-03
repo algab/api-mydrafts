@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -74,7 +75,7 @@ public class MediaControllerTest {
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaUtil.getMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", PATH_MEDIA))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -91,7 +92,7 @@ public class MediaControllerTest {
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaUtil.getTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", PATH_MEDIA))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 

@@ -1,5 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class LoginFormDTO {
 
     @Email(message = "email format is invalid")

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -73,7 +74,7 @@ public class DraftControllerTest {
         when(this.service.save(any())).thenReturn(DraftUtil.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -88,7 +89,7 @@ public class DraftControllerTest {
         when(this.service.searchDraft(anyString())).thenReturn(DraftUtil.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -102,7 +103,7 @@ public class DraftControllerTest {
         when(this.service.updateDraft(anyString(), any())).thenReturn(DraftUtil.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -116,7 +117,7 @@ public class DraftControllerTest {
         doNothing().when(this.service).deleteDraft(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isNoContent());

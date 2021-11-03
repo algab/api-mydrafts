@@ -20,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -77,7 +78,7 @@ public class TrendingControllerTest {
         when(this.service.trendingTMDB(PageRequest.of(0, 10))).thenReturn(trending());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_TRENDING)
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 

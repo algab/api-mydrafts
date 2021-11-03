@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -105,11 +106,38 @@ public class UserControllerTest {
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Controller search user unauthorized")
+    public void searchUserShouldReturnUnauthorized() throws Exception {
+        String json = TestUtil.readFileAsString("/json/user.json");
+        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Controller search user token unauthorized")
+    public void searchUserShouldReturnTokenUnauthorized() throws Exception {
+        String json = TestUtil.readFileAsString("/json/user.json");
+        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/1", PATH_USER))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -119,7 +147,7 @@ public class UserControllerTest {
         when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftUtil.getDraftDTO()), PageRequest.of(0, 10), 1));
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/drafts", PATH_USER, UserUtil.getUser().getId()))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -133,7 +161,7 @@ public class UserControllerTest {
         when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteUtil.getFavoriteDTO()), PageRequest.of(0, 10), 1));
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/favorites", PATH_USER, UserUtil.getUser().getId()))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -147,7 +175,7 @@ public class UserControllerTest {
         when(this.service.updateUser(anyString(), any())).thenReturn(UserUtil.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -160,7 +188,7 @@ public class UserControllerTest {
         doNothing().when(this.service).deleteUser(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isNoContent());

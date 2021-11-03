@@ -1,10 +1,20 @@
 package br.com.mydrafts.ApiMyDrafts.services;
 
+import br.com.mydrafts.ApiMyDrafts.constants.Media;
+import br.com.mydrafts.ApiMyDrafts.documents.Draft;
+import br.com.mydrafts.ApiMyDrafts.documents.Favorite;
 import br.com.mydrafts.ApiMyDrafts.documents.User;
+import br.com.mydrafts.ApiMyDrafts.dto.DraftDTO;
+import br.com.mydrafts.ApiMyDrafts.dto.FavoriteDTO;
+import br.com.mydrafts.ApiMyDrafts.dto.LoginFormDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserFormDTO;
 import br.com.mydrafts.ApiMyDrafts.exceptions.BusinessException;
+import br.com.mydrafts.ApiMyDrafts.repository.DraftRepository;
+import br.com.mydrafts.ApiMyDrafts.repository.FavoriteRepository;
 import br.com.mydrafts.ApiMyDrafts.repository.UserRepository;
+import br.com.mydrafts.ApiMyDrafts.utils.DraftUtil;
+import br.com.mydrafts.ApiMyDrafts.utils.FavoriteUtil;
 import br.com.mydrafts.ApiMyDrafts.utils.UserUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +22,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -29,6 +43,12 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository repository;
+
+    @MockBean
+    private DraftRepository draftRepository;
+
+    @MockBean
+    private FavoriteRepository favoriteRepository;
 
     @Test
     @DisplayName("Service save user")
@@ -55,7 +75,7 @@ public class UserServiceTest {
     public void searchUserShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
 
-        UserDTO user = service.searchUser("61586ad5362766670067edd5");
+        UserDTO user = service.searchUser(UserUtil.getUser().getId());
 
         assertThat(user.getName()).isEqualTo(UserUtil.getUser().getName());
         assertThat(user.getEmail()).isEqualTo(UserUtil.getUser().getEmail());
@@ -70,6 +90,48 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Service get drafts by user")
+    public void getDraftsShouldReturnSuccessful() {
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(draftRepository.findByUser(any(User.class), any())).thenReturn(pageDraft());
+
+        Page<DraftDTO> page = service.getDrafts(PageRequest.of(0, 10), UserUtil.getUser().getId());
+
+        assertThat(page.getTotalElements()).isEqualTo(1);
+        assertThat(page.getTotalPages()).isEqualTo(1);
+        assertThat(page.getContent().size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("Service get drafts user not found")
+    public void getDraftsShouldReturnUserNotFound() {
+        when(repository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getDrafts(PageRequest.of(0, 10), UserUtil.getUser().getId()));
+    }
+
+    @Test
+    @DisplayName("Service get favorites by user")
+    public void getFavoritesShouldReturnSuccessful() {
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(favoriteRepository.findByUser(any(), any())).thenReturn(pageFavorite());
+
+        Page<FavoriteDTO> page = service.getFavorites(PageRequest.of(0, 10), UserUtil.getUser().getId());
+
+        assertThat(page.getTotalElements()).isEqualTo(1);
+        assertThat(page.getTotalPages()).isEqualTo(1);
+        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.movie);
+    }
+
+    @Test
+    @DisplayName("Service get drafts user not found")
+    public void getFavoritesShouldReturnUserNotFound() {
+        when(repository.findById(anyString())).thenReturn(Optional.empty());
+
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getFavorites(PageRequest.of(0, 10), UserUtil.getUser().getId()));
+    }
+
+    @Test
     @DisplayName("Service update user")
     public void updateUserShouldReturnSuccessful() {
         User user = UserUtil.getUser();
@@ -79,7 +141,7 @@ public class UserServiceTest {
         user.setName("Alvaro Test");
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser("61586ad5362766670067edd5", userForm);
+        UserDTO saveUser = service.updateUser(UserUtil.getUser().getId(), userForm);
 
         assertThat(saveUser.getName()).isEqualTo(user.getName());
     }
@@ -95,7 +157,7 @@ public class UserServiceTest {
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser("61586ad5362766670067edd5", userForm);
+        UserDTO saveUser = service.updateUser(UserUtil.getUser().getId(), userForm);
 
         assertThat(saveUser.getEmail()).isEqualTo(user.getEmail());
     }
@@ -108,7 +170,7 @@ public class UserServiceTest {
         userForm.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("61586ad5362766670067edd5", userForm));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser(UserUtil.getUser().getId(), userForm));
     }
 
     @Test
@@ -125,7 +187,7 @@ public class UserServiceTest {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         doNothing().when(repository).delete(any());
 
-        service.deleteUser("61586ad5362766670067edd5");
+        service.deleteUser(UserUtil.getUser().getId());
 
         verify(repository, times(1)).delete(any());
     }
@@ -136,6 +198,14 @@ public class UserServiceTest {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.deleteUser("1"));
+    }
+
+    private Page<Draft> pageDraft() {
+        return new PageImpl<>(Arrays.asList(DraftUtil.getDraft(Media.movie)), PageRequest.of(0, 10), 1);
+    }
+
+    private Page<Favorite> pageFavorite() {
+        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.movie)), PageRequest.of(0, 10), 1);
     }
 
 }

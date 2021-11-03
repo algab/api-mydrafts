@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -79,7 +80,7 @@ public class SearchControllerTest {
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .param("name", "shang")
                 .param("media", "movie")
                 .content(json)
@@ -98,7 +99,7 @@ public class SearchControllerTest {
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
-                .header("Authorization", String.format("Bearer %s", token))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .param("name", "what")
                 .param("media", "tv")
                 .content(json)

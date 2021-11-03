@@ -1,6 +1,9 @@
 spring:
   application:
     name: api-mydrafts
+  data:
+    mongodb:
+      database: mydrafts
 tmdb:
   language: pt-BR
   api-key: d8jhokg0t41d0wyma7e87slzho5aggbj
