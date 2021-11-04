@@ -120,7 +120,7 @@ public class UserServiceTest {
 
         assertThat(page.getTotalElements()).isEqualTo(1);
         assertThat(page.getTotalPages()).isEqualTo(1);
-        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.movie);
+        assertThat(page.getContent().get(0).getProduction().getMedia()).isEqualTo(Media.MOVIE);
     }
 
     @Test
@@ -201,11 +201,11 @@ public class UserServiceTest {
     }
 
     private Page<Draft> pageDraft() {
-        return new PageImpl<>(Arrays.asList(DraftUtil.getDraft(Media.movie)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(DraftUtil.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
     private Page<Favorite> pageFavorite() {
-        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.movie)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
 }

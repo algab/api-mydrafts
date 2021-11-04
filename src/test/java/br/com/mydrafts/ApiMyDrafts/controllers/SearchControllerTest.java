@@ -77,7 +77,7 @@ public class SearchControllerTest {
     @DisplayName("Search movie")
     public void searchMovieTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/searchMovie.json");
-        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.movie, "shang")).thenReturn(searchMovie());
+        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
@@ -96,12 +96,31 @@ public class SearchControllerTest {
     @DisplayName("Search tv show")
     public void searchTVTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/searchTV.json");
-        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.tv, "what")).thenReturn(searchTV());
+        when(this.service.searchTMDB(PageRequest.of(0, 10), Media.TV, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .param("name", "what")
                 .param("media", "tv")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
+        mockMvc.perform(request).andExpect(jsonPath("totalElements").value(1));
+        mockMvc.perform(request).andExpect(jsonPath("content").isArray());
+    }
+
+    @Test
+    @DisplayName("Search any media")
+    public void searchAnyMediaTMDB() throws Exception {
+        String json = TestUtil.readFileAsString("/json/searchTV.json");
+        when(this.service.searchTMDB(PageRequest.of(0, 10), null, "what")).thenReturn(searchTV());
+
+        RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
+                .param("name", "what")
+                .param("media", "test")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 

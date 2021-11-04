@@ -23,10 +23,10 @@ public class SearchController {
     @GetMapping
     public ResponseEntity<Page<TMDBResultDTO>> searchTMDB(
             @PageableDefault Pageable page,
-            @RequestParam(value = "media", required = false) Media media,
+            @RequestParam(value = "media", required = false) String type,
             @RequestParam("name") String name
     ) {
-        Page<TMDBResultDTO> response = this.service.searchTMDB(page, media, name);
+        Page<TMDBResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
         return ResponseEntity.ok(response);
     }
 }

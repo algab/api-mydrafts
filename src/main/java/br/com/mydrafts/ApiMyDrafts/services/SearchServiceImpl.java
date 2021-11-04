@@ -26,7 +26,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Page<TMDBResultDTO> searchTMDB(Pageable page, Media media, String name) {
         List<TMDBResultDTO> content = new ArrayList<>();
-        if (media == Media.tv) {
+        if (media == Media.TV) {
             this.searchTV(content, name);
         } else {
             this.searchMovie(content, name);
@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
     private void searchMovie(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO movies = this.tmdbProxy.searchMovie(name);
         movies.getResults().stream().map(result -> {
-            result.setMedia(Media.movie);
+            result.setMedia(Media.MOVIE);
             return result;
         }).collect(Collectors.toList());
         content.addAll(movies.getResults());
@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService {
     private void searchTV(List<TMDBResultDTO> content, String name) {
         TMDBResponseDTO tv = this.tmdbProxy.searchTV(name);
         tv.getResults().stream().map(result -> {
-            result.setMedia(Media.tv);
+            result.setMedia(Media.TV);
             return result;
         }).collect(Collectors.toList());
         content.addAll(tv.getResults());

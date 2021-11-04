@@ -52,12 +52,12 @@ public class FavoriteServiceTest {
     @DisplayName("Service save favorite")
     public void saveFavoriteShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.movie)));
-        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.movie));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
+        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.MOVIE));
 
         FavoriteDTO favoriteDTO = service.save(FavoriteUtil.favoriteForm());
 
-        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.movie).getId());
+        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.MOVIE).getId());
         assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserUtil.getUser().getId());
     }
 
@@ -66,13 +66,13 @@ public class FavoriteServiceTest {
     public void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
-        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.movie));
-        when(productionRepository.save(any())).thenReturn(ProductionUtil.getProduction(Media.movie));
-        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.movie));
+        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
+        when(productionRepository.save(any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
+        when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.MOVIE));
 
         FavoriteDTO favoriteDTO = service.save(FavoriteUtil.favoriteForm());
 
-        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.movie).getId());
+        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionUtil.getProduction(Media.MOVIE).getId());
         assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserUtil.getUser().getId());
     }
 
@@ -88,7 +88,7 @@ public class FavoriteServiceTest {
     @DisplayName("Service favorite already registered")
     public void saveFavoriteShouldReturnAlreadyRegistered() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.movie)));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
         when(favoriteRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(FavoriteUtil.favoriteForm()));
@@ -97,7 +97,7 @@ public class FavoriteServiceTest {
     @Test
     @DisplayName("Service delete favorite")
     public void deleteFavoriteShouldReturnSuccessful() {
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteUtil.getFavorite(Media.movie)));
+        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteUtil.getFavorite(Media.MOVIE)));
         doNothing().when(favoriteRepository).delete(any());
 
         service.delete("1");
@@ -114,7 +114,7 @@ public class FavoriteServiceTest {
     }
 
     private Page<Favorite> pageFavorite() {
-        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.movie)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
 }

@@ -9,7 +9,7 @@ public final class FavoriteUtil {
 
     public static FavoriteFormDTO favoriteForm() {
         return FavoriteFormDTO.builder()
-                .media(Media.movie)
+                .media(Media.MOVIE)
                 .tmdbID(550988)
                 .userID("61586ad5362766670067edd5")
                 .build();

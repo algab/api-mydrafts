@@ -18,7 +18,7 @@ public final class ProductionUtil {
         return ProductionDTO.builder()
                 .id("6158fb48b7179927e035ae7b")
                 .tmdbID(550988)
-                .media(Media.movie)
+                .media(Media.MOVIE)
                 .build();
     }
 
