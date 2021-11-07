@@ -40,9 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/v1/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/v1/users").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().authenticationEntryPoint(new AuthException()).accessDeniedHandler(new AuthException())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthFilter(secret), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AuthFilter(secret), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new AuthException()).accessDeniedHandler(new AuthException());
     }
 
 }

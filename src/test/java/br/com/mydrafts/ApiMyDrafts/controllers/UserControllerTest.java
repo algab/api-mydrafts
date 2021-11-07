@@ -141,6 +141,20 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Controller search user token exception")
+    public void searchUserShouldReturnTokenException() throws Exception {
+        String json = TestUtil.readFileAsString("/json/user.json");
+        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/1", PATH_USER))
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", "eyJhbGciOiJIUzI1NiJ9"))
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @DisplayName("Controller get drafts by user")
     public void getDraftsByUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftsUser.json");

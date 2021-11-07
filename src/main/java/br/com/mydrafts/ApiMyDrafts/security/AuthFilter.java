@@ -1,5 +1,6 @@
 package br.com.mydrafts.ApiMyDrafts.security;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.http.HttpHeaders;
@@ -29,11 +30,22 @@ public class AuthFilter extends OncePerRequestFilter {
         if (authorization != null) {
             String token = authorization.substring(7);
             SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-            String id = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
-            UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(id, null, null);
-            SecurityContextHolder.getContext().setAuthentication(user);
+            if (validateToken(token, key)) {
+                String id = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
+                UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken(id, null, null);
+                SecurityContextHolder.getContext().setAuthentication(user);
+            }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
+    }
+
+    private Boolean validateToken(String token, SecretKey key) {
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException exception) {
+            return false;
+        }
     }
 
 }
