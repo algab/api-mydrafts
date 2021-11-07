@@ -5,6 +5,7 @@ import br.com.mydrafts.ApiMyDrafts.dto.FavoriteDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserDTO;
 import br.com.mydrafts.ApiMyDrafts.dto.UserFormDTO;
 import br.com.mydrafts.ApiMyDrafts.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/v1/users")
 public class UserController {
@@ -25,42 +27,66 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserFormDTO body) {
+        log.info("UserController.saveUser - Start - Input: name {}, email {}", body.getName(), body.getEmail());
+
         UserDTO user = this.service.saveUser(body);
+
+        log.info("UserController.saveUser - End - Output: id {}, name {}", user.getId(), user.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PreAuthorize("#id == authentication.principal")
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> searchUser(@PathVariable("id") String id) {
+        log.info("UserController.searchUser - Start - Input: id {}", id);
+
         UserDTO user = this.service.searchUser(id);
+
+        log.info("UserController.searchUser - End - Output: user {}", user);
         return ResponseEntity.ok(user);
     }
 
     @PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}/drafts")
     public ResponseEntity<Page<DraftDTO>> getDrafts(@PathVariable("id") String id, @PageableDefault Pageable page) {
-        Page<DraftDTO> pageDraft = this.service.getDrafts(page, id);
-        return ResponseEntity.ok(pageDraft);
+        log.info("UserController.getDrafts - Start - Input: id {}, page {}", id, page);
+
+        Page<DraftDTO> content = this.service.getDrafts(page, id);
+
+        log.info("UserController.getDrafts - End - Output: response {}", content.toList());
+        return ResponseEntity.ok(content);
     }
 
     @PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}/favorites")
     public ResponseEntity<Page<FavoriteDTO>> getFavorites(@PathVariable("id") String id, @PageableDefault Pageable page) {
+        log.info("UserController.getFavorites - Start - Input: id {}, page {}", id, page);
+
         Page<FavoriteDTO> content = this.service.getFavorites(page, id);
+
+        log.info("UserController.getFavorites - End - Output: response {}", content.toList());
         return ResponseEntity.ok(content);
     }
 
     @PreAuthorize("#id == authentication.principal")
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") String id, @RequestBody @Valid UserFormDTO body) {
+        log.info("UserController.updateUser - Start - Input: id {}", id);
+
         UserDTO user = this.service.updateUser(id, body);
+
+        log.info("UserController.updateUser - End - Output: user {}", user);
         return ResponseEntity.ok(user);
     }
 
     @PreAuthorize("#id == authentication.principal")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity deleteUser(@PathVariable("id") String id) {
+        log.info("UserController.deleteUser - Start - Input: id {}", id);
+
         this.service.deleteUser(id);
+
+        log.info("UserController.deleteUser - End");
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

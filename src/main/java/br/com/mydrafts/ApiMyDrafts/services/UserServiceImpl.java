@@ -48,48 +48,64 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO saveUser(UserFormDTO body) {
+        log.info("UserServiceImpl.saveUser - Start - Input: name {}, email {}", body.getName(), body.getEmail());
         if (!this.repository.existsByEmail(body.getEmail())) {
             body.setPassword(new BCryptPasswordEncoder().encode(body.getPassword()));
             User user = this.repository.save(mapper.map(body, User.class));
+            log.info("UserServiceImpl.saveUser - End");
             return mapper.map(user, UserDTO.class);
         } else {
+            log.error("UserServiceImpl.saveUser - Error: {}", MESSAGE_EMAIL_CONFLICT);
             throw new BusinessException(STATUS_CONFLICT, CONFLICT, MESSAGE_EMAIL_CONFLICT);
         }
     }
 
     @Override
     public UserDTO searchUser(String id) {
+        log.info("UserServiceImpl.searchUser - Start - Input: id {}", id);
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("UserServiceImpl.searchUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+                });
+        log.info("UserServiceImpl.searchUser - End");
         return mapper.map(user, UserDTO.class);
     }
 
     @Override
     public Page<DraftDTO> getDrafts(Pageable page, String id) {
+        log.info("UserServiceImpl.getDrafts - Start - Input: id {}, page {}", id, page);
         User user = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         Page<Draft> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
                 .map(draft -> mapper.map(draft, DraftDTO.class))
                 .collect(Collectors.toList());
+        log.info("UserServiceImpl.getDrafts - End");
         return new PageImpl<>(draftsDTO, page, drafts.getTotalElements());
     }
 
     @Override
     public Page<FavoriteDTO> getFavorites(Pageable page, String id) {
+        log.info("UserServiceImpl.getFavorites - Start - Input: id {}, page {}", id, page);
         User user = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         Page<Favorite> favorites = this.favoriteRepository.findByUser(user, page);
         List<FavoriteDTO> content = favorites.getContent().stream()
                 .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
                 .collect(Collectors.toList());
+        log.info("UserServiceImpl.getFavorites - End");
         return new PageImpl<>(content, page, favorites.getTotalElements());
     }
 
     @Override
     public UserDTO updateUser(String id, UserFormDTO body) {
+        log.info("UserServiceImpl.updateUser - Start - Input: id {}", id);
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+                });
         user.setName(body.getName());
         user.setGender(body.getGender());
         if (user.getEmail().equals(body.getEmail())) {
@@ -98,16 +114,23 @@ public class UserServiceImpl implements UserService {
             if (!this.repository.existsByEmail(body.getEmail())) {
                 user.setEmail(body.getEmail());
             } else {
+                log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_EMAIL_CONFLICT);
                 throw new BusinessException(STATUS_CONFLICT, CONFLICT, MESSAGE_EMAIL_CONFLICT);
             }
         }
+        log.info("UserServiceImpl.updateUser - End");
         return mapper.map(this.repository.save(user), UserDTO.class);
     }
 
     @Override
     public void deleteUser(String id) {
+        log.info("UserServiceImpl.deleteUser - Start - Input: id {}", id);
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+                });
+        log.info("UserServiceImpl.deleteUser - End");
         this.repository.delete(user);
     }
 
