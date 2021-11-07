@@ -13,20 +13,13 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
-      - name: Setup Maven
-        uses: stCarolas/setup-maven@v4.2
-        with:
-          maven-version: 3.8.2
-      - name: Install
+          cache: 'maven'
+      - name: Install dependencies
         run: mvn clean install
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Tests
+      - name: Tests units
         run: mvn clean test jacoco:report
       - name: Code Coverage
         uses: codecov/codecov-action@v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./target/site/jacoco/jacoco.xml
-    needs: [build]
