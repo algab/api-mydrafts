@@ -43,6 +43,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public FavoriteDTO save(FavoriteFormDTO body) {
         log.info("FavoriteServiceImpl.save - Start - Input: body {}", body);
+
         Favorite favorite = Favorite.builder().build();
         User user = this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> {
@@ -61,19 +62,23 @@ public class FavoriteServiceImpl implements FavoriteService {
             Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
             favorite.setProduction(saveProduction);
         }
-        log.info("FavoriteServiceImpl.save - End");
-        return mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
+
+        FavoriteDTO favoriteResult = mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
+        log.info("FavoriteServiceImpl.save - End - Input: body {} - Output: {}", body, favoriteResult);
+        return favoriteResult;
     }
 
     @Override
     public void delete(String id) {
         log.info("FavoriteServiceImpl.delete - Start - Input: id {}", id);
+
         Favorite favorite = this.favoriteRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("FavoriteServiceImpl.delete - Error: {}", MESSAGE_FAVORITE_NOT_FOUND);
                     return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_FAVORITE_NOT_FOUND);
                 });
-        log.info("FavoriteServiceImpl.delete - End");
+
+        log.info("FavoriteServiceImpl.delete - End - Input: id {}", id);
         this.favoriteRepository.delete(favorite);
     }
 

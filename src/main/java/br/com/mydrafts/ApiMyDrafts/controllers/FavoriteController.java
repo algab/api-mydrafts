@@ -25,7 +25,7 @@ public class FavoriteController {
 
         FavoriteDTO favorite = this.service.save(body);
 
-        log.info("FavoriteController.save - End - Output: favorite {}", favorite);
+        log.info("FavoriteController.save - End - Input: body {} - Output: {}", body, favorite);
         return ResponseEntity.status(201).body(favorite);
     }
 
@@ -35,7 +35,7 @@ public class FavoriteController {
 
         this.service.delete(id);
 
-        log.info("FavoriteController.delete - End");
+        log.info("FavoriteController.delete - End - Input: id {}", id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

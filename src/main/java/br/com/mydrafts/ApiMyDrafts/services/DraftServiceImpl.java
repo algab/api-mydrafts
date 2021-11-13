@@ -46,6 +46,7 @@ public class DraftServiceImpl implements DraftService {
     @Override
     public DraftDTO save(DraftFormDTO body) {
         log.info("DraftServiceImpl.save - Start - Input: body {}", body);
+
         Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
         User user = this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> {
@@ -64,25 +65,31 @@ public class DraftServiceImpl implements DraftService {
             Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
             draft.setProduction(saveProduction);
         }
-        log.info("DraftServiceImpl.save - End");
-        return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+
+        DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+        log.info("DraftServiceImpl.save - End - Input: body {} - Output: {}", body, draftResult);
+        return draftResult;
     }
 
     @Override
     public DraftDTO searchDraft(String id) {
         log.info("DraftServiceImpl.searchDraft - Start - Input: id {}", id);
+
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("DraftServiceImpl.searchDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
                     return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND);
                 });
-        log.info("DraftServiceImpl.searchDraft - End");
-        return mapper.map(draft, DraftDTO.class);
+
+        DraftDTO draftResult = mapper.map(draft, DraftDTO.class);
+        log.info("DraftServiceImpl.searchDraft - End - Input: id {} - Output: {}", id, draftResult);
+        return draftResult;
     }
 
     @Override
     public DraftDTO updateDraft(String id, DraftFormDTO body) {
         log.info("DraftServiceImpl.updateDraft - Start - Input: id {}, body {}", id, body);
+
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> {
                     log.info("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
@@ -95,20 +102,23 @@ public class DraftServiceImpl implements DraftService {
                 });
         draft.setRating(body.getRating());
         draft.setDescription(body.getDescription());
+
         DraftDTO draftResponse = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
-        log.info("DraftServiceImpl.updateDraft - End - Output: {}", draftResponse);
+        log.info("DraftServiceImpl.updateDraft - End - Input: id {}, body {} - Output: {}", id, body, draftResponse);
         return draftResponse;
     }
 
     @Override
     public void deleteDraft(String id) {
         log.info("DraftServiceImpl.deleteDraft - Start - Input: id {}", id);
+
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> {
                     log.info("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
                     return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_DRAFT_NOT_FOUND);
                 });
-        log.info("DraftServiceImpl.deleteDraft - End");
+
+        log.info("DraftServiceImpl.deleteDraft - End - Input: id {}", id);
         this.draftRepository.delete(draft);
     }
 

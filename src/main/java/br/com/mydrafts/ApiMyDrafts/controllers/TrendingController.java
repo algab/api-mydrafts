@@ -26,7 +26,7 @@ public class TrendingController {
 
         Page<TMDBResultDTO> response = this.service.trendingTMDB(page);
 
-        log.info("TrendingController.trendingTMDB - End - Output: response {}", response.toList());
+        log.info("TrendingController.trendingTMDB - End - Input: page {} - Output: {}", page, response);
         return ResponseEntity.ok(response);
     }
 }

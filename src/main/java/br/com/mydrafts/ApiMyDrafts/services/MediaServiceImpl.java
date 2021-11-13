@@ -20,19 +20,23 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public TMDBMovieResponseDTO getMovie(Integer id) {
         log.info("MediaServiceImpl.getMovie - Start - Input: id {}", id);
+
         TMDBMovieDTO movie = this.tmdbProxy.getMovie(id);
         TMDBCreditsDTO credits = this.tmdbProxy.getMovieCredits(id);
         TMDBMovieResponseDTO response = mapper.map(movie, TMDBMovieResponseDTO.class);
         response.setCrew(credits.getCrew());
-        log.info("MediaServiceImpl.getMovie - End");
+
+        log.info("MediaServiceImpl.getMovie - End - Input: id {} - Output: {}", response);
         return response;
     }
 
     @Override
     public TMDBTvResponseDTO getTV(Integer id) {
         log.info("MediaServiceImpl.getTV - Start - Input: id {}", id);
+
         TMDBTvDTO tv = this.tmdbProxy.getTV(id);
-        log.info("MediaServiceImpl.getTV - End");
+
+        log.info("MediaServiceImpl.getTV - End - Input: id {} - Output: {}", id, tv);
         return mapper.map(tv, TMDBTvResponseDTO.class);
     }
 

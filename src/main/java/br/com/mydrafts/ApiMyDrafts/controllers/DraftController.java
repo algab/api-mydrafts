@@ -25,7 +25,7 @@ public class DraftController {
 
         DraftDTO draft = this.service.save(body);
 
-        log.info("DraftController.save - End - Output: draft {}", draft);
+        log.info("DraftController.save - End - Input: body {} - Output: {}", body, draft);
         return ResponseEntity.status(201).body(draft);
     }
 
@@ -35,7 +35,7 @@ public class DraftController {
 
         DraftDTO draft = this.service.searchDraft(id);
 
-        log.info("DraftController.search - End - Output: draft {}", draft);
+        log.info("DraftController.search - End - Input: id {} - Output: {}", id, draft);
         return ResponseEntity.ok(draft);
     }
 
@@ -45,7 +45,7 @@ public class DraftController {
 
         DraftDTO draft = this.service.updateDraft(id, body);
 
-        log.info("DraftController.update - End - Output: draft {}", draft);
+        log.info("DraftController.update - End - Input: id {}, body {} - Output: {}", id, body, draft);
         return ResponseEntity.ok(draft);
     }
 
@@ -55,7 +55,7 @@ public class DraftController {
 
         this.service.deleteDraft(id);
 
-        log.info("DraftController.delete - End");
+        log.info("DraftController.delete - End - Input: id {}", id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

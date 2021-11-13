@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/media")
 public class MediaController {
+
     @Autowired
     private MediaService service;
 
@@ -24,7 +25,7 @@ public class MediaController {
 
         TMDBMovieResponseDTO movie = this.service.getMovie(id);
 
-        log.info("MediaController.getMovie - End - Output: movie {}", movie);
+        log.info("MediaController.getMovie - End - Input: id {} - Output: {}", id, movie);
         return ResponseEntity.ok(movie);
     }
 
@@ -34,7 +35,7 @@ public class MediaController {
 
         TMDBTvResponseDTO tv = this.service.getTV(id);
 
-        log.info("MediaController.getTV - End - Output: tv {}", tv);
+        log.info("MediaController.getTV - End - Input: id {} - Output: {}", id, tv);
         return ResponseEntity.ok(tv);
     }
 }

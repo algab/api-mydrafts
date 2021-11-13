@@ -32,7 +32,8 @@ public class SearchController {
 
         Page<TMDBResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
 
-        log.info("SearchController.searchTMDB - End - Output: response {}", response.toList());
+        log.info("SearchController.searchTMDB - End - Input: page {}, type {}, name {} - Output: {}", page, type, name, response);
         return ResponseEntity.ok(response);
     }
+
 }

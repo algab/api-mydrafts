@@ -22,12 +22,12 @@ public class LoginController {
     private LoginService service;
 
     @PostMapping
-    public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginFormDTO form) {
-        log.info("LoginController.login - Start - Input: email {}", form.getEmail());
+    public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginFormDTO body) {
+        log.info("LoginController.login - Start - Input: email {}", body.getEmail());
 
-        LoginDTO user = service.login(form);
+        LoginDTO user = service.login(body);
 
-        log.info("LoginController.login - End - Output: user {}", user);
+        log.info("LoginController.login - End - Input: email {} - Output: {}", body.getEmail(), user);
         return ResponseEntity.ok(user);
     }
 

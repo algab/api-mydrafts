@@ -31,7 +31,7 @@ public class UserController {
 
         UserDTO user = this.service.saveUser(body);
 
-        log.info("UserController.saveUser - End - Output: id {}, name {}", user.getId(), user.getName());
+        log.info("UserController.saveUser - End - - Input: name {}, email {} - Output: {}", body.getName(), body.getEmail(), user);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
 
         UserDTO user = this.service.searchUser(id);
 
-        log.info("UserController.searchUser - End - Output: user {}", user);
+        log.info("UserController.searchUser - End - Input: id {} - Output: {}", id, user);
         return ResponseEntity.ok(user);
     }
 
@@ -53,7 +53,7 @@ public class UserController {
 
         Page<DraftDTO> content = this.service.getDrafts(page, id);
 
-        log.info("UserController.getDrafts - End - Output: response {}", content.toList());
+        log.info("UserController.getDrafts - End - Input: id {}, page {} Output: {}", id, page, content);
         return ResponseEntity.ok(content);
     }
 
@@ -64,7 +64,7 @@ public class UserController {
 
         Page<FavoriteDTO> content = this.service.getFavorites(page, id);
 
-        log.info("UserController.getFavorites - End - Output: response {}", content.toList());
+        log.info("UserController.getFavorites - End - Input: id {}, page {} - Output: {}", id, page, content);
         return ResponseEntity.ok(content);
     }
 
@@ -75,7 +75,7 @@ public class UserController {
 
         UserDTO user = this.service.updateUser(id, body);
 
-        log.info("UserController.updateUser - End - Output: user {}", user);
+        log.info("UserController.updateUser - End - Input: id {} - Output: {}", id, user);
         return ResponseEntity.ok(user);
     }
 
@@ -86,7 +86,7 @@ public class UserController {
 
         this.service.deleteUser(id);
 
-        log.info("UserController.deleteUser - End");
+        log.info("UserController.deleteUser - End - Input: id {}", id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

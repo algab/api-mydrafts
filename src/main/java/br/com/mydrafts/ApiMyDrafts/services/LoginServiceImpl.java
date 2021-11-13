@@ -46,6 +46,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginDTO login(LoginFormDTO login) {
         log.info("LoginServiceImpl.login - Start - Input: email {}", login.getEmail());
+
         User user = repository.findByEmail(login.getEmail())
                 .orElseThrow(() -> {
                     log.error("LoginServiceImpl.login - Error: {}", MESSAGE_EMAIL_NOT_FOUND);
@@ -60,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
                     .signWith(key, SignatureAlgorithm.HS256)
                     .compact();
             LoginDTO loginResponse = LoginDTO.builder().token(token).user(userResponse).build();
-            log.info("LoginServiceImpl.login - End - Output: {}", login);
+            log.info("LoginServiceImpl.login - End - Input: email {} - Output: {}", login.getEmail(), loginResponse);
             return loginResponse;
         }
         log.error("LoginServiceImpl.login - Error: {}", MESSAGE_PASSWORD_INCORRECT);
