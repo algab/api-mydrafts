@@ -1,6 +1,8 @@
-package br.com.mydrafts.apimydrafts.exceptions;
+package br.com.mydrafts.apimydrafts.exceptions.handler;
 
+import br.com.mydrafts.apimydrafts.exceptions.ResponseDefault;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
@@ -13,14 +15,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 
-public class AuthException implements AuthenticationEntryPoint, AccessDeniedHandler {
-
-    private static final Integer STATUS_UNAUTHORIZED = 401;
-    private static final String MESSAGE_UNAUTHORIZED = "Unauthorized";
+public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDeniedHandler {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        ResponseException exception = createResponse(response);
+        ResponseDefault exception = createResponse(response);
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, exception);
@@ -29,21 +28,22 @@ public class AuthException implements AuthenticationEntryPoint, AccessDeniedHand
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException {
-        ResponseException exception = createResponse(response);
+        ResponseDefault exception = createResponse(response);
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, exception);
         out.flush();
     }
 
-    public ResponseException createResponse(HttpServletResponse response) {
-        response.setStatus(STATUS_UNAUTHORIZED);
+    public ResponseDefault createResponse(HttpServletResponse response) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        return ResponseException.builder()
-                .status(STATUS_UNAUTHORIZED)
-                .error(MESSAGE_UNAUTHORIZED)
-                .message(MESSAGE_UNAUTHORIZED)
+        return ResponseDefault.builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(HttpStatus.UNAUTHORIZED.toString())
+                .message(HttpStatus.UNAUTHORIZED.toString())
                 .timestamp(LocalDateTime.now().toString())
                 .build();
     }
+
 }

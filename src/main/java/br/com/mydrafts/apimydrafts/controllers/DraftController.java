@@ -50,13 +50,13 @@ public class DraftController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("DraftController.delete - Start - Input: id {}", id);
 
         this.service.deleteDraft(id);
 
         log.info("DraftController.delete - End - Input: id {}", id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 }

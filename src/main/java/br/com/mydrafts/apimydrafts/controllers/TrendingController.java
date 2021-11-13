@@ -29,4 +29,5 @@ public class TrendingController {
         log.info("TrendingController.trendingTMDB - End - Input: page {} - Output: {}", page, response);
         return ResponseEntity.ok(response);
     }
+
 }

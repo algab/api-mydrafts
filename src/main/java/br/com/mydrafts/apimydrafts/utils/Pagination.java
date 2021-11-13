@@ -11,7 +11,7 @@ import java.util.List;
 public class Pagination {
 
     public static <T> PageImpl<T> applyPage(List<T> content, Pageable page) {
-        Integer initSize = initPage(Long.valueOf(page.getOffset()).intValue(), content.size());
+        Integer initSize = initPage((int) page.getOffset(), content.size());
         Integer endSize = endPage(initSize, page.getPageSize(), content.size());
         return new PageImpl<>(content.subList(initSize, endSize), page, content.size());
     }

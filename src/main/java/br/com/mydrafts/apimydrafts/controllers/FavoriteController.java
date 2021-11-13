@@ -30,13 +30,13 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable("id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("FavoriteController.delete - Start - Input: id {}", id);
 
         this.service.delete(id);
 
         log.info("FavoriteController.delete - End - Input: id {}", id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -81,13 +81,13 @@ public class UserController {
 
     @PreAuthorize("#id == authentication.principal")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
         log.info("UserController.deleteUser - Start - Input: id {}", id);
 
         this.service.deleteUser(id);
 
         log.info("UserController.deleteUser - End - Input: id {}", id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 }

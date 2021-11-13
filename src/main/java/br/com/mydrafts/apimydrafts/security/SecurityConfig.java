@@ -1,6 +1,6 @@
 package br.com.mydrafts.apimydrafts.security;
 
-import br.com.mydrafts.apimydrafts.exceptions.AuthException;
+import br.com.mydrafts.apimydrafts.exceptions.handler.AuthExceptionHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(new AuthProvider());
     }
 
@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AuthFilter(secret), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().authenticationEntryPoint(new AuthException()).accessDeniedHandler(new AuthException());
+                .exceptionHandling().authenticationEntryPoint(new AuthExceptionHandler()).accessDeniedHandler(new AuthExceptionHandler());
     }
 
 }
