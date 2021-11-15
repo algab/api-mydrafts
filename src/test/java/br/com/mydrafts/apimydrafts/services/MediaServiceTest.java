@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Media Service")
-public class MediaServiceTest {
+class MediaServiceTest {
 
     @Autowired
     private MediaService service;
@@ -28,7 +28,7 @@ public class MediaServiceTest {
 
     @Test
     @DisplayName("Get movie successful")
-    public void getMovie() {
+    void getMovie() {
         when(client.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
         when(client.movieCredits(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.credits());
 
@@ -40,7 +40,7 @@ public class MediaServiceTest {
 
     @Test
     @DisplayName("Get tv successful")
-    public void getTV() {
+    void getTV() {
         when(client.tv(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.tv());
 
         TMDBTvResponseDTO result = service.getTV(1);

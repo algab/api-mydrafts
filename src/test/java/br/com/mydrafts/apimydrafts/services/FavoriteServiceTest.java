@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Favorite Service")
-public class FavoriteServiceTest {
+class FavoriteServiceTest {
 
     @Autowired
     private FavoriteService service;
@@ -50,7 +50,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service save favorite")
-    public void saveFavoriteShouldReturnSuccessful() {
+    void saveFavoriteShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
         when(favoriteRepository.save(any())).thenReturn(FavoriteUtil.getFavorite(Media.MOVIE));
@@ -63,7 +63,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service save favorite find movie tmdb")
-    public void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
+    void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
         when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
@@ -78,7 +78,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service save favorite user not found")
-    public void saveFavoriteShouldReturnUserNotFound() {
+    void saveFavoriteShouldReturnUserNotFound() {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(FavoriteUtil.favoriteForm()));
@@ -86,7 +86,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service favorite already registered")
-    public void saveFavoriteShouldReturnAlreadyRegistered() {
+    void saveFavoriteShouldReturnAlreadyRegistered() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
         when(favoriteRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
@@ -96,7 +96,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service delete favorite")
-    public void deleteFavoriteShouldReturnSuccessful() {
+    void deleteFavoriteShouldReturnSuccessful() {
         when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteUtil.getFavorite(Media.MOVIE)));
         doNothing().when(favoriteRepository).delete(any());
 
@@ -107,7 +107,7 @@ public class FavoriteServiceTest {
 
     @Test
     @DisplayName("Service delete favorite not found")
-    public void deleteFavoriteShouldReturnNotFound() {
+    void deleteFavoriteShouldReturnNotFound() {
         when(favoriteRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.delete("10"));

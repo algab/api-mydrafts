@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Trending Controller")
-public class TrendingControllerTest {
+class TrendingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +73,7 @@ public class TrendingControllerTest {
 
     @Test
     @DisplayName("Controller trending movies and tv")
-    public void trendingTMDB() throws Exception {
+    void trendingTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/trending.json");
         when(this.service.trendingTMDB(PageRequest.of(0, 10))).thenReturn(trending());
 

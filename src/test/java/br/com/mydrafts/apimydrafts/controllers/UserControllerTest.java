@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for User Controller")
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,7 +73,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller save user")
-    public void saveUserShouldReturnSuccessful() throws Exception {
+    void saveUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/userRequest.json");
         when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
 
@@ -87,7 +87,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller save user bad request")
-    public void saveUserShouldReturnBadRequest() throws Exception {
+    void saveUserShouldReturnBadRequest() throws Exception {
         String json = TestUtil.readFileAsString("/json/userBadRequest.json");
         when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
 
@@ -101,7 +101,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller search user by id")
-    public void searchUserShouldReturnSuccessful() throws Exception {
+    void searchUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
@@ -115,7 +115,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller search user unauthorized")
-    public void searchUserShouldReturnUnauthorized() throws Exception {
+    void searchUserShouldReturnUnauthorized() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
@@ -128,7 +128,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller search user token unauthorized")
-    public void searchUserShouldReturnTokenUnauthorized() throws Exception {
+    void searchUserShouldReturnTokenUnauthorized() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
@@ -142,7 +142,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller search user token exception")
-    public void searchUserShouldReturnTokenException() throws Exception {
+    void searchUserShouldReturnTokenException() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
         when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
 
@@ -156,7 +156,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller get drafts by user")
-    public void getDraftsByUserShouldReturnSuccessful() throws Exception {
+    void getDraftsByUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftsUser.json");
         when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftUtil.getDraftDTO()), PageRequest.of(0, 10), 1));
 
@@ -170,7 +170,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller get favorites by user")
-    public void getFavoritesByUserShouldReturnSuccessful() throws Exception {
+    void getFavoritesByUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/favoritesUser.json");
         when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteUtil.getFavoriteDTO()), PageRequest.of(0, 10), 1));
 
@@ -184,7 +184,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller update user by id")
-    public void updateUserShouldReturnSuccessful() throws Exception {
+    void updateUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/userRequest.json");
         when(this.service.updateUser(anyString(), any())).thenReturn(UserUtil.getUserDTO());
 
@@ -198,7 +198,7 @@ public class UserControllerTest {
 
     @Test
     @DisplayName("Controller delete user by id")
-    public void deleteUserShouldReturnSuccessful() throws Exception {
+    void deleteUserShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).deleteUser(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))

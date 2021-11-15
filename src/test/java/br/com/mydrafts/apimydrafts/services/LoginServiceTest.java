@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Login Service")
-public class LoginServiceTest {
+class LoginServiceTest {
 
     @Autowired
     private LoginService service;
@@ -31,7 +31,7 @@ public class LoginServiceTest {
 
     @Test
     @DisplayName("Service login user not found")
-    public void loginUserShouldReturnUserNotFound() {
+    void loginUserShouldReturnUserNotFound() {
         User user = UserUtil.getUser();
         user.setPassword("12345678");
         when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -41,7 +41,7 @@ public class LoginServiceTest {
 
     @Test
     @DisplayName("Service login password incorrect")
-    public void loginUserShouldReturnPasswordIncorrect() {
+    void loginUserShouldReturnPasswordIncorrect() {
         User user = UserUtil.getUser();
         user.setPassword("12345678");
         when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));

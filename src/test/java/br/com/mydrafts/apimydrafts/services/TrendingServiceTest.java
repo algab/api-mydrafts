@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Trending Service")
-public class TrendingServiceTest {
+class TrendingServiceTest {
 
     @Autowired
     private TrendingService service;
@@ -29,13 +29,13 @@ public class TrendingServiceTest {
 
     @Test
     @DisplayName("Get Trending Movies and TV Successful")
-    public void getTrendingSuccessful() {
+    void getTrendingSuccessful() {
         when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingMovie());
         when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingTV());
 
         Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 10));
 
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getTotalPages()).isEqualTo(2);
         assertThat(result.getTotalElements()).isEqualTo(20L);
         assertThat(result.getContent()).isNotEmpty();
@@ -44,13 +44,13 @@ public class TrendingServiceTest {
 
     @Test
     @DisplayName("Get Trending Pageable")
-    public void getTrendingPageable() {
+    void getTrendingPageable() {
         when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingMovie());
         when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingTV());
 
         Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 40));
 
-        assertThat(result.getNumber()).isEqualTo(0);
+        assertThat(result.getNumber()).isZero();
         assertThat(result.getTotalPages()).isEqualTo(1);
         assertThat(result.getTotalElements()).isEqualTo(20L);
         assertThat(result.getContent()).isNotEmpty();

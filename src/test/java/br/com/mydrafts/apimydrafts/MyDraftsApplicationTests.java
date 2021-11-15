@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MyDraftsApplicationTests {
 
 	@Test
-	public void main() {
+	void main() {
 		MyDraftsApplication.main(new String[] {});
 	}
 

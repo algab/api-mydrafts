@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Search Controller")
-public class SearchControllerTest {
+class SearchControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -75,7 +75,7 @@ public class SearchControllerTest {
 
     @Test
     @DisplayName("Search movie")
-    public void searchMovieTMDB() throws Exception {
+    void searchMovieTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "shang")).thenReturn(searchMovie());
 
@@ -94,7 +94,7 @@ public class SearchControllerTest {
 
     @Test
     @DisplayName("Search tv show")
-    public void searchTVTMDB() throws Exception {
+    void searchTVTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.TV, "what")).thenReturn(searchTV());
 
@@ -113,7 +113,7 @@ public class SearchControllerTest {
 
     @Test
     @DisplayName("Search any media")
-    public void searchAnyMediaTMDB() throws Exception {
+    void searchAnyMediaTMDB() throws Exception {
         String json = TestUtil.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), null, "what")).thenReturn(searchTV());
 

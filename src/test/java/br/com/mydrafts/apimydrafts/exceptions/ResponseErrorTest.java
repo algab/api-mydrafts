@@ -8,15 +8,15 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDate;
 
 @DisplayName("Tests for response default")
-class ResponseDefaultTest {
+class ResponseErrorTest {
 
     private static final String ERROR_HTTP = "BAD REQUEST";
     private static final String MESSAGE_ERROR = "Bad Request";
 
     @Test
-    @DisplayName("Test attributes ResponseDefault")
-    void setAttributesResponseDefaultShouldReturnSuccessful() {
-        ResponseDefault exception = new ResponseDefault();
+    @DisplayName("Test attributes ResponseError")
+    void setAttributesResponseErrorShouldReturnSuccessful() {
+        ResponseError exception = new ResponseError();
         exception.setStatus(HttpStatus.BAD_REQUEST.value());
         exception.setError(ERROR_HTTP);
         exception.setMessage(MESSAGE_ERROR);

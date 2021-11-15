@@ -35,7 +35,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for User Service")
-public class UserServiceTest {
+class UserServiceTest {
 
     @Autowired
     private UserService service;
@@ -51,7 +51,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service save user")
-    public void saveUserShouldReturnSuccessful() {
+    void saveUserShouldReturnSuccessful() {
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(UserUtil.getUser());
 
@@ -63,7 +63,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service save user email conflict")
-    public void saveUserShouldReturnEmailConflict() {
+    void saveUserShouldReturnEmailConflict() {
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(UserUtil.userForm()));
@@ -71,7 +71,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service search user")
-    public void searchUserShouldReturnSuccessful() {
+    void searchUserShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
 
         UserDTO user = service.searchUser(UserUtil.getUser().getId());
@@ -82,7 +82,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service search user not found")
-    public void searchUserShouldReturnNotFound() {
+    void searchUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.searchUser("1"));
@@ -90,7 +90,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service get drafts by user")
-    public void getDraftsShouldReturnSuccessful() {
+    void getDraftsShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(draftRepository.findByUser(any(User.class), any())).thenReturn(pageDraft());
 
@@ -103,7 +103,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service get drafts user not found")
-    public void getDraftsShouldReturnUserNotFound() {
+    void getDraftsShouldReturnUserNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getDrafts(PageRequest.of(0, 10), UserUtil.getUser().getId()));
@@ -111,7 +111,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service get favorites by user")
-    public void getFavoritesShouldReturnSuccessful() {
+    void getFavoritesShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(favoriteRepository.findByUser(any(), any())).thenReturn(pageFavorite());
 
@@ -124,7 +124,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service get drafts user not found")
-    public void getFavoritesShouldReturnUserNotFound() {
+    void getFavoritesShouldReturnUserNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getFavorites(PageRequest.of(0, 10), UserUtil.getUser().getId()));
@@ -132,7 +132,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service update user")
-    public void updateUserShouldReturnSuccessful() {
+    void updateUserShouldReturnSuccessful() {
         User user = UserUtil.getUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
         UserFormDTO userForm = UserUtil.userForm();
@@ -147,7 +147,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service update user email")
-    public void updateUserEmailShouldReturnSuccessful() {
+    void updateUserEmailShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         UserFormDTO userForm = UserUtil.userForm();
         userForm.setEmail("alvarotest@email.com");
@@ -163,7 +163,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service update user email conflict")
-    public void updateUserShouldReturnEmailConflict() {
+    void updateUserShouldReturnEmailConflict() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         UserFormDTO userForm = UserUtil.userForm();
         userForm.setEmail("alvarotest@email.com");
@@ -174,7 +174,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service update user not found")
-    public void updateUserShouldReturnNotFound() {
+    void updateUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", UserUtil.userForm()));
@@ -182,7 +182,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service delete user")
-    public void deleteUserShouldReturnSuccessful() {
+    void deleteUserShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         doNothing().when(repository).delete(any());
 
@@ -193,7 +193,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("Service delete user not found")
-    public void deleteUserShouldReturnNotFound() {
+    void deleteUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.deleteUser("1"));

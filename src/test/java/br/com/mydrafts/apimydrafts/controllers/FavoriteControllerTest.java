@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Favorite Controller")
-public class FavoriteControllerTest {
+class FavoriteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -69,7 +69,7 @@ public class FavoriteControllerTest {
 
     @Test
     @DisplayName("Controller save favorite")
-    public void saveFavoriteShouldReturnSuccessful() throws Exception {
+    void saveFavoriteShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/favoriteRequest.json");
         when(this.service.save(any())).thenReturn(FavoriteUtil.getFavoriteDTO());
 
@@ -84,7 +84,7 @@ public class FavoriteControllerTest {
 
     @Test
     @DisplayName("Controller delete favorite")
-    public void deleteFavoriteShouldReturnSuccessful() throws Exception {
+    void deleteFavoriteShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).delete(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_FAVORITE))

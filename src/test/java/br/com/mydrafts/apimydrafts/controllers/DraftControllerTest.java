@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Draft Controller")
-public class DraftControllerTest {
+class DraftControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -69,7 +69,7 @@ public class DraftControllerTest {
 
     @Test
     @DisplayName("Controller save draft")
-    public void saveDraftShouldReturnSuccessful() throws Exception {
+    void saveDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
         when(this.service.save(any())).thenReturn(DraftUtil.getDraftDTO());
 
@@ -84,7 +84,7 @@ public class DraftControllerTest {
 
     @Test
     @DisplayName("Controller search draft by id")
-    public void searchDraftShouldReturnSuccessful() throws Exception {
+    void searchDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draft.json");
         when(this.service.searchDraft(anyString())).thenReturn(DraftUtil.getDraftDTO());
 
@@ -98,7 +98,7 @@ public class DraftControllerTest {
 
     @Test
     @DisplayName("Controller update draft")
-    public void updateDraftShouldReturnSuccessful() throws Exception {
+    void updateDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
         when(this.service.updateDraft(anyString(), any())).thenReturn(DraftUtil.getDraftDTO());
 
@@ -113,7 +113,7 @@ public class DraftControllerTest {
 
     @Test
     @DisplayName("Controller delete draft by id")
-    public void deleteDraftShouldReturnSuccessful() throws Exception {
+    void deleteDraftShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).deleteDraft(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))

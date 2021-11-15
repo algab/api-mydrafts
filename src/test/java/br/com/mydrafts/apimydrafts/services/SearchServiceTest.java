@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Search Service")
-public class SearchServiceTest {
+class SearchServiceTest {
 
     @Autowired
     private SearchService service;
@@ -30,7 +30,7 @@ public class SearchServiceTest {
 
     @Test
     @DisplayName("Search movie by name")
-    public void searchMovie() {
+    void searchMovie() {
         when(client.searchMovie(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchMovie());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "Shang-Chi");
@@ -43,7 +43,7 @@ public class SearchServiceTest {
 
     @Test
     @DisplayName("Search tv show by name")
-    public void searchTV() {
+     void searchTV() {
         when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.TV, "What");
@@ -56,7 +56,7 @@ public class SearchServiceTest {
 
     @Test
     @DisplayName("Search content empty")
-    public void searchEmpty() {
+    void searchEmpty() {
         when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(5, 20), Media.TV, "What");

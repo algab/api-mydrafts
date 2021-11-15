@@ -39,7 +39,7 @@ public class AuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
-    private Boolean validateToken(String token, SecretKey key) {
+    private boolean validateToken(String token, SecretKey key) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;

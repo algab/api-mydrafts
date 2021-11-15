@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.exceptions.handler;
 
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
-import br.com.mydrafts.apimydrafts.exceptions.ResponseDefault;
+import br.com.mydrafts.apimydrafts.exceptions.ResponseError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ResponseDefault> handleBusinessException(BusinessException exception) {
-        ResponseDefault responseException = ResponseDefault.builder()
+    public ResponseEntity<ResponseError> handleBusinessException(BusinessException exception) {
+        ResponseError responseException = ResponseError.builder()
                 .status(exception.getStatus())
                 .error(exception.getError())
                 .message(exception.getMessage())
@@ -39,7 +39,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         String message = ex.getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
-        ResponseDefault responseException = ResponseDefault.builder()
+        ResponseError responseException = ResponseError.builder()
                 .status(status.value())
                 .error(HttpStatus.BAD_REQUEST.toString())
                 .message(message)

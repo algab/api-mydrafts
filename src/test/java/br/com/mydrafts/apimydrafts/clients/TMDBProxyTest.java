@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for TMDBProxy")
-public class TMDBProxyTest {
+class TMDBProxyTest {
 
     @Autowired
     private TMDBProxy tmdbProxy;
@@ -44,7 +44,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Trending movie successful")
-    public void trendingMovieSuccessful() {
+    void trendingMovieSuccessful() {
         when(tmdbClient.trendingMovie(anyString(), anyString())).thenReturn(TrendingUtil.responseTrendingMovie());
 
         TMDBResponseDTO trendingMovie = tmdbProxy.trendingMovie();
@@ -54,7 +54,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Trending movie exception")
-    public void trendingMovieThrowException() {
+    void trendingMovieThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.trendingMovie(anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -64,7 +64,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Trending tv successful")
-    public void trendingTVSuccessful() {
+    void trendingTVSuccessful() {
         when(tmdbClient.trendingTv(anyString(), anyString())).thenReturn(TrendingUtil.responseTrendingTV());
 
         TMDBResponseDTO trendingTV = tmdbProxy.trendingTV();
@@ -74,7 +74,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Trending tv exception")
-    public void trendingTVThrowException() {
+    void trendingTVThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.trendingTv(anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -84,7 +84,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Search movie successful")
-    public void searchMovieSuccessful() {
+    void searchMovieSuccessful() {
         when(tmdbClient.searchMovie(anyString(), anyString(), anyString())).thenReturn(SearchUtil.responseSearchMovie());
 
         TMDBResponseDTO searchMovie = tmdbProxy.searchMovie(NAME_MOVIE);
@@ -94,7 +94,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Search movie exception")
-    public void searchMovieThrowException() {
+    void searchMovieThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.searchMovie(anyString(), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -104,7 +104,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Search tv successful")
-    public void searchTVSuccessful() {
+    void searchTVSuccessful() {
         when(tmdbClient.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
 
         TMDBResponseDTO searchTV = tmdbProxy.searchTV(NAME_TV_SHOW);
@@ -114,7 +114,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Search tv exception")
-    public void searchTVThrowException() {
+    void searchTVThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.searchTv(anyString(), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -124,7 +124,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get movie successful")
-    public void getMovieSuccessful() {
+    void getMovieSuccessful() {
         when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
 
         TMDBMovieDTO movie = tmdbProxy.getMovie(1);
@@ -135,7 +135,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get movie exception")
-    public void getMovieThrowException() {
+    void getMovieThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.movie(any(Integer.class), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -145,7 +145,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get movie credits successful")
-    public void getMovieCreditsSuccessful() {
+    void getMovieCreditsSuccessful() {
         when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.credits());
 
         TMDBCreditsDTO credits = tmdbProxy.getMovieCredits(1);
@@ -155,7 +155,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get movie credits exception")
-    public void getMovieCreditsThrowException() {
+    void getMovieCreditsThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -165,7 +165,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get tv successful")
-    public void getTVSuccessful() {
+    void getTVSuccessful() {
         when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.tv());
 
         TMDBTvDTO tv = tmdbProxy.getTV(1);
@@ -176,7 +176,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Get tv exception")
-    public void getTVThrowException() {
+    void getTVThrowException() {
         Request request = Request.create(Request.HttpMethod.GET, URL_EXCEPTION, new HashMap<>(), null, null, null);
         Response response = Response.builder().status(500).reason(MESSAGE_SERVER_ERROR).request(request).headers(new HashMap<>()).build();
         when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenThrow(FeignException.errorStatus("", response));
@@ -186,7 +186,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Find production movie successful")
-    public void findProductionMovieShouldReturnSuccessful() {
+    void findProductionMovieShouldReturnSuccessful() {
         when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
         when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.credits());
 
@@ -199,7 +199,7 @@ public class TMDBProxyTest {
 
     @Test
     @DisplayName("Find production tv successful")
-    public void findProductionTVShouldReturnSuccessful() {
+    void findProductionTVShouldReturnSuccessful() {
         when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.tv());
 
         Production production = tmdbProxy.findProduction(Media.TV, 1);

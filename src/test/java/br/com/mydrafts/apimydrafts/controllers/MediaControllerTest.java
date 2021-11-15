@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Tests for Media Controller")
-public class MediaControllerTest {
+class MediaControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,7 +70,7 @@ public class MediaControllerTest {
 
     @Test
     @DisplayName("Get movie by id")
-    public void getMovieSuccessful() throws Exception {
+    void getMovieSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/movie.json");
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaUtil.getMovie());
 
@@ -87,7 +87,7 @@ public class MediaControllerTest {
 
     @Test
     @DisplayName("Get tv show by id")
-    public void getTVSuccessful() throws Exception {
+    void getTVSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/tv.json");
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaUtil.getTV());
 

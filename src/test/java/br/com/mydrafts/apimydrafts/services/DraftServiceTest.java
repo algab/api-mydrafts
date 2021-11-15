@@ -31,7 +31,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Draft Service")
-public class DraftServiceTest {
+class DraftServiceTest {
 
     @Autowired
     private DraftService service;
@@ -50,7 +50,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service save draft")
-    public void saveDraftShouldReturnSuccessful() {
+    void saveDraftShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
         when(draftRepository.save(any(Draft.class))).thenReturn(DraftUtil.getDraft(Media.MOVIE));
@@ -64,7 +64,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service save draft find movie tmdb")
-    public void saveDraftFindMovieTMDBShouldReturnSuccessful() {
+    void saveDraftFindMovieTMDBShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
         when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
@@ -80,7 +80,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service save draft find tv tmdb")
-    public void saveDraftFindTVTMDBShouldReturnSuccessful() {
+    void saveDraftFindTVTMDBShouldReturnSuccessful() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
         when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.TV));
@@ -97,7 +97,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service draft already registered")
-    public void saveDraftShouldReturnAlreadyRegistered() {
+    void saveDraftShouldReturnAlreadyRegistered() {
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
         when(draftRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
@@ -107,7 +107,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service save draft user not found")
-    public void saveDraftShouldReturnUserNotFound() {
+    void saveDraftShouldReturnUserNotFound() {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(DraftUtil.draftForm(Media.TV)));
@@ -115,7 +115,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service search draft by id")
-    public void searchDraftShouldReturnSuccessful() {
+    void searchDraftShouldReturnSuccessful() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
 
         DraftDTO draftDTO = service.searchDraft("61586ad5362766670067eda8");
@@ -127,7 +127,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service search draft not found")
-    public void searchDraftShouldReturnNotFound() {
+    void searchDraftShouldReturnNotFound() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.searchDraft("61586ad5362766670067eda8"));
@@ -135,7 +135,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service update draft")
-    public void updateDraftShouldReturnSuccessful() {
+    void updateDraftShouldReturnSuccessful() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
         when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
@@ -150,7 +150,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service update draft not found")
-    public void updateDraftShouldReturnDraftNotFound() {
+    void updateDraftShouldReturnDraftNotFound() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", DraftUtil.draftForm(Media.MOVIE)));
@@ -158,7 +158,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service update draft return user not found")
-    public void updateDraftShouldReturnUserNotFound() {
+    void updateDraftShouldReturnUserNotFound() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
@@ -167,7 +167,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service delete draft")
-    public void deleteDraftShouldReturnSuccessful() {
+    void deleteDraftShouldReturnSuccessful() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
         doNothing().when(draftRepository).delete(any());
 
@@ -178,7 +178,7 @@ public class DraftServiceTest {
 
     @Test
     @DisplayName("Service delete draft not found")
-    public void deleteDraftShouldReturnNotFound() {
+    void deleteDraftShouldReturnNotFound() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.deleteDraft("61586ad5362766670067eda8"));

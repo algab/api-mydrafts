@@ -8,6 +8,7 @@ import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -27,14 +28,11 @@ public class TMDBProxy {
     @Autowired
     private ModelMapper mapper;
 
-    private static final Integer STATUS_SERVER_ERROR = 500;
-    private static final String MESSAGE_SERVER_ERROR = "INTERNAL SERVER ERROR";
-
     public TMDBResponseDTO trendingMovie() {
         try {
             return this.client.trendingMovie(this.apiKey, this.language);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -42,7 +40,7 @@ public class TMDBProxy {
         try {
             return this.client.trendingTv(this.apiKey, this.language);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -50,7 +48,7 @@ public class TMDBProxy {
         try {
             return this.client.searchMovie(this.apiKey, this.language, name);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -58,7 +56,7 @@ public class TMDBProxy {
         try {
             return this.client.searchTv(this.apiKey, this.language, name);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -66,7 +64,7 @@ public class TMDBProxy {
         try {
             return this.client.movie(tmdbID, this.apiKey, this.language);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -78,7 +76,7 @@ public class TMDBProxy {
                     .collect(Collectors.toList()));
             return credits;
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
@@ -86,7 +84,7 @@ public class TMDBProxy {
         try {
             return this.client.tv(tmdbID, this.apiKey, this.language);
         } catch (FeignException exception) {
-            throw new BusinessException(STATUS_SERVER_ERROR, MESSAGE_SERVER_ERROR, exception.contentUTF8());
+            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
         }
     }
 
