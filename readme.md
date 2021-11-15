@@ -1,5 +1,6 @@
 # MyDrafts
 
+![repo](https://github.com/algab/api-mydrafts/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/algab/api-mydrafts/branch/master/graph/badge.svg?token=4HHIZGIOLW)](https://codecov.io/gh/algab/api-mydrafts)
 
 API MyDrafts, application to search and view information of movies and tv shows on TMDB and also save movies and tv shows to watch later and write your opinion about them.
