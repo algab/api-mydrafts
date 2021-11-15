@@ -4,6 +4,8 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority
+server:
+  port: ${PORT:8080}
 tmdb:
   language: pt-BR
   api-key: ${API_KEY}
