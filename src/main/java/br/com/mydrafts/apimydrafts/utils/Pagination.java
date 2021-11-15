@@ -26,7 +26,7 @@ public class Pagination {
 
     private static Integer endPage(Integer initSize, Integer pageSize, Integer total) {
         Integer endSize = initSize + pageSize;
-        if (endSize > total) {
+        if (endSize >= total) {
             Integer rest = endSize - total;
             endSize -= rest;
         } else {

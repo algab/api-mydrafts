@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +36,6 @@ public class LoginServiceImpl implements LoginService {
     @Value("${secret.jwt}")
     private String secret;
 
-    private static final String BAD_REQUEST = "BAD REQUEST";
-    private static final String NOT_FOUND = "NOT FOUND";
-    private static final Integer STATUS_BAD_REQUEST = 400;
-    private static final Integer STATUS_NOT_FOUND = 404;
     private static final String MESSAGE_PASSWORD_INCORRECT = "Password incorrect";
     private static final String MESSAGE_EMAIL_NOT_FOUND = "Email not found";
 
@@ -49,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
         User user = repository.findByEmail(login.getEmail())
                 .orElseThrow(() -> {
                     log.error("LoginServiceImpl.login - Error: {}", MESSAGE_EMAIL_NOT_FOUND);
-                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_EMAIL_NOT_FOUND);
+                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_EMAIL_NOT_FOUND);
                 });
         if (new BCryptPasswordEncoder().matches(login.getPassword(), user.getPassword())) {
             UserDTO userResponse = mapper.map(user, UserDTO.class);
@@ -64,7 +61,7 @@ public class LoginServiceImpl implements LoginService {
             return loginResponse;
         }
         log.error("LoginServiceImpl.login - Error: {}", MESSAGE_PASSWORD_INCORRECT);
-        throw new BusinessException(STATUS_BAD_REQUEST, BAD_REQUEST, MESSAGE_PASSWORD_INCORRECT);
+        throw new BusinessException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), MESSAGE_PASSWORD_INCORRECT);
     }
 
 }

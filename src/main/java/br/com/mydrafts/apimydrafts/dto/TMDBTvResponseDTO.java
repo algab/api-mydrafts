@@ -37,6 +37,8 @@ public class TMDBTvResponseDTO {
 
     private String language;
 
+    private List<TMDBSeasonDTO> seasons;
+
     private List<String> created;
 
     private List<String> genres;

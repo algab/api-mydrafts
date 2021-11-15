@@ -23,6 +23,7 @@ public class TMDBTvToResponse extends AbstractConverter<TMDBTvDTO, TMDBTvRespons
                 .dateRelease(tv.getDateRelease())
                 .lastEpisode(tv.getLastEpisode())
                 .language(tv.getLanguage())
+                .seasons(tv.getSeasons())
                 .created(tv.getCreated().stream().map(created -> created.getName()).collect(Collectors.toList()))
                 .genres(tv.getGenres().stream().map(genre -> genre.getName()).collect(Collectors.toList()))
                 .companies(tv.getCompanies().stream().map(company -> company.getName()).collect(Collectors.toList()))

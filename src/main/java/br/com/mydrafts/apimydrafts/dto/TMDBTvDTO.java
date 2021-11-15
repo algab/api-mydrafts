@@ -38,6 +38,8 @@ public class TMDBTvDTO {
     @JsonAlias({"original_language"})
     private String language;
 
+    private List<TMDBSeasonDTO> seasons;
+
     @JsonAlias({"created_by"})
     private List<TMDBCreatedDTO> created;
 
