@@ -7,16 +7,16 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 
-@DisplayName("Tests for response default")
-class ResponseErrorTest {
+@DisplayName("Tests for exception response")
+class ExceptionResponseTest {
 
     private static final String ERROR_HTTP = "BAD REQUEST";
     private static final String MESSAGE_ERROR = "Bad Request";
 
     @Test
-    @DisplayName("Test attributes ResponseError")
-    void setAttributesResponseErrorShouldReturnSuccessful() {
-        ResponseError exception = new ResponseError();
+    @DisplayName("Test attributes ExceptionResponse")
+    void setAttributesExceptionResponseShouldReturnSuccessful() {
+        ExceptionResponse exception = new ExceptionResponse();
         exception.setStatus(HttpStatus.BAD_REQUEST.value());
         exception.setError(ERROR_HTTP);
         exception.setMessage(MESSAGE_ERROR);

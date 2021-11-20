@@ -11,7 +11,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResponseError {
+public class ExceptionResponse {
 
     private Integer status;
 

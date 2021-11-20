@@ -2,8 +2,7 @@ package br.com.mydrafts.apimydrafts.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

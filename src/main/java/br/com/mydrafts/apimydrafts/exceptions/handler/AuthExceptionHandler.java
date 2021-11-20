@@ -1,6 +1,6 @@
 package br.com.mydrafts.apimydrafts.exceptions.handler;
 
-import br.com.mydrafts.apimydrafts.exceptions.ResponseError;
+import br.com.mydrafts.apimydrafts.exceptions.ExceptionResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +19,7 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        ResponseError exception = createResponse(response);
+        ExceptionResponse exception = createResponse(response);
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, exception);
@@ -28,17 +28,17 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException {
-        ResponseError exception = createResponse(response);
+        ExceptionResponse exception = createResponse(response);
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, exception);
         out.flush();
     }
 
-    public ResponseError createResponse(HttpServletResponse response) {
+    public ExceptionResponse createResponse(HttpServletResponse response) {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        return ResponseError.builder()
+        return ExceptionResponse.builder()
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .error(HttpStatus.UNAUTHORIZED.toString())
                 .message(HttpStatus.UNAUTHORIZED.toString())

@@ -2,16 +2,14 @@ package br.com.mydrafts.apimydrafts.dto;
 
 import br.com.mydrafts.apimydrafts.constants.Gender;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Setter
-@Getter
+@Data
 @Builder
 public class UserFormDTO {
 
