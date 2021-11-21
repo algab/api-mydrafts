@@ -2,8 +2,8 @@ package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.utils.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +24,24 @@ public class SearchServiceImpl implements SearchService {
     private TMDBProxy tmdbProxy;
 
     @Override
-    public Page<TMDBResultDTO> searchTMDB(Pageable page, Media media, String name) {
+    public Page<ResultDTO> searchTMDB(Pageable page, Media media, String name) {
         log.info("SearchServiceImpl.searchTMDB - Start - Input: page {}, media {}, name {}", page, media, name);
 
-        List<TMDBResultDTO> content = new ArrayList<>();
+        List<ResultDTO> content = new ArrayList<>();
         if (media == Media.TV) {
             this.searchTV(content, name);
         } else {
             this.searchMovie(content, name);
         }
-        content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
+        content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
 
-        Page<TMDBResultDTO> pageResult = Pagination.applyPage(content, page);
+        Page<ResultDTO> pageResult = Pagination.applyPage(content, page);
         log.info("SearchServiceImpl.searchTMDB - End - Input: page {}, media {}, name {} - Output: {}", page, media, name, pageResult);
         return pageResult;
     }
 
-    private void searchMovie(List<TMDBResultDTO> content, String name) {
-        TMDBResponseDTO movies = this.tmdbProxy.searchMovie(name);
+    private void searchMovie(List<ResultDTO> content, String name) {
+        ResponseDTO movies = this.tmdbProxy.searchMovie(name);
         movies.getResults().stream().map(result -> {
             result.setMedia(Media.MOVIE);
             return result;
@@ -49,8 +49,8 @@ public class SearchServiceImpl implements SearchService {
         content.addAll(movies.getResults());
     }
 
-    private void searchTV(List<TMDBResultDTO> content, String name) {
-        TMDBResponseDTO tv = this.tmdbProxy.searchTV(name);
+    private void searchTV(List<ResultDTO> content, String name) {
+        ResponseDTO tv = this.tmdbProxy.searchTV(name);
         tv.getResults().stream().map(result -> {
             result.setMedia(Media.TV);
             return result;

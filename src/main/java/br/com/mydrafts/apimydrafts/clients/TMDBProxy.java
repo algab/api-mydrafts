@@ -2,7 +2,12 @@ package br.com.mydrafts.apimydrafts.clients;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.Production;
-import br.com.mydrafts.apimydrafts.dto.*;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import feign.FeignException;
 import org.modelmapper.ModelMapper;
@@ -28,7 +33,7 @@ public class TMDBProxy {
     @Autowired
     private ModelMapper mapper;
 
-    public TMDBResponseDTO trendingMovie() {
+    public ResponseDTO trendingMovie() {
         try {
             return this.client.trendingMovie(this.apiKey, this.language);
         } catch (FeignException exception) {
@@ -36,7 +41,7 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBResponseDTO trendingTV() {
+    public ResponseDTO trendingTV() {
         try {
             return this.client.trendingTv(this.apiKey, this.language);
         } catch (FeignException exception) {
@@ -44,7 +49,7 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBResponseDTO searchMovie(String name) {
+    public ResponseDTO searchMovie(String name) {
         try {
             return this.client.searchMovie(this.apiKey, this.language, name);
         } catch (FeignException exception) {
@@ -52,7 +57,7 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBResponseDTO searchTV(String name) {
+    public ResponseDTO searchTV(String name) {
         try {
             return this.client.searchTv(this.apiKey, this.language, name);
         } catch (FeignException exception) {
@@ -60,7 +65,7 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBMovieDTO getMovie(Integer tmdbID) {
+    public MovieDTO getMovie(Integer tmdbID) {
         try {
             return this.client.movie(tmdbID, this.apiKey, this.language);
         } catch (FeignException exception) {
@@ -68,9 +73,9 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBCreditsDTO getMovieCredits(Integer tmdbID) {
+    public CreditsDTO getMovieCredits(Integer tmdbID) {
         try {
-            TMDBCreditsDTO credits = this.client.movieCredits(tmdbID, this.apiKey, this.language);
+            CreditsDTO credits = this.client.movieCredits(tmdbID, this.apiKey, this.language);
             credits.setCrew(credits.getCrew().stream()
                     .filter(crew -> crew.getJob().equals("Director") || crew.getJob().equals("Writer") || crew.getJob().equals("Executive Producer"))
                     .collect(Collectors.toList()));
@@ -80,7 +85,7 @@ public class TMDBProxy {
         }
     }
 
-    public TMDBTvDTO getTV(Integer tmdbID) {
+    public TvDTO getTV(Integer tmdbID) {
         try {
             return this.client.tv(tmdbID, this.apiKey, this.language);
         } catch (FeignException exception) {
@@ -91,13 +96,13 @@ public class TMDBProxy {
     public Production findProduction(Media media, Integer tmdbID) {
         Production production = Production.builder().media(media).tmdbID(tmdbID).build();
         if (media.equals(Media.MOVIE)) {
-            TMDBMovieDTO movie = getMovie(tmdbID);
-            TMDBCreditsDTO credits = getMovieCredits(tmdbID);
-            TMDBMovieResponseDTO response = mapper.map(movie, TMDBMovieResponseDTO.class);
+            MovieDTO movie = getMovie(tmdbID);
+            CreditsDTO credits = getMovieCredits(tmdbID);
+            MovieResponseDTO response = mapper.map(movie, MovieResponseDTO.class);
             response.setCrew(credits.getCrew());
             production.setMovie(response);
         } else {
-            TMDBTvResponseDTO tv = mapper.map(getTV(tmdbID), TMDBTvResponseDTO.class);
+            TvResponseDTO tv = mapper.map(getTV(tmdbID), TvResponseDTO.class);
             production.setTv(tv);
         }
         return production;

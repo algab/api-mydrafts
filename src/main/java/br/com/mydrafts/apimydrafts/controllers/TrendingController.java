@@ -1,6 +1,6 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.services.TrendingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ public class TrendingController {
     private TrendingService service;
 
     @GetMapping
-    public ResponseEntity<Page<TMDBResultDTO>> trendingTMDB(@PageableDefault Pageable page) {
+    public ResponseEntity<Page<ResultDTO>> trendingTMDB(@PageableDefault Pageable page) {
         log.info("TrendingController.trendingTMDB - Start - Input: page {}", page);
 
-        Page<TMDBResultDTO> response = this.service.trendingTMDB(page);
+        Page<ResultDTO> response = this.service.trendingTMDB(page);
 
         log.info("TrendingController.trendingTMDB - End - Input: page {} - Output: {}", page, response);
         return ResponseEntity.ok(response);

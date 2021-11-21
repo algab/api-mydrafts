@@ -1,6 +1,8 @@
 package br.com.mydrafts.apimydrafts.dto;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -17,8 +19,8 @@ public class ProductionDTO {
 
     private Media media;
 
-    private TMDBMovieResponseDTO movie;
+    private MovieResponseDTO movie;
 
-    private TMDBTvResponseDTO tv;
+    private TvResponseDTO tv;
 
 }

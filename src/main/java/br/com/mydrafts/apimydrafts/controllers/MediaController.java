@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import br.com.mydrafts.apimydrafts.services.MediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,20 @@ public class MediaController {
     private MediaService service;
 
     @GetMapping(path = "/movie/{id}")
-    public ResponseEntity<TMDBMovieResponseDTO> getMovie(@PathVariable("id") Integer id) {
+    public ResponseEntity<MovieResponseDTO> getMovie(@PathVariable("id") Integer id) {
         log.info("MediaController.getMovie - Start - Input: id {}", id);
 
-        TMDBMovieResponseDTO movie = this.service.getMovie(id);
+        MovieResponseDTO movie = this.service.getMovie(id);
 
         log.info("MediaController.getMovie - End - Input: id {} - Output: {}", id, movie);
         return ResponseEntity.ok(movie);
     }
 
     @GetMapping(path = "/tv/{id}")
-    public ResponseEntity<TMDBTvResponseDTO> getTV(@PathVariable("id") Integer id) {
+    public ResponseEntity<TvResponseDTO> getTV(@PathVariable("id") Integer id) {
         log.info("MediaController.getTV - Start - Input: id {}", id);
 
-        TMDBTvResponseDTO tv = this.service.getTV(id);
+        TvResponseDTO tv = this.service.getTV(id);
 
         log.info("MediaController.getTV - End - Input: id {} - Output: {}", id, tv);
         return ResponseEntity.ok(tv);

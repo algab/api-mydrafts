@@ -1,18 +1,18 @@
 package br.com.mydrafts.apimydrafts.converters;
 
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import org.modelmapper.AbstractConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-public class TMDBMovieToResponse extends AbstractConverter<TMDBMovieDTO, TMDBMovieResponseDTO> {
+public class TMDBMovieToResponse extends AbstractConverter<MovieDTO, MovieResponseDTO> {
 
     @Override
-    protected TMDBMovieResponseDTO convert(TMDBMovieDTO movie) {
-        return TMDBMovieResponseDTO.builder()
+    protected MovieResponseDTO convert(MovieDTO movie) {
+        return MovieResponseDTO.builder()
                 .id(movie.getId())
                 .title(movie.getTitle())
                 .titleOriginal(movie.getTitleOriginal())

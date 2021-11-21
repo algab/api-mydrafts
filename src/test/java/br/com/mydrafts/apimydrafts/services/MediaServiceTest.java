@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBClient;
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class MediaServiceTest {
         when(client.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
         when(client.movieCredits(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.credits());
 
-        TMDBMovieResponseDTO result = service.getMovie(1);
+        MovieResponseDTO result = service.getMovie(1);
 
         assertThat(result.getId()).isEqualTo(MediaBuilder.movie().getId());
         assertThat(result.getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
@@ -43,7 +43,7 @@ class MediaServiceTest {
     void getTV() {
         when(client.tv(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.tv());
 
-        TMDBTvResponseDTO result = service.getTV(1);
+        TvResponseDTO result = service.getTV(1);
 
         assertThat(result.getId()).isEqualTo(MediaBuilder.tv().getId());
         assertThat(result.getTitle()).isEqualTo(MediaBuilder.tv().getTitle());

@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.dto;
+package br.com.mydrafts.apimydrafts.dto.tmdb;
 
 import br.com.mydrafts.apimydrafts.serializer.ImageSerializer;
 import com.fasterxml.jackson.annotation.JsonAlias;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TMDBCrewDTO {
+public class CrewDTO {
 
     private Integer id;
 

@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.dto;
+package br.com.mydrafts.apimydrafts.dto.tmdb;
 
 import br.com.mydrafts.apimydrafts.serializer.LocalDateSerializer;
 import br.com.mydrafts.apimydrafts.serializer.ImageSerializer;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class TMDBResultDTO {
+public class ResultDTO {
 
     private Integer id;
 

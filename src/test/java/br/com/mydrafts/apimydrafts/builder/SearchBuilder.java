@@ -1,15 +1,15 @@
 package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
 public final class SearchBuilder {
-    public static TMDBResultDTO searchMovie() {
-        return TMDBResultDTO.builder()
+    public static ResultDTO searchMovie() {
+        return ResultDTO.builder()
                 .id(1)
                 .title("Shang-Chi e a Lenda dos Dez Anéis")
                 .titleOriginal("Shang-Chi and the Legend of the Ten Rings")
@@ -21,8 +21,8 @@ public final class SearchBuilder {
                 .build();
     }
 
-    public static TMDBResultDTO searchTV() {
-        return TMDBResultDTO.builder()
+    public static ResultDTO searchTV() {
+        return ResultDTO.builder()
                 .id(1)
                 .title("What If...?")
                 .titleOriginal("What If...?")
@@ -34,14 +34,14 @@ public final class SearchBuilder {
                 .build();
     }
 
-    public static TMDBResponseDTO responseSearchMovie() {
-        return TMDBResponseDTO.builder()
+    public static ResponseDTO responseSearchMovie() {
+        return ResponseDTO.builder()
                 .results(Arrays.asList(SearchBuilder.searchMovie()))
                 .build();
     }
 
-    public static TMDBResponseDTO responseSearchTV() {
-        return TMDBResponseDTO.builder()
+    public static ResponseDTO responseSearchTV() {
+        return ResponseDTO.builder()
                 .results(Arrays.asList(SearchBuilder.searchTV()))
                 .build();
     }

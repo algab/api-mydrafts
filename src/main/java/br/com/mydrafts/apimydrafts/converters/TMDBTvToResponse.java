@@ -1,18 +1,18 @@
 package br.com.mydrafts.apimydrafts.converters;
 
-import br.com.mydrafts.apimydrafts.dto.TMDBTvDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import org.modelmapper.AbstractConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
 @Component
-public class TMDBTvToResponse extends AbstractConverter<TMDBTvDTO, TMDBTvResponseDTO> {
+public class TMDBTvToResponse extends AbstractConverter<TvDTO, TvResponseDTO> {
 
     @Override
-    protected TMDBTvResponseDTO convert(TMDBTvDTO tv) {
-        return TMDBTvResponseDTO.builder()
+    protected TvResponseDTO convert(TvDTO tv) {
+        return TvResponseDTO.builder()
                 .id(tv.getId())
                 .title(tv.getTitle())
                 .titleOriginal(tv.getTitleOriginal())

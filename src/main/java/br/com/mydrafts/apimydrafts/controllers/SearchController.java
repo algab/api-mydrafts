@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.services.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ public class SearchController {
     private SearchService service;
 
     @GetMapping
-    public ResponseEntity<Page<TMDBResultDTO>> searchTMDB(
+    public ResponseEntity<Page<ResultDTO>> searchTMDB(
             @PageableDefault Pageable page,
             @RequestParam(value = "media", required = false) String type,
             @RequestParam("name") String name
     ) {
         log.info("SearchController.searchTMDB - Start - Input: page {}, type {}, name {}", page, type, name);
 
-        Page<TMDBResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
+        Page<ResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
 
         log.info("SearchController.searchTMDB - End - Input: page {}, type {}, name {} - Output: {}", page, type, name, response);
         return ResponseEntity.ok(response);

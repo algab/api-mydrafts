@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.documents;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,8 +22,8 @@ public class Production {
 
     private Media media;
 
-    private TMDBMovieResponseDTO movie;
+    private MovieResponseDTO movie;
 
-    private TMDBTvResponseDTO tv;
+    private TvResponseDTO tv;
 
 }

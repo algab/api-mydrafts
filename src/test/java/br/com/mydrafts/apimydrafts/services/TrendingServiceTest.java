@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBClient;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class TrendingServiceTest {
         when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingMovie());
         when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingTV());
 
-        Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 10));
+        Page<ResultDTO> result = service.trendingTMDB(PageRequest.of(0, 10));
 
         assertThat(result.getNumber()).isZero();
         assertThat(result.getTotalPages()).isEqualTo(2);
@@ -48,7 +48,7 @@ class TrendingServiceTest {
         when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingMovie());
         when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingTV());
 
-        Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 40));
+        Page<ResultDTO> result = service.trendingTMDB(PageRequest.of(0, 40));
 
         assertThat(result.getNumber()).isZero();
         assertThat(result.getTotalPages()).isEqualTo(1);

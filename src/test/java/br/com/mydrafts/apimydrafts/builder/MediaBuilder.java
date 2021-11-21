@@ -1,22 +1,22 @@
 package br.com.mydrafts.apimydrafts.builder;
 
-import br.com.mydrafts.apimydrafts.dto.TMDBCompaniesDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBCreatedDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBCreditsDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBCrewDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBGenresDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBNetworkDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CompaniesDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CreatedDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CrewDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.GenresDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.NetworkDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 
 public final class MediaBuilder {
-    public static TMDBMovieResponseDTO getMovie() {
-        return TMDBMovieResponseDTO.builder()
+    public static MovieResponseDTO getMovie() {
+        return MovieResponseDTO.builder()
                 .id(1)
                 .title("O Esquadrão Suicida")
                 .titleOriginal("The Suicide Squad")
@@ -32,8 +32,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBTvResponseDTO getTV() {
-        return TMDBTvResponseDTO.builder()
+    public static TvResponseDTO getTV() {
+        return TvResponseDTO.builder()
                 .id(1)
                 .title("The Office")
                 .titleOriginal("The Office")
@@ -50,8 +50,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBMovieDTO movie() {
-        return TMDBMovieDTO.builder()
+    public static MovieDTO movie() {
+        return MovieDTO.builder()
                 .id(1)
                 .title("O Esquadrão Suicida")
                 .titleOriginal("The Suicide Squad")
@@ -66,8 +66,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBTvDTO tv() {
-        return TMDBTvDTO.builder()
+    public static TvDTO tv() {
+        return TvDTO.builder()
                 .id(1)
                 .title("The Office")
                 .titleOriginal("The Office")
@@ -85,15 +85,15 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBCreditsDTO credits() {
-        return TMDBCreditsDTO.builder()
+    public static CreditsDTO credits() {
+        return CreditsDTO.builder()
                 .id(1)
                 .crew(Arrays.asList(MediaBuilder.crewDirector(), MediaBuilder.crewActor(), MediaBuilder.crewWriter(), MediaBuilder.crewExecutiveProducer()))
                 .build();
     }
 
-    public static TMDBCrewDTO crewDirector() {
-        return TMDBCrewDTO.builder()
+    public static CrewDTO crewDirector() {
+        return CrewDTO.builder()
                 .id(1)
                 .gender(2)
                 .name("James Gunn")
@@ -102,8 +102,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBCrewDTO crewActor() {
-        return TMDBCrewDTO.builder()
+    public static CrewDTO crewActor() {
+        return CrewDTO.builder()
                 .id(1)
                 .gender(1)
                 .name("Margot Robbie")
@@ -112,8 +112,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBCrewDTO crewWriter() {
-        return TMDBCrewDTO.builder()
+    public static CrewDTO crewWriter() {
+        return CrewDTO.builder()
                 .id(2)
                 .gender(2)
                 .name("James Gunn")
@@ -122,8 +122,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBCrewDTO crewExecutiveProducer() {
-        return TMDBCrewDTO.builder()
+    public static CrewDTO crewExecutiveProducer() {
+        return CrewDTO.builder()
                 .id(2)
                 .gender(2)
                 .name("James Gunn")
@@ -132,15 +132,15 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBGenresDTO genres() {
-        return TMDBGenresDTO.builder()
+    public static GenresDTO genres() {
+        return GenresDTO.builder()
                 .id(1)
                 .name("Ação")
                 .build();
     }
 
-    public static TMDBCompaniesDTO companies() {
-        return TMDBCompaniesDTO.builder()
+    public static CompaniesDTO companies() {
+        return CompaniesDTO.builder()
                 .id(1)
                 .name("DC Comics")
                 .logo("http://teste.com/dc-comics.jpg")
@@ -148,8 +148,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBCreatedDTO created() {
-        return TMDBCreatedDTO.builder()
+    public static CreatedDTO created() {
+        return CreatedDTO.builder()
                 .id(1)
                 .name("Greg Daniels")
                 .gender(2)
@@ -157,8 +157,8 @@ public final class MediaBuilder {
                 .build();
     }
 
-    public static TMDBNetworkDTO network() {
-        return TMDBNetworkDTO.builder()
+    public static NetworkDTO network() {
+        return NetworkDTO.builder()
                 .id(1)
                 .name("NBC")
                 .country("US")

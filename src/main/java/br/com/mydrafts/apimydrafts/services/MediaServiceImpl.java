@@ -1,7 +1,11 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
-import br.com.mydrafts.apimydrafts.dto.*;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +22,12 @@ public class MediaServiceImpl implements MediaService {
     private ModelMapper mapper;
 
     @Override
-    public TMDBMovieResponseDTO getMovie(Integer id) {
+    public MovieResponseDTO getMovie(Integer id) {
         log.info("MediaServiceImpl.getMovie - Start - Input: id {}", id);
 
-        TMDBMovieDTO movie = this.tmdbProxy.getMovie(id);
-        TMDBCreditsDTO credits = this.tmdbProxy.getMovieCredits(id);
-        TMDBMovieResponseDTO response = mapper.map(movie, TMDBMovieResponseDTO.class);
+        MovieDTO movie = this.tmdbProxy.getMovie(id);
+        CreditsDTO credits = this.tmdbProxy.getMovieCredits(id);
+        MovieResponseDTO response = mapper.map(movie, MovieResponseDTO.class);
         response.setCrew(credits.getCrew());
 
         log.info("MediaServiceImpl.getMovie - End - Input: id {} - Output: {}", response);
@@ -31,13 +35,13 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public TMDBTvResponseDTO getTV(Integer id) {
+    public TvResponseDTO getTV(Integer id) {
         log.info("MediaServiceImpl.getTV - Start - Input: id {}", id);
 
-        TMDBTvDTO tv = this.tmdbProxy.getTV(id);
+        TvDTO tv = this.tmdbProxy.getTV(id);
 
         log.info("MediaServiceImpl.getTV - End - Input: id {} - Output: {}", id, tv);
-        return mapper.map(tv, TMDBTvResponseDTO.class);
+        return mapper.map(tv, TvResponseDTO.class);
     }
 
 }

@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
-import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.utils.Pagination;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,26 +22,26 @@ public class TrendingServiceImpl implements TrendingService {
     private TMDBProxy tmdbProxy;
 
     @Override
-    public Page<TMDBResultDTO> trendingTMDB(Pageable page) {
+    public Page<ResultDTO> trendingTMDB(Pageable page) {
         log.info("TrendingServiceImpl.trendingTMDB - Start - Input: page {}", page);
 
-        List<TMDBResultDTO> content = new ArrayList<>();
+        List<ResultDTO> content = new ArrayList<>();
         this.trendingMovie(content);
         this.trendingTV(content);
-        content.sort(Comparator.comparing(TMDBResultDTO::getPopularity).reversed());
+        content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
 
-        Page<TMDBResultDTO> pageResult = Pagination.applyPage(content, page);
+        Page<ResultDTO> pageResult = Pagination.applyPage(content, page);
         log.info("TrendingServiceImpl.trendingTMDB - End - Input: page {} - Output: {}", page, pageResult);
         return pageResult;
     }
 
-    private void trendingMovie(List<TMDBResultDTO> content) {
-        TMDBResponseDTO movies = this.tmdbProxy.trendingMovie();
+    private void trendingMovie(List<ResultDTO> content) {
+        ResponseDTO movies = this.tmdbProxy.trendingMovie();
         content.addAll(movies.getResults().subList(0, 10));
     }
 
-    private void trendingTV(List<TMDBResultDTO> content) {
-        TMDBResponseDTO tv = this.tmdbProxy.trendingTV();
+    private void trendingTV(List<ResultDTO> content) {
+        ResponseDTO tv = this.tmdbProxy.trendingTV();
         content.addAll(tv.getResults().subList(0, 10));
     }
 

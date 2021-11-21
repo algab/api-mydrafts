@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.dto;
+package br.com.mydrafts.apimydrafts.dto.tmdb;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TMDBResponseDTO {
+public class ResponseDTO {
 
-    private List<TMDBResultDTO> results;
+    private List<ResultDTO> results;
 
 }

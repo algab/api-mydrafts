@@ -1,16 +1,16 @@
 package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class TrendingBuilder {
-    public static TMDBResultDTO trending() {
-        return TMDBResultDTO.builder()
+    public static ResultDTO trending() {
+        return ResultDTO.builder()
                 .id(1)
                 .title("Spider-Man Far From Home")
                 .titleOriginal("Spider-Man Far From Home")
@@ -22,10 +22,10 @@ public final class TrendingBuilder {
                 .build();
     }
 
-    public static TMDBResponseDTO responseTrendingMovie() {
-        List<TMDBResultDTO> listMovies = new ArrayList<>();
+    public static ResponseDTO responseTrendingMovie() {
+        List<ResultDTO> listMovies = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            listMovies.add(TMDBResultDTO.builder()
+            listMovies.add(ResultDTO.builder()
                     .id(i)
                     .title(String.format("Spider-Man %d", i))
                     .titleOriginal(String.format("Spider-Man %d", i))
@@ -36,15 +36,15 @@ public final class TrendingBuilder {
                     .popularity(Long.valueOf(100 + i))
                     .build());
         }
-        return TMDBResponseDTO.builder()
+        return ResponseDTO.builder()
                 .results(listMovies)
                 .build();
     }
 
-    public static TMDBResponseDTO responseTrendingTV() {
-        List<TMDBResultDTO> listTV = new ArrayList<>();
+    public static ResponseDTO responseTrendingTV() {
+        List<ResultDTO> listTV = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            listTV.add(TMDBResultDTO.builder()
+            listTV.add(ResultDTO.builder()
                     .id(i)
                     .title(String.format("The Simpsons Season %d", i))
                     .titleOriginal(String.format("The Simpsons Season %d", i))
@@ -55,7 +55,7 @@ public final class TrendingBuilder {
                     .popularity(Long.valueOf(10 + i))
                     .build());
         }
-        return TMDBResponseDTO.builder()
+        return ResponseDTO.builder()
                 .results(listTV)
                 .build();
     }

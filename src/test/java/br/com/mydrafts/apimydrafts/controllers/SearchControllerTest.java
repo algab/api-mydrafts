@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.SearchService;
 import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
@@ -130,15 +130,15 @@ class SearchControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("content").isArray());
     }
 
-    private Page<TMDBResultDTO> searchMovie() {
+    private Page<ResultDTO> searchMovie() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(SearchBuilder.searchMovie());
+        List<ResultDTO> contents = Arrays.asList(SearchBuilder.searchMovie());
         return new PageImpl<>(contents, page, 1);
     }
 
-    private Page<TMDBResultDTO> searchTV() {
+    private Page<ResultDTO> searchTV() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(SearchBuilder.searchTV());
+        List<ResultDTO> contents = Arrays.asList(SearchBuilder.searchTV());
         return new PageImpl<>(contents, page, 1);
     }
 

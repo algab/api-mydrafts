@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
-import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.TrendingService;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
@@ -88,9 +88,9 @@ class TrendingControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("content").isArray());
     }
 
-    private Page<TMDBResultDTO> trending() {
+    private Page<ResultDTO> trending() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(TrendingBuilder.trending());
+        List<ResultDTO> contents = Arrays.asList(TrendingBuilder.trending());
         return new PageImpl<>(contents, page, 1);
     }
 

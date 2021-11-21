@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.dto;
+package br.com.mydrafts.apimydrafts.dto.tmdb;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,10 +7,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class TMDBCreditsDTO {
+public class CreditsDTO {
 
     private Integer id;
 
-    private List<TMDBCrewDTO> crew;
+    private List<CrewDTO> crew;
 
 }

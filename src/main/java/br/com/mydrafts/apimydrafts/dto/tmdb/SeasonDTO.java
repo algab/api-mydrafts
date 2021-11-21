@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.dto;
+package br.com.mydrafts.apimydrafts.dto.tmdb;
 
 import br.com.mydrafts.apimydrafts.serializer.ImageSerializer;
 import br.com.mydrafts.apimydrafts.serializer.LocalDateSerializer;
@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class TMDBSeasonDTO {
+public class SeasonDTO {
 
     private String name;
 
