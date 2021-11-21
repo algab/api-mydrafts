@@ -6,8 +6,10 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvSeasonDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import feign.FeignException;
 import org.modelmapper.ModelMapper;
@@ -93,7 +95,7 @@ public class TMDBProxy {
         }
     }
 
-    public Production findProduction(Media media, Integer tmdbID) {
+    public Production findProduction(Media media, Integer tmdbID, Integer numberSeason) {
         Production production = Production.builder().media(media).tmdbID(tmdbID).build();
         if (media.equals(Media.MOVIE)) {
             MovieDTO movie = getMovie(tmdbID);
@@ -102,8 +104,16 @@ public class TMDBProxy {
             response.setCrew(credits.getCrew());
             production.setMovie(response);
         } else {
-            TvResponseDTO tv = mapper.map(getTV(tmdbID), TvResponseDTO.class);
-            production.setTv(tv);
+            if (numberSeason != null) {
+                TvResponseDTO tv = mapper.map(getTV(tmdbID), TvResponseDTO.class);
+                TvSeasonDTO tvSeason = mapper.map(tv, TvSeasonDTO.class);
+                SeasonDTO season = tv.getSeasons().stream().filter(data -> data.getNumber() == numberSeason).collect(Collectors.toList()).get(0);
+                tvSeason.setId(season.getId());
+                tvSeason.setSeason(season.getNumber());
+                tvSeason.setDateRelease(season.getDate());
+                production.setTv(tvSeason);
+            }
+            throw new BusinessException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), "Season is required");
         }
         return production;
     }

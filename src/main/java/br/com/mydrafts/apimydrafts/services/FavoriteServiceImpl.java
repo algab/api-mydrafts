@@ -59,7 +59,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             }
             favorite.setProduction(production.get());
         } else {
-            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
+            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID(), body.getSeason()));
             favorite.setProduction(saveProduction);
         }
 

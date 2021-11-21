@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class FavoriteFormDTO {
 
+    private Integer season;
+
     @NotNull(message = "tmdbID is required")
     private Integer tmdbID;
 

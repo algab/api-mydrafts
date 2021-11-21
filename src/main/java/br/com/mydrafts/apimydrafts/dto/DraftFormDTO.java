@@ -15,6 +15,8 @@ public class DraftFormDTO {
 
     private String description;
 
+    private Integer season;
+
     @Min(value = 1, message = "minimum rating is 1")
     @Max(value = 10, message = "maximum rating is 10")
     @NotNull(message = "rating is required")

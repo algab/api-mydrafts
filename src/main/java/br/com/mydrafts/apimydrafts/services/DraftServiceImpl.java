@@ -62,7 +62,7 @@ public class DraftServiceImpl implements DraftService {
             }
             draft.setProduction(production.get());
         } else {
-            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID()));
+            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID(), body.getSeason()));
             draft.setProduction(saveProduction);
         }
 

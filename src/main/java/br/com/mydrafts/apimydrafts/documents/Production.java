@@ -3,6 +3,7 @@ package br.com.mydrafts.apimydrafts.documents;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvSeasonDTO;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -24,6 +25,6 @@ public class Production {
 
     private MovieResponseDTO movie;
 
-    private TvResponseDTO tv;
+    private TvSeasonDTO tv;
 
 }
