@@ -1,11 +1,11 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Gender;
 import br.com.mydrafts.apimydrafts.documents.User;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 
-public final class UserUtil {
+public final class UserBuilder {
 
     public static UserFormDTO userForm() {
         return UserFormDTO.builder()

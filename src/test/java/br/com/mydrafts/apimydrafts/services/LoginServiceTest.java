@@ -4,7 +4,7 @@ import br.com.mydrafts.apimydrafts.documents.User;
 import br.com.mydrafts.apimydrafts.dto.LoginFormDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("Service login user not found")
     void loginUserShouldReturnUserNotFound() {
-        User user = UserUtil.getUser();
+        User user = UserBuilder.getUser();
         user.setPassword("12345678");
         when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
 
@@ -42,7 +42,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("Service login password incorrect")
     void loginUserShouldReturnPasswordIncorrect() {
-        User user = UserUtil.getUser();
+        User user = UserBuilder.getUser();
         user.setPassword("12345678");
         when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
 

@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.dto.TMDBCompaniesDTO;
 import br.com.mydrafts.apimydrafts.dto.TMDBCreatedDTO;
@@ -14,7 +14,7 @@ import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-public final class MediaUtil {
+public final class MediaBuilder {
     public static TMDBMovieResponseDTO getMovie() {
         return TMDBMovieResponseDTO.builder()
                 .id(1)
@@ -28,7 +28,7 @@ public final class MediaUtil {
                 .language("en")
                 .genres(Arrays.asList("Ação"))
                 .companies(Arrays.asList("Warner Bros. Pictures"))
-                .crew(Arrays.asList(MediaUtil.crewDirector()))
+                .crew(Arrays.asList(MediaBuilder.crewDirector()))
                 .build();
     }
 
@@ -60,8 +60,8 @@ public final class MediaUtil {
                 .poster("https://image.tmdb.org/t/p/original/wTS3dS2DJiMFFgqKDz5fxMTri.jpg")
                 .backdrop("https://image.tmdb.org/t/p/original/jlGmlFOcfo8n5tURmhC7YVd4Iyy.jpg")
                 .dateRelease(LocalDate.of(2021, 07, 28))
-                .genres(Arrays.asList(MediaUtil.genres()))
-                .companies(Arrays.asList(MediaUtil.companies()))
+                .genres(Arrays.asList(MediaBuilder.genres()))
+                .companies(Arrays.asList(MediaBuilder.companies()))
                 .language("en")
                 .build();
     }
@@ -78,17 +78,17 @@ public final class MediaUtil {
                 .dateRelease(LocalDate.of(2005, 03, 24))
                 .lastEpisode(LocalDate.of(2013, 05, 16))
                 .language("en")
-                .created(Arrays.asList(MediaUtil.created()))
-                .genres(Arrays.asList(MediaUtil.genres()))
-                .companies(Arrays.asList(MediaUtil.companies()))
-                .networks(Arrays.asList(MediaUtil.network()))
+                .created(Arrays.asList(MediaBuilder.created()))
+                .genres(Arrays.asList(MediaBuilder.genres()))
+                .companies(Arrays.asList(MediaBuilder.companies()))
+                .networks(Arrays.asList(MediaBuilder.network()))
                 .build();
     }
 
     public static TMDBCreditsDTO credits() {
         return TMDBCreditsDTO.builder()
                 .id(1)
-                .crew(Arrays.asList(MediaUtil.crewDirector(), MediaUtil.crewActor(), MediaUtil.crewWriter(), MediaUtil.crewExecutiveProducer()))
+                .crew(Arrays.asList(MediaBuilder.crewDirector(), MediaBuilder.crewActor(), MediaBuilder.crewWriter(), MediaBuilder.crewExecutiveProducer()))
                 .build();
     }
 

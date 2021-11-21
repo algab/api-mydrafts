@@ -5,9 +5,9 @@ import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.SearchService;
-import br.com.mydrafts.apimydrafts.utils.SearchUtil;
+import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +62,7 @@ class SearchControllerTest {
     @BeforeAll
     public void init() throws Exception {
         String json = TestUtil.readFileAsString("/json/login.json");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
                 .content(json)
@@ -132,13 +132,13 @@ class SearchControllerTest {
 
     private Page<TMDBResultDTO> searchMovie() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(SearchUtil.searchMovie());
+        List<TMDBResultDTO> contents = Arrays.asList(SearchBuilder.searchMovie());
         return new PageImpl<>(contents, page, 1);
     }
 
     private Page<TMDBResultDTO> searchTV() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(SearchUtil.searchTV());
+        List<TMDBResultDTO> contents = Arrays.asList(SearchBuilder.searchTV());
         return new PageImpl<>(contents, page, 1);
     }
 

@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TrendingUtil {
+public final class TrendingBuilder {
     public static TMDBResultDTO trending() {
         return TMDBResultDTO.builder()
                 .id(1)

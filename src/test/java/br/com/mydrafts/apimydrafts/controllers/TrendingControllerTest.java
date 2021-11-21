@@ -5,8 +5,8 @@ import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.TrendingService;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.utils.TrendingUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +60,7 @@ class TrendingControllerTest {
     @BeforeAll
     public void init() throws Exception {
         String json = TestUtil.readFileAsString("/json/login.json");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
                 .content(json)
@@ -90,7 +90,7 @@ class TrendingControllerTest {
 
     private Page<TMDBResultDTO> trending() {
         PageRequest page = PageRequest.of(0, 10);
-        List<TMDBResultDTO> contents = Arrays.asList(TrendingUtil.trending());
+        List<TMDBResultDTO> contents = Arrays.asList(TrendingBuilder.trending());
         return new PageImpl<>(contents, page, 1);
     }
 

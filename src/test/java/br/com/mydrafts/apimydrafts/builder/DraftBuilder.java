@@ -1,11 +1,11 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.Draft;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 
-public final class DraftUtil {
+public final class DraftBuilder {
 
     public static DraftFormDTO draftForm(Media media) {
         return DraftFormDTO.builder()
@@ -22,8 +22,8 @@ public final class DraftUtil {
                 .id("61586ad5362766670067eda8")
                 .description("Very Good")
                 .rating(10D)
-                .user(UserUtil.getUser())
-                .production(ProductionUtil.getProduction(media))
+                .user(UserBuilder.getUser())
+                .production(ProductionBuilder.getProduction(media))
                 .build();
     }
 
@@ -32,8 +32,8 @@ public final class DraftUtil {
                 .id("61586ad5362766670067eda8")
                 .description("Very Good")
                 .rating(10D)
-                .user(UserUtil.getUserDTO())
-                .production(ProductionUtil.getProductionDTO())
+                .user(UserBuilder.getUserDTO())
+                .production(ProductionBuilder.getProductionDTO())
                 .build();
     }
 

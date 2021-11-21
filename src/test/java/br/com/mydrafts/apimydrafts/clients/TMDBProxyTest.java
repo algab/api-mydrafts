@@ -7,9 +7,9 @@ import br.com.mydrafts.apimydrafts.dto.TMDBMovieDTO;
 import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.TMDBTvDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
-import br.com.mydrafts.apimydrafts.utils.MediaUtil;
-import br.com.mydrafts.apimydrafts.utils.SearchUtil;
-import br.com.mydrafts.apimydrafts.utils.TrendingUtil;
+import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
+import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
+import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
 import feign.FeignException;
 import feign.Request;
 import feign.Response;
@@ -45,7 +45,7 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Trending movie successful")
     void trendingMovieSuccessful() {
-        when(tmdbClient.trendingMovie(anyString(), anyString())).thenReturn(TrendingUtil.responseTrendingMovie());
+        when(tmdbClient.trendingMovie(anyString(), anyString())).thenReturn(TrendingBuilder.responseTrendingMovie());
 
         TMDBResponseDTO trendingMovie = tmdbProxy.trendingMovie();
 
@@ -65,7 +65,7 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Trending tv successful")
     void trendingTVSuccessful() {
-        when(tmdbClient.trendingTv(anyString(), anyString())).thenReturn(TrendingUtil.responseTrendingTV());
+        when(tmdbClient.trendingTv(anyString(), anyString())).thenReturn(TrendingBuilder.responseTrendingTV());
 
         TMDBResponseDTO trendingTV = tmdbProxy.trendingTV();
 
@@ -85,11 +85,11 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Search movie successful")
     void searchMovieSuccessful() {
-        when(tmdbClient.searchMovie(anyString(), anyString(), anyString())).thenReturn(SearchUtil.responseSearchMovie());
+        when(tmdbClient.searchMovie(anyString(), anyString(), anyString())).thenReturn(SearchBuilder.responseSearchMovie());
 
         TMDBResponseDTO searchMovie = tmdbProxy.searchMovie(NAME_MOVIE);
 
-        assertThat(searchMovie.getResults().size()).isEqualTo(SearchUtil.responseSearchMovie().getResults().size());
+        assertThat(searchMovie.getResults().size()).isEqualTo(SearchBuilder.responseSearchMovie().getResults().size());
     }
 
     @Test
@@ -105,11 +105,11 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Search tv successful")
     void searchTVSuccessful() {
-        when(tmdbClient.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
+        when(tmdbClient.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchBuilder.responseSearchTV());
 
         TMDBResponseDTO searchTV = tmdbProxy.searchTV(NAME_TV_SHOW);
 
-        assertThat(searchTV.getResults().size()).isEqualTo(SearchUtil.responseSearchTV().getResults().size());
+        assertThat(searchTV.getResults().size()).isEqualTo(SearchBuilder.responseSearchTV().getResults().size());
     }
 
     @Test
@@ -125,12 +125,12 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Get movie successful")
     void getMovieSuccessful() {
-        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
+        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
 
         TMDBMovieDTO movie = tmdbProxy.getMovie(1);
 
-        assertThat(movie.getTitle()).isEqualTo(MediaUtil.getMovie().getTitle());
-        assertThat(movie.getDateRelease()).isEqualTo(MediaUtil.getMovie().getDateRelease());
+        assertThat(movie.getTitle()).isEqualTo(MediaBuilder.getMovie().getTitle());
+        assertThat(movie.getDateRelease()).isEqualTo(MediaBuilder.getMovie().getDateRelease());
     }
 
     @Test
@@ -146,7 +146,7 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Get movie credits successful")
     void getMovieCreditsSuccessful() {
-        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.credits());
+        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.credits());
 
         TMDBCreditsDTO credits = tmdbProxy.getMovieCredits(1);
 
@@ -166,12 +166,12 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Get tv successful")
     void getTVSuccessful() {
-        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.tv());
+        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.tv());
 
         TMDBTvDTO tv = tmdbProxy.getTV(1);
 
-        assertThat(tv.getTitle()).isEqualTo(MediaUtil.getTV().getTitle());
-        assertThat(tv.getDateRelease()).isEqualTo(MediaUtil.getTV().getDateRelease());
+        assertThat(tv.getTitle()).isEqualTo(MediaBuilder.getTV().getTitle());
+        assertThat(tv.getDateRelease()).isEqualTo(MediaBuilder.getTV().getDateRelease());
     }
 
     @Test
@@ -187,26 +187,26 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Find production movie successful")
     void findProductionMovieShouldReturnSuccessful() {
-        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
-        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.credits());
+        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
+        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.credits());
 
         Production production = tmdbProxy.findProduction(Media.MOVIE, 1);
 
         assertThat(production.getTv()).isNull();
         assertThat(production.getMedia()).isEqualTo(Media.MOVIE);
-        assertThat(production.getMovie().getTitle()).isEqualTo(MediaUtil.movie().getTitle());
+        assertThat(production.getMovie().getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
     }
 
     @Test
     @DisplayName("Find production tv successful")
     void findProductionTVShouldReturnSuccessful() {
-        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaUtil.tv());
+        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.tv());
 
         Production production = tmdbProxy.findProduction(Media.TV, 1);
 
         assertThat(production.getMovie()).isNull();
         assertThat(production.getMedia()).isEqualTo(Media.TV);
-        assertThat(production.getTv().getTitle()).isEqualTo(MediaUtil.tv().getTitle());
+        assertThat(production.getTv().getTitle()).isEqualTo(MediaBuilder.tv().getTitle());
     }
 
 }

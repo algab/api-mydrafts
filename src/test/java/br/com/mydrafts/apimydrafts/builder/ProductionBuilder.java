@@ -1,10 +1,10 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
 
-public final class ProductionUtil {
+public final class ProductionBuilder {
 
     public static Production getProduction(Media media) {
         return Production.builder()

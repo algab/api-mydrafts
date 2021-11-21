@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.services;
 import br.com.mydrafts.apimydrafts.clients.TMDBClient;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
-import br.com.mydrafts.apimydrafts.utils.SearchUtil;
+import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search movie by name")
     void searchMovie() {
-        when(client.searchMovie(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchMovie());
+        when(client.searchMovie(any(String.class), any(String.class), any(String.class))).thenReturn(SearchBuilder.responseSearchMovie());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "Shang-Chi");
 
@@ -44,7 +44,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search tv show by name")
      void searchTV() {
-        when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
+        when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchBuilder.responseSearchTV());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.TV, "What");
 
@@ -57,7 +57,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search content empty")
     void searchEmpty() {
-        when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchUtil.responseSearchTV());
+        when(client.searchTv(any(String.class), any(String.class), any(String.class))).thenReturn(SearchBuilder.responseSearchTV());
 
         Page<TMDBResultDTO> page = service.searchTMDB(PageRequest.of(5, 20), Media.TV, "What");
 

@@ -4,9 +4,9 @@ import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.DraftService;
 import br.com.mydrafts.apimydrafts.services.LoginService;
-import br.com.mydrafts.apimydrafts.utils.DraftUtil;
+import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +56,7 @@ class DraftControllerTest {
     @BeforeAll
     public void init() throws Exception {
         String json = TestUtil.readFileAsString("/json/login.json");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
                 .content(json)
@@ -71,7 +71,7 @@ class DraftControllerTest {
     @DisplayName("Controller save draft")
     void saveDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
-        when(this.service.save(any())).thenReturn(DraftUtil.getDraftDTO());
+        when(this.service.save(any())).thenReturn(DraftBuilder.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
@@ -86,7 +86,7 @@ class DraftControllerTest {
     @DisplayName("Controller search draft by id")
     void searchDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draft.json");
-        when(this.service.searchDraft(anyString())).thenReturn(DraftUtil.getDraftDTO());
+        when(this.service.searchDraft(anyString())).thenReturn(DraftBuilder.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
@@ -100,7 +100,7 @@ class DraftControllerTest {
     @DisplayName("Controller update draft")
     void updateDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
-        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftUtil.getDraftDTO());
+        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftBuilder.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))

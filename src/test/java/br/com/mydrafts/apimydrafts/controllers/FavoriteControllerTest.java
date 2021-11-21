@@ -3,9 +3,9 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.FavoriteService;
-import br.com.mydrafts.apimydrafts.utils.FavoriteUtil;
+import br.com.mydrafts.apimydrafts.builder.FavoriteBuilder;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +56,7 @@ class FavoriteControllerTest {
     @BeforeAll
     public void init() throws Exception {
         String json = TestUtil.readFileAsString("/json/login.json");
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
                 .content(json)
@@ -71,7 +71,7 @@ class FavoriteControllerTest {
     @DisplayName("Controller save favorite")
     void saveFavoriteShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/favoriteRequest.json");
-        when(this.service.save(any())).thenReturn(FavoriteUtil.getFavoriteDTO());
+        when(this.service.save(any())).thenReturn(FavoriteBuilder.getFavoriteDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_FAVORITE)
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))

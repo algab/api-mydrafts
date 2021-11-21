@@ -8,9 +8,9 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
-import br.com.mydrafts.apimydrafts.utils.DraftUtil;
-import br.com.mydrafts.apimydrafts.utils.ProductionUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
+import br.com.mydrafts.apimydrafts.builder.ProductionBuilder;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,58 +51,58 @@ class DraftServiceTest {
     @Test
     @DisplayName("Service save draft")
     void saveDraftShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
-        when(draftRepository.save(any(Draft.class))).thenReturn(DraftUtil.getDraft(Media.MOVIE));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionBuilder.getProduction(Media.MOVIE)));
+        when(draftRepository.save(any(Draft.class))).thenReturn(DraftBuilder.getDraft(Media.MOVIE));
 
-        DraftDTO draftDTO = service.save(DraftUtil.draftForm(Media.MOVIE));
+        DraftDTO draftDTO = service.save(DraftBuilder.draftForm(Media.MOVIE));
 
-        assertThat(draftDTO.getDescription()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getDescription());
-        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getUser().getId());
-        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getProduction().getId());
+        assertThat(draftDTO.getDescription()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getDescription());
+        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getUser().getId());
+        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getProduction().getId());
     }
 
     @Test
     @DisplayName("Service save draft find movie tmdb")
     void saveDraftFindMovieTMDBShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
-        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
-        when(productionRepository.save(any())).thenReturn(ProductionUtil.getProduction(Media.MOVIE));
-        when(draftRepository.save(any(Draft.class))).thenReturn(DraftUtil.getDraft(Media.MOVIE));
+        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
+        when(productionRepository.save(any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
+        when(draftRepository.save(any(Draft.class))).thenReturn(DraftBuilder.getDraft(Media.MOVIE));
 
-        DraftDTO draftDTO = service.save(DraftUtil.draftForm(Media.MOVIE));
+        DraftDTO draftDTO = service.save(DraftBuilder.draftForm(Media.MOVIE));
 
-        assertThat(draftDTO.getDescription()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getDescription());
-        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getUser().getId());
-        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getProduction().getId());
+        assertThat(draftDTO.getDescription()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getDescription());
+        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getUser().getId());
+        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getProduction().getId());
     }
 
     @Test
     @DisplayName("Service save draft find tv tmdb")
     void saveDraftFindTVTMDBShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
         when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
-        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionUtil.getProduction(Media.TV));
-        when(productionRepository.save(any())).thenReturn(ProductionUtil.getProduction(Media.TV));
-        when(draftRepository.save(any(Draft.class))).thenReturn(DraftUtil.getDraft(Media.TV));
+        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionBuilder.getProduction(Media.TV));
+        when(productionRepository.save(any())).thenReturn(ProductionBuilder.getProduction(Media.TV));
+        when(draftRepository.save(any(Draft.class))).thenReturn(DraftBuilder.getDraft(Media.TV));
 
-        DraftDTO draftDTO = service.save(DraftUtil.draftForm(Media.TV));
+        DraftDTO draftDTO = service.save(DraftBuilder.draftForm(Media.TV));
 
         assertThat(draftDTO.getProduction().getMedia()).isEqualTo(Media.TV);
-        assertThat(draftDTO.getDescription()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getDescription());
-        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getUser().getId());
-        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getProduction().getId());
+        assertThat(draftDTO.getDescription()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getDescription());
+        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getUser().getId());
+        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getProduction().getId());
     }
 
     @Test
     @DisplayName("Service draft already registered")
     void saveDraftShouldReturnAlreadyRegistered() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionBuilder.getProduction(Media.MOVIE)));
         when(draftRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(DraftUtil.draftForm(Media.TV)));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(DraftBuilder.draftForm(Media.TV)));
     }
 
     @Test
@@ -110,19 +110,19 @@ class DraftServiceTest {
     void saveDraftShouldReturnUserNotFound() {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(DraftUtil.draftForm(Media.TV)));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(DraftBuilder.draftForm(Media.TV)));
     }
 
     @Test
     @DisplayName("Service search draft by id")
     void searchDraftShouldReturnSuccessful() {
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftBuilder.getDraft(Media.MOVIE)));
 
         DraftDTO draftDTO = service.searchDraft("61586ad5362766670067eda8");
 
         assertThat(draftDTO.getProduction().getMedia()).isEqualTo(Media.MOVIE);
-        assertThat(draftDTO.getRating()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getRating());
-        assertThat(draftDTO.getDescription()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getDescription());
+        assertThat(draftDTO.getRating()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getRating());
+        assertThat(draftDTO.getDescription()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getDescription());
     }
 
     @Test
@@ -136,16 +136,16 @@ class DraftServiceTest {
     @Test
     @DisplayName("Service update draft")
     void updateDraftShouldReturnSuccessful() {
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionUtil.getProduction(Media.MOVIE)));
-        when(draftRepository.save(any(Draft.class))).thenReturn(DraftUtil.getDraft(Media.MOVIE));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftBuilder.getDraft(Media.MOVIE)));
+        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.of(ProductionBuilder.getProduction(Media.MOVIE)));
+        when(draftRepository.save(any(Draft.class))).thenReturn(DraftBuilder.getDraft(Media.MOVIE));
 
-        DraftDTO draftDTO = service.updateDraft("61586ad5362766670067eda8", DraftUtil.draftForm(Media.MOVIE));
+        DraftDTO draftDTO = service.updateDraft("61586ad5362766670067eda8", DraftBuilder.draftForm(Media.MOVIE));
 
-        assertThat(draftDTO.getDescription()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getDescription());
-        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getUser().getId());
-        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftUtil.getDraft(Media.MOVIE).getProduction().getId());
+        assertThat(draftDTO.getDescription()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getDescription());
+        assertThat(draftDTO.getUser().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getUser().getId());
+        assertThat(draftDTO.getProduction().getId()).isEqualTo(DraftBuilder.getDraft(Media.MOVIE).getProduction().getId());
     }
 
     @Test
@@ -153,22 +153,22 @@ class DraftServiceTest {
     void updateDraftShouldReturnDraftNotFound() {
         when(draftRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", DraftUtil.draftForm(Media.MOVIE)));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", DraftBuilder.draftForm(Media.MOVIE)));
     }
 
     @Test
     @DisplayName("Service update draft return user not found")
     void updateDraftShouldReturnUserNotFound() {
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftBuilder.getDraft(Media.MOVIE)));
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", DraftUtil.draftForm(Media.MOVIE)));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", DraftBuilder.draftForm(Media.MOVIE)));
     }
 
     @Test
     @DisplayName("Service delete draft")
     void deleteDraftShouldReturnSuccessful() {
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftUtil.getDraft(Media.MOVIE)));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftBuilder.getDraft(Media.MOVIE)));
         doNothing().when(draftRepository).delete(any());
 
         service.deleteDraft("61586ad5362766670067eda8");
@@ -185,7 +185,7 @@ class DraftServiceTest {
     }
 
     private Page<Draft> pageDraft() {
-        return new PageImpl<>(Arrays.asList(DraftUtil.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(DraftBuilder.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
 }

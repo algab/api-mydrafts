@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBClient;
 import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
-import br.com.mydrafts.apimydrafts.utils.TrendingUtil;
+import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +30,8 @@ class TrendingServiceTest {
     @Test
     @DisplayName("Get Trending Movies and TV Successful")
     void getTrendingSuccessful() {
-        when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingMovie());
-        when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingTV());
+        when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingMovie());
+        when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingTV());
 
         Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 10));
 
@@ -45,8 +45,8 @@ class TrendingServiceTest {
     @Test
     @DisplayName("Get Trending Pageable")
     void getTrendingPageable() {
-        when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingMovie());
-        when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingUtil.responseTrendingTV());
+        when(client.trendingMovie(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingMovie());
+        when(client.trendingTv(any(String.class), any(String.class))).thenReturn(TrendingBuilder.responseTrendingTV());
 
         Page<TMDBResultDTO> result = service.trendingTMDB(PageRequest.of(0, 40));
 

@@ -1,4 +1,4 @@
-package br.com.mydrafts.apimydrafts.utils;
+package br.com.mydrafts.apimydrafts.builder;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.TMDBResponseDTO;
@@ -7,7 +7,7 @@ import br.com.mydrafts.apimydrafts.dto.TMDBResultDTO;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-public final class SearchUtil {
+public final class SearchBuilder {
     public static TMDBResultDTO searchMovie() {
         return TMDBResultDTO.builder()
                 .id(1)
@@ -36,13 +36,13 @@ public final class SearchUtil {
 
     public static TMDBResponseDTO responseSearchMovie() {
         return TMDBResponseDTO.builder()
-                .results(Arrays.asList(SearchUtil.searchMovie()))
+                .results(Arrays.asList(SearchBuilder.searchMovie()))
                 .build();
     }
 
     public static TMDBResponseDTO responseSearchTV() {
         return TMDBResponseDTO.builder()
-                .results(Arrays.asList(SearchUtil.searchTV()))
+                .results(Arrays.asList(SearchBuilder.searchTV()))
                 .build();
     }
 }

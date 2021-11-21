@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.services;
 import br.com.mydrafts.apimydrafts.clients.TMDBClient;
 import br.com.mydrafts.apimydrafts.dto.TMDBMovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.TMDBTvResponseDTO;
-import br.com.mydrafts.apimydrafts.utils.MediaUtil;
+import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,24 +29,24 @@ class MediaServiceTest {
     @Test
     @DisplayName("Get movie successful")
     void getMovie() {
-        when(client.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.movie());
-        when(client.movieCredits(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.credits());
+        when(client.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
+        when(client.movieCredits(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.credits());
 
         TMDBMovieResponseDTO result = service.getMovie(1);
 
-        assertThat(result.getId()).isEqualTo(MediaUtil.movie().getId());
-        assertThat(result.getTitle()).isEqualTo(MediaUtil.movie().getTitle());
+        assertThat(result.getId()).isEqualTo(MediaBuilder.movie().getId());
+        assertThat(result.getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
     }
 
     @Test
     @DisplayName("Get tv successful")
     void getTV() {
-        when(client.tv(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaUtil.tv());
+        when(client.tv(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.tv());
 
         TMDBTvResponseDTO result = service.getTV(1);
 
-        assertThat(result.getId()).isEqualTo(MediaUtil.tv().getId());
-        assertThat(result.getTitle()).isEqualTo(MediaUtil.tv().getTitle());
+        assertThat(result.getId()).isEqualTo(MediaBuilder.tv().getId());
+        assertThat(result.getTitle()).isEqualTo(MediaBuilder.tv().getTitle());
     }
 
 }

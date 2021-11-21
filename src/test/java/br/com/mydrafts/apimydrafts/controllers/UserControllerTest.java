@@ -3,10 +3,10 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.services.UserService;
-import br.com.mydrafts.apimydrafts.utils.DraftUtil;
-import br.com.mydrafts.apimydrafts.utils.FavoriteUtil;
+import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
+import br.com.mydrafts.apimydrafts.builder.FavoriteBuilder;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -60,7 +60,7 @@ class UserControllerTest {
     @BeforeAll
     public void init() throws Exception {
         String json = TestUtil.readFileAsString("/json/login.json");
-        when(repository.findByEmail(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(repository.findByEmail(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
                 .content(json)
@@ -75,7 +75,7 @@ class UserControllerTest {
     @DisplayName("Controller save user")
     void saveUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/userRequest.json");
-        when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.saveUser(any())).thenReturn(UserBuilder.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
                 .content(json)
@@ -89,7 +89,7 @@ class UserControllerTest {
     @DisplayName("Controller save user bad request")
     void saveUserShouldReturnBadRequest() throws Exception {
         String json = TestUtil.readFileAsString("/json/userBadRequest.json");
-        when(this.service.saveUser(any())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.saveUser(any())).thenReturn(UserBuilder.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
                 .content(json)
@@ -103,9 +103,9 @@ class UserControllerTest {
     @DisplayName("Controller search user by id")
     void searchUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
-        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.searchUser(anyString())).thenReturn(UserBuilder.getUserDTO());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserBuilder.getUser().getId()))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -117,9 +117,9 @@ class UserControllerTest {
     @DisplayName("Controller search user unauthorized")
     void searchUserShouldReturnUnauthorized() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
-        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.searchUser(anyString())).thenReturn(UserBuilder.getUserDTO());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserBuilder.getUser().getId()))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -130,7 +130,7 @@ class UserControllerTest {
     @DisplayName("Controller search user token unauthorized")
     void searchUserShouldReturnTokenUnauthorized() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
-        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.searchUser(anyString())).thenReturn(UserBuilder.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/1", PATH_USER))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
@@ -144,7 +144,7 @@ class UserControllerTest {
     @DisplayName("Controller search user token exception")
     void searchUserShouldReturnTokenException() throws Exception {
         String json = TestUtil.readFileAsString("/json/user.json");
-        when(this.service.searchUser(anyString())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.searchUser(anyString())).thenReturn(UserBuilder.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/1", PATH_USER))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", "eyJhbGciOiJIUzI1NiJ9"))
@@ -158,9 +158,9 @@ class UserControllerTest {
     @DisplayName("Controller get drafts by user")
     void getDraftsByUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftsUser.json");
-        when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftUtil.getDraftDTO()), PageRequest.of(0, 10), 1));
+        when(this.service.getDrafts(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(DraftBuilder.getDraftDTO()), PageRequest.of(0, 10), 1));
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/drafts", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/drafts", PATH_USER, UserBuilder.getUser().getId()))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -172,9 +172,9 @@ class UserControllerTest {
     @DisplayName("Controller get favorites by user")
     void getFavoritesByUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/favoritesUser.json");
-        when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteUtil.getFavoriteDTO()), PageRequest.of(0, 10), 1));
+        when(this.service.getFavorites(any(), anyString())).thenReturn(new PageImpl<>(Arrays.asList(FavoriteBuilder.getFavoriteDTO()), PageRequest.of(0, 10), 1));
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/favorites", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/favorites", PATH_USER, UserBuilder.getUser().getId()))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -186,9 +186,9 @@ class UserControllerTest {
     @DisplayName("Controller update user by id")
     void updateUserShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/userRequest.json");
-        when(this.service.updateUser(anyString(), any())).thenReturn(UserUtil.getUserDTO());
+        when(this.service.updateUser(anyString(), any())).thenReturn(UserBuilder.getUserDTO());
 
-        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserBuilder.getUser().getId()))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON);
@@ -201,7 +201,7 @@ class UserControllerTest {
     void deleteUserShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).deleteUser(anyString());
 
-        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_USER, UserUtil.getUser().getId()))
+        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_USER, UserBuilder.getUser().getId()))
                 .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", token))
                 .contentType(MediaType.APPLICATION_JSON);
 

@@ -12,9 +12,9 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
-import br.com.mydrafts.apimydrafts.utils.DraftUtil;
-import br.com.mydrafts.apimydrafts.utils.FavoriteUtil;
-import br.com.mydrafts.apimydrafts.utils.UserUtil;
+import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
+import br.com.mydrafts.apimydrafts.builder.FavoriteBuilder;
+import br.com.mydrafts.apimydrafts.builder.UserBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,12 +53,12 @@ class UserServiceTest {
     @DisplayName("Service save user")
     void saveUserShouldReturnSuccessful() {
         when(repository.existsByEmail(anyString())).thenReturn(false);
-        when(repository.save(any())).thenReturn(UserUtil.getUser());
+        when(repository.save(any())).thenReturn(UserBuilder.getUser());
 
-        UserDTO user = service.saveUser(UserUtil.userForm());
+        UserDTO user = service.saveUser(UserBuilder.userForm());
 
-        assertThat(user.getName()).isEqualTo(UserUtil.getUser().getName());
-        assertThat(user.getEmail()).isEqualTo(UserUtil.getUser().getEmail());
+        assertThat(user.getName()).isEqualTo(UserBuilder.getUser().getName());
+        assertThat(user.getEmail()).isEqualTo(UserBuilder.getUser().getEmail());
     }
 
     @Test
@@ -66,18 +66,18 @@ class UserServiceTest {
     void saveUserShouldReturnEmailConflict() {
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(UserUtil.userForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(UserBuilder.userForm()));
     }
 
     @Test
     @DisplayName("Service search user")
     void searchUserShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
 
-        UserDTO user = service.searchUser(UserUtil.getUser().getId());
+        UserDTO user = service.searchUser(UserBuilder.getUser().getId());
 
-        assertThat(user.getName()).isEqualTo(UserUtil.getUser().getName());
-        assertThat(user.getEmail()).isEqualTo(UserUtil.getUser().getEmail());
+        assertThat(user.getName()).isEqualTo(UserBuilder.getUser().getName());
+        assertThat(user.getEmail()).isEqualTo(UserBuilder.getUser().getEmail());
     }
 
     @Test
@@ -91,10 +91,10 @@ class UserServiceTest {
     @Test
     @DisplayName("Service get drafts by user")
     void getDraftsShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
         when(draftRepository.findByUser(any(User.class), any())).thenReturn(pageDraft());
 
-        Page<DraftDTO> page = service.getDrafts(PageRequest.of(0, 10), UserUtil.getUser().getId());
+        Page<DraftDTO> page = service.getDrafts(PageRequest.of(0, 10), UserBuilder.getUser().getId());
 
         assertThat(page.getTotalElements()).isEqualTo(1);
         assertThat(page.getTotalPages()).isEqualTo(1);
@@ -106,16 +106,16 @@ class UserServiceTest {
     void getDraftsShouldReturnUserNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getDrafts(PageRequest.of(0, 10), UserUtil.getUser().getId()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getDrafts(PageRequest.of(0, 10), UserBuilder.getUser().getId()));
     }
 
     @Test
     @DisplayName("Service get favorites by user")
     void getFavoritesShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
         when(favoriteRepository.findByUser(any(), any())).thenReturn(pageFavorite());
 
-        Page<FavoriteDTO> page = service.getFavorites(PageRequest.of(0, 10), UserUtil.getUser().getId());
+        Page<FavoriteDTO> page = service.getFavorites(PageRequest.of(0, 10), UserBuilder.getUser().getId());
 
         assertThat(page.getTotalElements()).isEqualTo(1);
         assertThat(page.getTotalPages()).isEqualTo(1);
@@ -127,20 +127,20 @@ class UserServiceTest {
     void getFavoritesShouldReturnUserNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getFavorites(PageRequest.of(0, 10), UserUtil.getUser().getId()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.getFavorites(PageRequest.of(0, 10), UserBuilder.getUser().getId()));
     }
 
     @Test
     @DisplayName("Service update user")
     void updateUserShouldReturnSuccessful() {
-        User user = UserUtil.getUser();
+        User user = UserBuilder.getUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
-        UserFormDTO userForm = UserUtil.userForm();
+        UserFormDTO userForm = UserBuilder.userForm();
         userForm.setName("Alvaro Test");
         user.setName("Alvaro Test");
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser(UserUtil.getUser().getId(), userForm);
+        UserDTO saveUser = service.updateUser(UserBuilder.getUser().getId(), userForm);
 
         assertThat(saveUser.getName()).isEqualTo(user.getName());
     }
@@ -148,15 +148,15 @@ class UserServiceTest {
     @Test
     @DisplayName("Service update user email")
     void updateUserEmailShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        UserFormDTO userForm = UserUtil.userForm();
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+        UserFormDTO userForm = UserBuilder.userForm();
         userForm.setEmail("alvarotest@email.com");
-        User user = UserUtil.getUser();
+        User user = UserBuilder.getUser();
         user.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser(UserUtil.getUser().getId(), userForm);
+        UserDTO saveUser = service.updateUser(UserBuilder.getUser().getId(), userForm);
 
         assertThat(saveUser.getEmail()).isEqualTo(user.getEmail());
     }
@@ -164,12 +164,12 @@ class UserServiceTest {
     @Test
     @DisplayName("Service update user email conflict")
     void updateUserShouldReturnEmailConflict() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
-        UserFormDTO userForm = UserUtil.userForm();
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+        UserFormDTO userForm = UserBuilder.userForm();
         userForm.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser(UserUtil.getUser().getId(), userForm));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser(UserBuilder.getUser().getId(), userForm));
     }
 
     @Test
@@ -177,16 +177,16 @@ class UserServiceTest {
     void updateUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", UserUtil.userForm()));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", UserBuilder.userForm()));
     }
 
     @Test
     @DisplayName("Service delete user")
     void deleteUserShouldReturnSuccessful() {
-        when(repository.findById(anyString())).thenReturn(Optional.of(UserUtil.getUser()));
+        when(repository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
         doNothing().when(repository).delete(any());
 
-        service.deleteUser(UserUtil.getUser().getId());
+        service.deleteUser(UserBuilder.getUser().getId());
 
         verify(repository, times(1)).delete(any());
     }
@@ -200,11 +200,11 @@ class UserServiceTest {
     }
 
     private Page<Draft> pageDraft() {
-        return new PageImpl<>(Arrays.asList(DraftUtil.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(DraftBuilder.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
     private Page<Favorite> pageFavorite() {
-        return new PageImpl<>(Arrays.asList(FavoriteUtil.getFavorite(Media.MOVIE)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(Arrays.asList(FavoriteBuilder.getFavorite(Media.MOVIE)), PageRequest.of(0, 10), 1);
     }
 
 }
