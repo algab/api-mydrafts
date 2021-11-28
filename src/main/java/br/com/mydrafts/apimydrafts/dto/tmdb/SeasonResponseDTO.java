@@ -11,8 +11,12 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class MovieResponseDTO extends BaseResponseDTO {
+public class SeasonResponseDTO extends BaseResponseDTO {
 
-    private List<CrewDTO> crew;
+    private Integer season;
+
+    private List<String> created;
+
+    private List<String> networks;
 
 }

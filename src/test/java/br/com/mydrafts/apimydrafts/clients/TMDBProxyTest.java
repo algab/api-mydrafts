@@ -184,29 +184,29 @@ class TMDBProxyTest {
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> tmdbProxy.getTV(1));
     }
 
-    @Test
-    @DisplayName("Find production movie successful")
-    void findProductionMovieShouldReturnSuccessful() {
-        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
-        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.credits());
-
-        Production production = tmdbProxy.findProduction(Media.MOVIE, 1);
-
-        assertThat(production.getTv()).isNull();
-        assertThat(production.getMedia()).isEqualTo(Media.MOVIE);
-        assertThat(production.getMovie().getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
-    }
-
-    @Test
-    @DisplayName("Find production tv successful")
-    void findProductionTVShouldReturnSuccessful() {
-        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.tv());
-
-        Production production = tmdbProxy.findProduction(Media.TV, 1);
-
-        assertThat(production.getMovie()).isNull();
-        assertThat(production.getMedia()).isEqualTo(Media.TV);
-        assertThat(production.getTv().getTitle()).isEqualTo(MediaBuilder.tv().getTitle());
-    }
+//    @Test
+//    @DisplayName("Find production movie successful")
+//    void findProductionMovieShouldReturnSuccessful() {
+//        when(tmdbClient.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
+//        when(tmdbClient.movieCredits(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.credits());
+//
+//        Production production = tmdbProxy.findProduction(Media.MOVIE, 1);
+//
+//        assertThat(production.getTv()).isNull();
+//        assertThat(production.getMedia()).isEqualTo(Media.MOVIE);
+//        assertThat(production.getMovie().getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
+//    }
+//
+//    @Test
+//    @DisplayName("Find production tv successful")
+//    void findProductionTVShouldReturnSuccessful() {
+//        when(tmdbClient.tv(any(Integer.class), anyString(), anyString())).thenReturn(MediaBuilder.tv());
+//
+//        Production production = tmdbProxy.findProduction(Media.TV, 1);
+//
+//        assertThat(production.getMovie()).isNull();
+//        assertThat(production.getMedia()).isEqualTo(Media.TV);
+//        assertThat(production.getTv().getTitle()).isEqualTo(MediaBuilder.tv().getTitle());
+//    }
 
 }

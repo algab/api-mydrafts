@@ -11,8 +11,6 @@ import java.time.LocalDate;
 @Data
 public class SeasonDTO {
 
-    private Integer id;
-
     private String name;
 
     @JsonAlias({"season_number"})

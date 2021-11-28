@@ -4,20 +4,22 @@ import br.com.mydrafts.apimydrafts.serializer.ImageSerializer;
 import br.com.mydrafts.apimydrafts.serializer.LocalDateSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class TvSeasonDTO {
+@SuperBuilder
+@NoArgsConstructor
+public class BaseResponseDTO {
 
     private Integer id;
 
     private String title;
 
     private String titleOriginal;
-
-    private Integer season;
 
     private String tagline;
 
@@ -34,12 +36,8 @@ public class TvSeasonDTO {
 
     private String language;
 
-    private List<String> created;
-
     private List<String> genres;
 
     private List<String> companies;
-
-    private List<String> networks;
 
 }

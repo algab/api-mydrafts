@@ -61,20 +61,20 @@ class FavoriteServiceTest {
         assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserBuilder.getUser().getId());
     }
 
-    @Test
-    @DisplayName("Service save favorite find movie tmdb")
-    void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
-        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
-        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
-        when(productionRepository.save(any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
-        when(favoriteRepository.save(any())).thenReturn(FavoriteBuilder.getFavorite(Media.MOVIE));
-
-        FavoriteDTO favoriteDTO = service.save(FavoriteBuilder.favoriteForm());
-
-        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionBuilder.getProduction(Media.MOVIE).getId());
-        assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserBuilder.getUser().getId());
-    }
+//    @Test
+//    @DisplayName("Service save favorite find movie tmdb")
+//    void saveFavoriteFindMovieTMDBShouldReturnSuccessful() {
+//        when(userRepository.findById(anyString())).thenReturn(Optional.of(UserBuilder.getUser()));
+//        when(productionRepository.findByTmdbID(any(Integer.class))).thenReturn(Optional.empty());
+//        when(tmdbProxy.findProduction(any(), any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
+//        when(productionRepository.save(any())).thenReturn(ProductionBuilder.getProduction(Media.MOVIE));
+//        when(favoriteRepository.save(any())).thenReturn(FavoriteBuilder.getFavorite(Media.MOVIE));
+//
+//        FavoriteDTO favoriteDTO = service.save(FavoriteBuilder.favoriteForm());
+//
+//        assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionBuilder.getProduction(Media.MOVIE).getId());
+//        assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserBuilder.getUser().getId());
+//    }
 
     @Test
     @DisplayName("Service save favorite user not found")

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface DraftRepository extends MongoRepository<Draft, String> {
 
-    Boolean existsByUserAndProduction(User user, Production production);
+    boolean existsByUserAndProduction(User user, Production production);
 
     Page<Draft> findByUser(User user, Pageable page);
 
