@@ -5,6 +5,10 @@ import br.com.mydrafts.apimydrafts.documents.Production;
 
 public interface ProductionService {
 
-    Production mountProduction(Integer tmdbID, Integer season, Media media);
+    Production mountProduction(Integer tmdbID, Media media, Integer season);
+
+    Production searchByTmdbID(Integer tmdbID);
+
+    Production searchByTmdbIdAndSeason(Integer tmdbID, Integer season);
 
 }

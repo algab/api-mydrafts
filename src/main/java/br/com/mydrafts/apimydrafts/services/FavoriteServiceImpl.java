@@ -7,15 +7,13 @@ import br.com.mydrafts.apimydrafts.documents.User;
 import br.com.mydrafts.apimydrafts.dto.*;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
-import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,10 +23,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoriteRepository favoriteRepository;
 
     @Autowired
-    private ProductionRepository productionRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ProductionService productionService;
 
     @Autowired
     private TMDBProxy tmdbProxy;
@@ -44,25 +42,13 @@ public class FavoriteServiceImpl implements FavoriteService {
     public FavoriteDTO save(FavoriteFormDTO body) {
         log.info("FavoriteServiceImpl.save - Start - Input: body {}", body);
 
-        Favorite favorite = Favorite.builder().build();
         User user = this.userRepository.findById(body.getUserID())
                 .orElseThrow(() -> {
                     log.error("FavoriteServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
                     return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_USER_NOT_FOUND);
                 });
-        favorite.setUser(user);
-        Optional<Production> production = this.productionRepository.findByTmdbID(body.getTmdbID());
-        if (production.isPresent()) {
-            if (this.favoriteRepository.existsByUserAndProduction(user, production.get())) {
-                log.error("FavoriteServiceImpl.save - Error: {}", MESSAGE_FAVORITE_CONFLICT);
-                throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.toString(), MESSAGE_FAVORITE_CONFLICT);
-            }
-            favorite.setProduction(production.get());
-        } else {
-            Production saveProduction = this.productionRepository.save(this.tmdbProxy.findProduction(body.getMedia(), body.getTmdbID(), body.getSeason()));
-            favorite.setProduction(saveProduction);
-        }
 
+        Favorite favorite = setDataFavorite(body, user);
         FavoriteDTO favoriteResult = mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
         log.info("FavoriteServiceImpl.save - End - Input: body {} - Output: {}", body, favoriteResult);
         return favoriteResult;
@@ -80,6 +66,23 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         log.info("FavoriteServiceImpl.delete - End - Input: id {}", id);
         this.favoriteRepository.delete(favorite);
+    }
+
+    private Favorite setDataFavorite(FavoriteFormDTO body, User user) {
+        Favorite favorite = Favorite.builder().build();
+        favorite.setUser(user);
+        Production production = this.productionService.searchByTmdbID(body.getTmdbID());
+        if (production != null) {
+            if (Boolean.TRUE.equals(this.favoriteRepository.existsByUserAndProduction(user, production))) {
+                log.error("FavoriteServiceImpl.setDataFavorite - Error: {}", MESSAGE_FAVORITE_CONFLICT);
+                throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), MESSAGE_FAVORITE_CONFLICT);
+            }
+            favorite.setProduction(production);
+        } else {
+            Production productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia(), null);
+            favorite.setProduction(productionResponse);
+        }
+        return favorite;
     }
 
 }

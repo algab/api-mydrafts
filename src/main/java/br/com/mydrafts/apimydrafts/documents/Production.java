@@ -6,7 +6,8 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.BaseResponseDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,8 +19,10 @@ public class Production {
 
     private Integer tmdbID;
 
+    private Integer season;
+
     private Media media;
 
-    private BaseResponseDTO production;
+    private BaseResponseDTO data;
 
 }

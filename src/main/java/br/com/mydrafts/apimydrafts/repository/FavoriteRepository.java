@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface FavoriteRepository extends MongoRepository<Favorite, String> {
 
-    Boolean existsByUserAndProduction(User user, Production production);
+    boolean existsByUserAndProduction(User user, Production production);
 
     Page<Favorite> findByUser(User user, Pageable page);
 

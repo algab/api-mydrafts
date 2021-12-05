@@ -10,12 +10,16 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
+import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,7 +36,7 @@ public class ProductionServiceImpl implements ProductionService {
     private ModelMapper mapper;
 
     @Override
-    public Production mountProduction(Integer tmdbID, Integer season, Media media) {
+    public Production mountProduction(Integer tmdbID, Media media, Integer season) {
         log.info("ProductionServiceImpl.mountProduction - Input: tmdbID {}, season {}, media {}", tmdbID, season, media);
 
         Production production = Production.builder().media(media).tmdbID(tmdbID).build();
@@ -42,13 +46,27 @@ public class ProductionServiceImpl implements ProductionService {
             dataTV(tmdbID, season, production);
         }
 
-        Production productionResponse = this.saveProduction(production);
+        Production productionResponse = this.repository.save(production);
         log.info("ProductionServiceImpl.mountProduction - Input: tmdbID {}, season {}, media {} - Output: {}", tmdbID, season, media, productionResponse);
         return productionResponse;
     }
 
-    private Production saveProduction(Production production) {
-        return this.repository.save(production);
+    @Override
+    public Production searchByTmdbID(Integer tmdbID) {
+        Optional<Production> production = this.repository.findByTmdbID(tmdbID);
+        if (production.isPresent()) {
+            return production.get();
+        }
+        return null;
+    }
+
+    @Override
+    public Production searchByTmdbIdAndSeason(Integer tmdbID, Integer season) {
+        Optional<Production> production = this.repository.findByTmdbIDAndSeason(tmdbID, season);
+        if (production.isPresent()) {
+            return production.get();
+        }
+        return null;
     }
 
     private void dataMovie(Integer tmdbID, Production production) {
@@ -56,7 +74,7 @@ public class ProductionServiceImpl implements ProductionService {
         CreditsDTO credits = tmdbProxy.getMovieCredits(tmdbID);
         MovieResponseDTO response = mapper.map(movie, MovieResponseDTO.class);
         response.setCrew(credits.getCrew());
-        production.setProduction(response);
+        production.setData(response);
     }
 
     private void dataTV(Integer tmdbID, Integer season, Production production) {
@@ -67,9 +85,10 @@ public class ProductionServiceImpl implements ProductionService {
             SeasonDTO findSeason = tv.getSeasons().stream().filter(data -> data.getNumber().equals(season)).collect(Collectors.toList()).get(0);
             tvSeason.setSeason(findSeason.getNumber());
             tvSeason.setDateRelease(findSeason.getDate());
-            production.setProduction(tvSeason);
+            production.setData(tvSeason);
+            production.setSeason(season);
         } else {
-            production.setProduction(tvResponse);
+            production.setData(tvResponse);
         }
     }
 
