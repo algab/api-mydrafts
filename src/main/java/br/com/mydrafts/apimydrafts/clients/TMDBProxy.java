@@ -1,21 +1,12 @@
 package br.com.mydrafts.apimydrafts.clients;
 
-import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonResponseDTO;
-import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
-import feign.FeignException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
@@ -36,86 +27,35 @@ public class TMDBProxy {
     private ModelMapper mapper;
 
     public ResponseDTO trendingMovie() {
-        try {
-            return this.client.trendingMovie(this.apiKey, this.language);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        return this.client.trendingMovie(this.apiKey, this.language);
     }
 
     public ResponseDTO trendingTV() {
-        try {
-            return this.client.trendingTv(this.apiKey, this.language);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        return this.client.trendingTv(this.apiKey, this.language);
     }
 
     public ResponseDTO searchMovie(String name) {
-        try {
-            return this.client.searchMovie(this.apiKey, this.language, name);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        return this.client.searchMovie(this.apiKey, this.language, name);
     }
 
     public ResponseDTO searchTV(String name) {
-        try {
-            return this.client.searchTv(this.apiKey, this.language, name);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        return this.client.searchTv(this.apiKey, this.language, name);
     }
 
     public MovieDTO getMovie(Integer tmdbID) {
-        try {
-            return this.client.movie(tmdbID, this.apiKey, this.language);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        return this.client.movie(tmdbID, this.apiKey, this.language);
     }
 
     public CreditsDTO getMovieCredits(Integer tmdbID) {
-        try {
-            CreditsDTO credits = this.client.movieCredits(tmdbID, this.apiKey, this.language);
-            credits.setCrew(credits.getCrew().stream()
-                    .filter(crew -> crew.getJob().equals("Director") || crew.getJob().equals("Writer") || crew.getJob().equals("Executive Producer"))
-                    .collect(Collectors.toList()));
-            return credits;
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
+        CreditsDTO credits = this.client.movieCredits(tmdbID, this.apiKey, this.language);
+        credits.setCrew(credits.getCrew().stream()
+                .filter(crew -> crew.getJob().equals("Director") || crew.getJob().equals("Writer") || crew.getJob().equals("Executive Producer"))
+                .collect(Collectors.toList()));
+        return credits;
     }
 
     public TvDTO getTV(Integer tmdbID) {
-        try {
-            return this.client.tv(tmdbID, this.apiKey, this.language);
-        } catch (FeignException exception) {
-            throw new BusinessException(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.toString(), exception.contentUTF8());
-        }
-    }
-
-    public Production findProduction(Media media, Integer tmdbID, Integer numberSeason) {
-        Production production = Production.builder().media(media).tmdbID(tmdbID).build();
-        if (media.equals(Media.MOVIE)) {
-            MovieDTO movie = getMovie(tmdbID);
-            CreditsDTO credits = getMovieCredits(tmdbID);
-            MovieResponseDTO response = mapper.map(movie, MovieResponseDTO.class);
-            response.setCrew(credits.getCrew());
-            production.setProduction(response);
-        } else {
-            TvResponseDTO tv = mapper.map(getTV(tmdbID), TvResponseDTO.class);
-            if (numberSeason != null) {
-                SeasonResponseDTO tvSeason = mapper.map(tv, SeasonResponseDTO.class);
-                SeasonDTO season = tv.getSeasons().stream().filter(data -> data.getNumber().equals(numberSeason)).collect(Collectors.toList()).get(0);
-                tvSeason.setSeason(season.getNumber());
-                tvSeason.setDateRelease(season.getDate());
-                production.setProduction(tvSeason);
-            } else {
-                production.setProduction(tv);
-            }
-        }
-        return production;
+        return this.client.tv(tmdbID, this.apiKey, this.language);
     }
 
 }
