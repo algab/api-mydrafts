@@ -1,6 +1,9 @@
 package br.com.mydrafts.apimydrafts.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Data
 @Builder
@@ -15,7 +18,5 @@ public class DraftDTO {
     private Double rating;
 
     private ProductionDTO production;
-
-    private UserDTO user;
 
 }

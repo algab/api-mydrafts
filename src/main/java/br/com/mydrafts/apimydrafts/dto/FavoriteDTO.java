@@ -12,6 +12,4 @@ public class FavoriteDTO {
 
     private ProductionDTO production;
 
-    private UserDTO user;
-
 }

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 public class DraftServiceImpl implements DraftService {
@@ -75,18 +77,17 @@ public class DraftServiceImpl implements DraftService {
     public DraftDTO updateDraft(String id, DraftFormDTO body) {
         log.info("DraftServiceImpl.updateDraft - Start - Input: id {}, body {}", id, body);
 
-        if (Boolean.FALSE.equals(this.draftRepository.existsById(id))) {
-            log.info("DraftServiceImpl.updateDraft - search draft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
+        if (!this.draftRepository.existsById(id)) {
+            log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
             throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
         }
 
-        User user = this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> {
-                    log.info("DraftServiceImpl.updateDraft - search user - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
-                });
+        if (!this.userRepository.existsById(body.getUserID())) {
+            log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", MESSAGE_USER_NOT_FOUND);
+            throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
+        }
 
-        Draft draft = setDataDraft(body, user);
+        Draft draft = updateDataDraft(id, body);
         DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
         log.info("DraftServiceImpl.updateDraft - End - Input: id {}, body {} - Output: {}", id, body, draftResult);
         return draftResult;
@@ -98,7 +99,7 @@ public class DraftServiceImpl implements DraftService {
 
         Draft draft = this.draftRepository.findById(id)
                 .orElseThrow(() -> {
-                    log.info("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
+                    log.error("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
                     return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
                 });
 
@@ -111,7 +112,7 @@ public class DraftServiceImpl implements DraftService {
         Production production = searchProduction(body.getTmdbID(), body.getSeason(), body.getMedia());
         if (production != null) {
             if (Boolean.TRUE.equals(this.draftRepository.existsByUserAndProduction(user, production))) {
-                log.error("DraftServiceImpl.save - Error: {}", MESSAGE_DRAFT_CONFLICT);
+                log.error("DraftServiceImpl.setDataDraft - Error: {}", MESSAGE_DRAFT_CONFLICT);
                 throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), MESSAGE_DRAFT_CONFLICT);
             }
             draft.setProduction(production);
@@ -138,6 +139,16 @@ public class DraftServiceImpl implements DraftService {
             throw new BusinessException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), MESSAGE_TV_BAD_REQUEST);
         }
         return this.productionService.searchByTmdbIdAndSeason(tmdbID, season);
+    }
+
+    private Draft updateDataDraft(String id, DraftFormDTO body) {
+        Optional<Draft> draft = this.draftRepository.findById(id);
+        if (draft.isPresent()) {
+            draft.get().setRating(body.getRating());
+            draft.get().setDescription(body.getDescription());
+            return draft.get();
+        }
+        throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
     }
 
 }

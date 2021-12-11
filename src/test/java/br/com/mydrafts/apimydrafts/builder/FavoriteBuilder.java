@@ -26,7 +26,6 @@ public final class FavoriteBuilder {
     public static FavoriteDTO getFavoriteDTO() {
         return FavoriteDTO.builder()
                 .id("1")
-                .user(UserBuilder.getUserDTO())
                 .production(ProductionBuilder.getProductionDTO())
                 .build();
     }

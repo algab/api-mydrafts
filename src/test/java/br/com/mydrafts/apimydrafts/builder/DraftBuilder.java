@@ -31,8 +31,7 @@ public final class DraftBuilder {
         return DraftDTO.builder()
                 .id("61586ad5362766670067eda8")
                 .description("Very Good")
-                .rating(10D)
-                .user(UserBuilder.getUserDTO())
+                .rating(5D)
                 .production(ProductionBuilder.getProductionDTO())
                 .build();
     }

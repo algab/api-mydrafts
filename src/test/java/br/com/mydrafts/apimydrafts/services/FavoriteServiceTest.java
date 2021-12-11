@@ -58,7 +58,6 @@ class FavoriteServiceTest {
         FavoriteDTO favoriteDTO = service.save(FavoriteBuilder.favoriteForm());
 
         assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionBuilder.getProduction(Media.MOVIE).getId());
-        assertThat(favoriteDTO.getUser().getId()).isEqualTo(UserBuilder.getUser().getId());
     }
 
 //    @Test

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-@DisplayName("Tests for business exception")
+@DisplayName("Tests for BusinessException")
 class BusinessExceptionTest {
 
     private static final String ERROR_HTTP = "BAD REQUEST";
