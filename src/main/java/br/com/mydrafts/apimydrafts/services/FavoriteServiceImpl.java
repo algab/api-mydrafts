@@ -1,6 +1,5 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.documents.Favorite;
 import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.documents.User;
@@ -27,9 +26,6 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
     private ProductionService productionService;
-
-    @Autowired
-    private TMDBProxy tmdbProxy;
 
     @Autowired
     private ModelMapper mapper;
@@ -73,7 +69,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setUser(user);
         Production production = this.productionService.searchByTmdbID(body.getTmdbID());
         if (production != null) {
-            if (Boolean.TRUE.equals(this.favoriteRepository.existsByUserAndProduction(user, production))) {
+            if (this.favoriteRepository.existsByUserAndProduction(user, production)) {
                 log.error("FavoriteServiceImpl.setDataFavorite - Error: {}", MESSAGE_FAVORITE_CONFLICT);
                 throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), MESSAGE_FAVORITE_CONFLICT);
             }

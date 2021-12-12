@@ -8,11 +8,13 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.GenresDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.NetworkDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 
 public final class MediaBuilder {
     public static MovieResponseDTO getMovie() {
@@ -26,9 +28,9 @@ public final class MediaBuilder {
                 .backdrop("https://image.tmdb.org/t/p/original/jlGmlFOcfo8n5tURmhC7YVd4Iyy.jpg")
                 .dateRelease(LocalDate.of(2021, 07, 28))
                 .language("en")
-                .genres(Arrays.asList("Ação"))
-                .companies(Arrays.asList("Warner Bros. Pictures"))
-                .crew(Arrays.asList(MediaBuilder.crewDirector()))
+                .genres(Collections.singletonList("Ação"))
+                .companies(Collections.singletonList("Warner Bros. Pictures"))
+                .crew(Collections.singletonList(MediaBuilder.crewDirector()))
                 .build();
     }
 
@@ -44,9 +46,9 @@ public final class MediaBuilder {
                 .dateRelease(LocalDate.of(2005, 03, 24))
                 .lastEpisode(LocalDate.of(2013, 05, 16))
                 .language("en")
-                .created(Arrays.asList("Greg Daniels"))
-                .genres(Arrays.asList("Comédia"))
-                .networks(Arrays.asList("NBC"))
+                .created(Collections.singletonList("Greg Daniels"))
+                .genres(Collections.singletonList("Comédia"))
+                .networks(Collections.singletonList("NBC"))
                 .build();
     }
 
@@ -60,8 +62,8 @@ public final class MediaBuilder {
                 .poster("https://image.tmdb.org/t/p/original/wTS3dS2DJiMFFgqKDz5fxMTri.jpg")
                 .backdrop("https://image.tmdb.org/t/p/original/jlGmlFOcfo8n5tURmhC7YVd4Iyy.jpg")
                 .dateRelease(LocalDate.of(2021, 07, 28))
-                .genres(Arrays.asList(MediaBuilder.genres()))
-                .companies(Arrays.asList(MediaBuilder.companies()))
+                .genres(Collections.singletonList(MediaBuilder.genres()))
+                .companies(Collections.singletonList(MediaBuilder.companies()))
                 .language("en")
                 .build();
     }
@@ -78,10 +80,11 @@ public final class MediaBuilder {
                 .dateRelease(LocalDate.of(2005, 03, 24))
                 .lastEpisode(LocalDate.of(2013, 05, 16))
                 .language("en")
-                .created(Arrays.asList(MediaBuilder.created()))
-                .genres(Arrays.asList(MediaBuilder.genres()))
-                .companies(Arrays.asList(MediaBuilder.companies()))
-                .networks(Arrays.asList(MediaBuilder.network()))
+                .created(Collections.singletonList(MediaBuilder.created()))
+                .genres(Collections.singletonList(MediaBuilder.genres()))
+                .companies(Collections.singletonList(MediaBuilder.companies()))
+                .networks(Collections.singletonList(MediaBuilder.network()))
+                .seasons(Collections.singletonList(tvSeason()))
                 .build();
     }
 
@@ -163,6 +166,17 @@ public final class MediaBuilder {
                 .name("NBC")
                 .country("US")
                 .logo("http://teste.com/nbc.jpg")
+                .build();
+    }
+
+    public static SeasonDTO tvSeason() {
+        return SeasonDTO.builder()
+                .name("Season 1")
+                .number(1)
+                .totalEpisodes(10)
+                .overview("Test")
+                .poster("http://test.com/season.jpg")
+                .date(LocalDate.of(2021, 12, 10))
                 .build();
     }
 

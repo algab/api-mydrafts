@@ -11,7 +11,7 @@ public final class DraftBuilder {
         return DraftFormDTO.builder()
                 .description("Very Good")
                 .media(media)
-                .rating(10D)
+                .rating(5D)
                 .tmdbID(550988)
                 .userID("61586ad5362766670067edd5")
                 .build();
@@ -21,7 +21,7 @@ public final class DraftBuilder {
         return Draft.builder()
                 .id("61586ad5362766670067eda8")
                 .description("Very Good")
-                .rating(10D)
+                .rating(5D)
                 .user(UserBuilder.getUser())
                 .production(ProductionBuilder.getProduction(media))
                 .build();

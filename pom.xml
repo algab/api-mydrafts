@@ -136,7 +136,7 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>**/dto/*</exclude>
+						<exclude>**/dto/**</exclude>
 						<exclude>**/documents/*</exclude>
 					</excludes>
 				</configuration>
