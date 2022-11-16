@@ -11,10 +11,7 @@ To run the API locally you need to create an API Key in [TMDB Developers](https:
 You need to create the following envs on your machine.
 
 ```
-MONGO_DB
-MONGO_USER
-MONGO_PASS
-MONGO_HOST
+MONGO_URI
 API_KEY
 ```
 

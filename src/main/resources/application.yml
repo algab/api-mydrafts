@@ -3,7 +3,7 @@ spring:
     name: api-mydrafts
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority
+      uri: ${MONGO_URI}
 server:
   port: ${PORT:8080}
 tmdb:
