@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.services;
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
-import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.SearchFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search movie by name")
     void searchMovie() {
-        when(proxy.searchMovie(any(String.class))).thenReturn(SearchBuilder.responseSearchMovie());
+        when(proxy.searchMovie(any(String.class))).thenReturn(SearchFixture.responseSearchMovie());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "Shang-Chi");
 
@@ -47,7 +47,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search tv show by name")
      void searchTV() {
-        when(proxy.searchTV(any(String.class))).thenReturn(SearchBuilder.responseSearchTV());
+        when(proxy.searchTV(any(String.class))).thenReturn(SearchFixture.responseSearchTV());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.TV, "What");
 
@@ -60,7 +60,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search content empty")
     void searchEmpty() {
-        when(proxy.searchTV(any(String.class))).thenReturn(SearchBuilder.responseSearchTV());
+        when(proxy.searchTV(any(String.class))).thenReturn(SearchFixture.responseSearchTV());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(5, 20), Media.TV, "What");
 

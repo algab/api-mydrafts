@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
-import br.com.mydrafts.apimydrafts.builder.ProductionBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
+import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.converters.TMDBTvToResponse;
@@ -44,8 +44,8 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service mount data production movie")
     void mountProductionMovieShouldReturnSuccessful() {
-        when(proxy.getMovie(anyInt())).thenReturn(MediaBuilder.movie());
-        when(proxy.getMovieCredits(anyInt())).thenReturn(MediaBuilder.credits());
+        when(proxy.getMovie(anyInt())).thenReturn(MediaFixture.movie());
+        when(proxy.getMovieCredits(anyInt())).thenReturn(MediaFixture.credits());
         when(productionRepository.save(any())).thenReturn(getProductionMovie());
 
         Production production = service.mountProduction(10, Media.MOVIE, null);
@@ -56,7 +56,7 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service mount data production tv with season")
     void mountProductionTVSeasonShouldReturnSuccessful() {
-        when(proxy.getTV(anyInt())).thenReturn(MediaBuilder.tv());
+        when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
         Production production = service.mountProduction(10, Media.TV, 1);
@@ -67,7 +67,7 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service mount data production tv without season")
     void mountProductionTVShouldReturnSuccessful() {
-        when(proxy.getTV(anyInt())).thenReturn(MediaBuilder.tv());
+        when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
         Production production = service.mountProduction(10, Media.TV, null);
@@ -78,11 +78,11 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service search by tmdb id")
     void searchByTmdbIDShouldReturnSuccessful() {
-        when(productionRepository.findByTmdbID(anyInt())).thenReturn(Optional.of(ProductionBuilder.getProduction(Media.MOVIE)));
+        when(productionRepository.findByTmdbID(anyInt())).thenReturn(Optional.of(ProductionFixture.getProduction(Media.MOVIE)));
 
         Production production = service.searchByTmdbID(10);
 
-        assertThat(ProductionBuilder.getProduction(Media.MOVIE).getMedia()).isEqualTo(production.getMedia());
+        assertThat(ProductionFixture.getProduction(Media.MOVIE).getMedia()).isEqualTo(production.getMedia());
     }
 
     @Test
@@ -98,11 +98,11 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service search by tmdb id and tv season")
     void searchByTmdbIDAndSeasonShouldReturnSuccessful() {
-        when(productionRepository.findByTmdbIDAndSeason(anyInt(), anyInt())).thenReturn(Optional.of(ProductionBuilder.getProduction(Media.TV)));
+        when(productionRepository.findByTmdbIDAndSeason(anyInt(), anyInt())).thenReturn(Optional.of(ProductionFixture.getProduction(Media.TV)));
 
         Production production = service.searchByTmdbIdAndSeason(10, 1);
 
-        assertThat(ProductionBuilder.getProduction(Media.TV).getMedia()).isEqualTo(production.getMedia());
+        assertThat(ProductionFixture.getProduction(Media.TV).getMedia()).isEqualTo(production.getMedia());
     }
 
     @Test
@@ -116,14 +116,14 @@ class ProductionServiceTest {
     }
 
     private Production getProductionMovie() {
-        Production production = ProductionBuilder.getProduction(Media.MOVIE);
-        production.setData(MediaBuilder.getMovie());
+        Production production = ProductionFixture.getProduction(Media.MOVIE);
+        production.setData(MediaFixture.getMovie());
         return production;
     }
 
     private Production getProductionTV() {
-        Production production = ProductionBuilder.getProduction(Media.TV);
-        production.setData(MediaBuilder.getTV());
+        Production production = ProductionFixture.getProduction(Media.TV);
+        production.setData(MediaFixture.getTV());
         return production;
     }
 

@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
-import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.TrendingFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,8 +32,8 @@ class TrendingServiceTest {
     @Test
     @DisplayName("Get Trending Movies and TV Successful")
     void getTrendingSuccessful() {
-        when(proxy.trendingMovie()).thenReturn(TrendingBuilder.responseTrendingMovie());
-        when(proxy.trendingTV()).thenReturn(TrendingBuilder.responseTrendingTV());
+        when(proxy.trendingMovie()).thenReturn(TrendingFixture.responseTrendingMovie());
+        when(proxy.trendingTV()).thenReturn(TrendingFixture.responseTrendingTV());
 
         Page<ResultDTO> result = service.trendingTMDB(PageRequest.of(0, 10));
 
@@ -47,8 +47,8 @@ class TrendingServiceTest {
     @Test
     @DisplayName("Get Trending Pageable")
     void getTrendingPageable() {
-        when(proxy.trendingMovie()).thenReturn(TrendingBuilder.responseTrendingMovie());
-        when(proxy.trendingTV()).thenReturn(TrendingBuilder.responseTrendingTV());
+        when(proxy.trendingMovie()).thenReturn(TrendingFixture.responseTrendingMovie());
+        when(proxy.trendingTV()).thenReturn(TrendingFixture.responseTrendingTV());
 
         Page<ResultDTO> result = service.trendingTMDB(PageRequest.of(0, 40));
 

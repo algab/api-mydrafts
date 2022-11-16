@@ -2,12 +2,11 @@ package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.DraftService;
-import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,7 +39,7 @@ class DraftControllerTest {
     @DisplayName("Controller save draft")
     void saveDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
-        when(this.service.save(any())).thenReturn(DraftBuilder.getDraftDTO());
+        when(this.service.save(any())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
             .content(json)
@@ -54,7 +53,7 @@ class DraftControllerTest {
     @DisplayName("Controller search draft by id")
     void searchDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draft.json");
-        when(this.service.searchDraft(anyString())).thenReturn(DraftBuilder.getDraftDTO());
+        when(this.service.searchDraft(anyString())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
             .content(json)
@@ -67,7 +66,7 @@ class DraftControllerTest {
     @DisplayName("Controller update draft")
     void updateDraftShouldReturnSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/draftRequest.json");
-        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftBuilder.getDraftDTO());
+        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
             .content(json)

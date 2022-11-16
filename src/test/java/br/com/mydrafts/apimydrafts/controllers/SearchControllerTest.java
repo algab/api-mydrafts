@@ -4,7 +4,7 @@ import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.SearchService;
-import br.com.mydrafts.apimydrafts.builder.SearchBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.SearchFixture;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -102,13 +102,13 @@ class SearchControllerTest {
 
     private Page<ResultDTO> searchMovie() {
         PageRequest page = PageRequest.of(0, 10);
-        List<ResultDTO> contents = Collections.singletonList(SearchBuilder.searchMovie());
+        List<ResultDTO> contents = Collections.singletonList(SearchFixture.searchMovie());
         return new PageImpl<>(contents, page, 1);
     }
 
     private Page<ResultDTO> searchTV() {
         PageRequest page = PageRequest.of(0, 10);
-        List<ResultDTO> contents = Collections.singletonList(SearchBuilder.searchTV());
+        List<ResultDTO> contents = Collections.singletonList(SearchFixture.searchTV());
         return new PageImpl<>(contents, page, 1);
     }
 

@@ -4,7 +4,7 @@ import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.converters.TMDBTvToResponse;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
-import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,24 +35,24 @@ class MediaServiceTest {
     @Test
     @DisplayName("Get movie successful")
     void getMovie() {
-        when(proxy.getMovie(any(Integer.class))).thenReturn(MediaBuilder.movie());
-        when(proxy.getMovieCredits(any(Integer.class))).thenReturn(MediaBuilder.credits());
+        when(proxy.getMovie(any(Integer.class))).thenReturn(MediaFixture.movie());
+        when(proxy.getMovieCredits(any(Integer.class))).thenReturn(MediaFixture.credits());
 
         MovieResponseDTO result = service.getMovie(1);
 
-        assertThat(result.getId()).isEqualTo(MediaBuilder.movie().getId());
-        assertThat(result.getTitle()).isEqualTo(MediaBuilder.movie().getTitle());
+        assertThat(result.getId()).isEqualTo(MediaFixture.movie().getId());
+        assertThat(result.getTitle()).isEqualTo(MediaFixture.movie().getTitle());
     }
 
     @Test
     @DisplayName("Get tv successful")
     void getTV() {
-        when(proxy.getTV(any(Integer.class))).thenReturn(MediaBuilder.tv());
+        when(proxy.getTV(any(Integer.class))).thenReturn(MediaFixture.tv());
 
         TvResponseDTO result = service.getTV(1);
 
-        assertThat(result.getId()).isEqualTo(MediaBuilder.tv().getId());
-        assertThat(result.getTitle()).isEqualTo(MediaBuilder.tv().getTitle());
+        assertThat(result.getId()).isEqualTo(MediaFixture.tv().getId());
+        assertThat(result.getTitle()).isEqualTo(MediaFixture.tv().getTitle());
     }
 
 }

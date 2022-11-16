@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.MediaService;
-import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,33 +43,33 @@ class MediaControllerTest {
     @DisplayName("Get movie by id")
     void getMovieSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/movie.json");
-        when(this.service.getMovie(any(Integer.class))).thenReturn(MediaBuilder.getMovie());
+        when(this.service.getMovie(any(Integer.class))).thenReturn(MediaFixture.getMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", PATH_MEDIA))
             .content(json)
             .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isOk());
-        mockMvc.perform(request).andExpect(jsonPath("title").value(MediaBuilder.getMovie().getTitle()));
-        mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaBuilder.getMovie().getOverview()));
-        mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaBuilder.getMovie().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+        mockMvc.perform(request).andExpect(jsonPath("title").value(MediaFixture.getMovie().getTitle()));
+        mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaFixture.getMovie().getOverview()));
+        mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaFixture.getMovie().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     }
 
     @Test
     @DisplayName("Get tv show by id")
     void getTVSuccessful() throws Exception {
         String json = TestUtil.readFileAsString("/json/tv.json");
-        when(this.service.getTV(any(Integer.class))).thenReturn(MediaBuilder.getTV());
+        when(this.service.getTV(any(Integer.class))).thenReturn(MediaFixture.getTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", PATH_MEDIA))
             .content(json)
             .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request).andExpect(status().isOk());
-        mockMvc.perform(request).andExpect(jsonPath("title").value(MediaBuilder.getTV().getTitle()));
-        mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaBuilder.getTV().getOverview()));
-        mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaBuilder.getTV().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
-        mockMvc.perform(request).andExpect(jsonPath("lastEpisode").value(MediaBuilder.getTV().getLastEpisode().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+        mockMvc.perform(request).andExpect(jsonPath("title").value(MediaFixture.getTV().getTitle()));
+        mockMvc.perform(request).andExpect(jsonPath("overview").value(MediaFixture.getTV().getOverview()));
+        mockMvc.perform(request).andExpect(jsonPath("dateRelease").value(MediaFixture.getTV().getDateRelease().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+        mockMvc.perform(request).andExpect(jsonPath("lastEpisode").value(MediaFixture.getTV().getLastEpisode().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
     }
 
 }

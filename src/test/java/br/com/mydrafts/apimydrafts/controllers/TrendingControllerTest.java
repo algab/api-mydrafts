@@ -4,7 +4,7 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.TrendingService;
 import br.com.mydrafts.apimydrafts.utils.TestUtil;
-import br.com.mydrafts.apimydrafts.builder.TrendingBuilder;
+import br.com.mydrafts.apimydrafts.fixtures.TrendingFixture;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -63,7 +63,7 @@ class TrendingControllerTest {
 
     private Page<ResultDTO> trending() {
         PageRequest page = PageRequest.of(0, 10);
-        List<ResultDTO> contents = Collections.singletonList(TrendingBuilder.trending());
+        List<ResultDTO> contents = Collections.singletonList(TrendingFixture.trending());
         return new PageImpl<>(contents, page, 1);
     }
 
