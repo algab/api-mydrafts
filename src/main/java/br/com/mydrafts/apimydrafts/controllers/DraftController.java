@@ -3,9 +3,9 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 import br.com.mydrafts.apimydrafts.services.DraftService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +14,9 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/v1/drafts")
+@AllArgsConstructor
 public class DraftController {
 
-    @Autowired
     private DraftService service;
 
     @PostMapping

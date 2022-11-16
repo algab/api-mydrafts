@@ -4,14 +4,15 @@ import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
 import br.com.mydrafts.apimydrafts.builder.ProductionBuilder;
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.constants.Media;
+import br.com.mydrafts.apimydrafts.converters.TMDBTvToResponse;
 import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -21,19 +22,24 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Production Service")
 class ProductionServiceTest {
 
-    @Autowired
     private ProductionService service;
 
-    @MockBean
+    @Mock
     private ProductionRepository productionRepository;
 
-    @MockBean
+    @Mock
     private TMDBProxy proxy;
+
+    @BeforeEach
+    void setup() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.addConverter(new TMDBTvToResponse());
+        service = new ProductionServiceImpl(productionRepository, proxy, mapper);
+    }
 
     @Test
     @DisplayName("Service mount data production movie")

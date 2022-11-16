@@ -1,8 +1,10 @@
 package br.com.mydrafts.apimydrafts.dto;
 
 import br.com.mydrafts.apimydrafts.constants.Gender;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +13,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserFormDTO {
 
     @Size(min = 6, message = "name needs at least 6 characters")

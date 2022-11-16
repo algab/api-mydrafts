@@ -10,11 +10,11 @@ import java.io.IOException;
 public class ImageSerializer extends JsonSerializer<String> {
 
     @Value("${tmdb.imgs-url}")
-    private String imgsUrl;
+    private String url;
 
     @Override
     public void serialize(String poster, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(String.format("%s%s", this.imgsUrl, poster));
+        jsonGenerator.writeString(String.format("%s%s", this.url, poster));
     }
 
 }

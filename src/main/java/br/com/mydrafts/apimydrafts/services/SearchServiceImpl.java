@@ -35,7 +35,7 @@ public class SearchServiceImpl implements SearchService {
         content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
         Page<ResultDTO> pageResult = Pagination.applyPage(content, page);
 
-        log.info("SearchServiceImpl.searchTMDB - End - Input: page {}, media {}, name {} - Output: {}", page, media, name, pageResult);
+        log.info("SearchServiceImpl.searchTMDB - End - Input: page {}, media {}, name {} - Output: {}", page, media, name, pageResult.getContent());
         return pageResult;
     }
 

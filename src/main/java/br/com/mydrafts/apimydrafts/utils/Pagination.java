@@ -16,18 +16,18 @@ public class Pagination {
         return new PageImpl<>(content.subList(initSize, endSize), page, content.size());
     }
 
-    public static Integer initPage(Integer initSize, Integer total) {
+    private static Integer initPage(Integer initSize, Integer total) {
         if (initSize > total) {
-            Integer rest = initSize - total;
+            int rest = initSize - total;
             initSize -= rest;
         }
         return initSize;
     }
 
     private static Integer endPage(Integer initSize, Integer pageSize, Integer total) {
-        Integer endSize = initSize + pageSize;
+        int endSize = initSize + pageSize;
         if (endSize >= total) {
-            Integer rest = endSize - total;
+            int rest = endSize - total;
             endSize -= rest;
         } else {
             endSize = pageSize;

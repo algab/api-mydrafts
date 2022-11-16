@@ -1,36 +1,42 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.clients.TMDBClient;
+import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
+import br.com.mydrafts.apimydrafts.converters.TMDBTvToResponse;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import br.com.mydrafts.apimydrafts.builder.MediaBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Media Service")
 class MediaServiceTest {
 
-    @Autowired
     private MediaService service;
 
-    @MockBean
-    private TMDBClient client;
+    @Mock
+    private TMDBProxy proxy;
+
+    @BeforeEach
+    void setup() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.addConverter(new TMDBTvToResponse());
+        service = new MediaServiceImpl(proxy, mapper);
+    }
 
     @Test
     @DisplayName("Get movie successful")
     void getMovie() {
-        when(client.movie(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.movie());
-        when(client.movieCredits(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.credits());
+        when(proxy.getMovie(any(Integer.class))).thenReturn(MediaBuilder.movie());
+        when(proxy.getMovieCredits(any(Integer.class))).thenReturn(MediaBuilder.credits());
 
         MovieResponseDTO result = service.getMovie(1);
 
@@ -41,7 +47,7 @@ class MediaServiceTest {
     @Test
     @DisplayName("Get tv successful")
     void getTV() {
-        when(client.tv(any(Integer.class), any(String.class), any(String.class))).thenReturn(MediaBuilder.tv());
+        when(proxy.getTV(any(Integer.class))).thenReturn(MediaBuilder.tv());
 
         TvResponseDTO result = service.getTV(1);
 

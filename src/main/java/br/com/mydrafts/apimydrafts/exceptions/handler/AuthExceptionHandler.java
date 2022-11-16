@@ -39,11 +39,11 @@ public class AuthExceptionHandler implements AuthenticationEntryPoint, AccessDen
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         return ExceptionResponse.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .error(HttpStatus.UNAUTHORIZED.toString())
-                .message(HttpStatus.UNAUTHORIZED.toString())
-                .timestamp(LocalDateTime.now().toString())
-                .build();
+            .status(HttpStatus.UNAUTHORIZED.value())
+            .error(HttpStatus.UNAUTHORIZED.toString())
+            .message(HttpStatus.UNAUTHORIZED.toString())
+            .timestamp(LocalDateTime.now().toString())
+            .build();
     }
 
 }

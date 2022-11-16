@@ -36,13 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/v1/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/v1/users").permitAll()
-                .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthFilter(secret), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().authenticationEntryPoint(new AuthExceptionHandler()).accessDeniedHandler(new AuthExceptionHandler());
+            .authorizeRequests()
+            .antMatchers(HttpMethod.POST, "/v1/login").permitAll()
+            .antMatchers(HttpMethod.POST, "/v1/users").permitAll()
+            .anyRequest().authenticated()
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().addFilterBefore(new AuthFilter(secret), UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling().authenticationEntryPoint(new AuthExceptionHandler()).accessDeniedHandler(new AuthExceptionHandler());
     }
 
 }

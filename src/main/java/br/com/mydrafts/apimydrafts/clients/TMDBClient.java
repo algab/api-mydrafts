@@ -21,16 +21,16 @@ public interface TMDBClient {
 
     @GetMapping(value="/search/movie", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     ResponseDTO searchMovie(
-            @RequestParam("api_key") String apiKey,
-            @RequestParam("language") String language,
-            @RequestParam("query") String query
+        @RequestParam("api_key") String apiKey,
+        @RequestParam("language") String language,
+        @RequestParam("query") String query
     );
 
     @GetMapping(value="/search/tv", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
     ResponseDTO searchTv(
-            @RequestParam("api_key") String apiKey,
-            @RequestParam("language") String language,
-            @RequestParam("query") String query
+        @RequestParam("api_key") String apiKey,
+        @RequestParam("language") String language,
+        @RequestParam("query") String query
     );
 
     @GetMapping(value="/movie/{id}", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)

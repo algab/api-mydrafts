@@ -5,8 +5,8 @@ import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 import br.com.mydrafts.apimydrafts.services.UserService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,9 +20,9 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping(path = "/v1/users")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
     private UserService service;
 
     @PostMapping

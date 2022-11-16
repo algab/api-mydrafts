@@ -31,7 +31,7 @@ public class TrendingServiceImpl implements TrendingService {
         content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
         Page<ResultDTO> pageResult = Pagination.applyPage(content, page);
 
-        log.info("TrendingServiceImpl.trendingTMDB - End - Input: page {} - Output: {}", page, pageResult);
+        log.info("TrendingServiceImpl.trendingTMDB - End - Input: page {} - Output: {}", page, pageResult.getContent());
         return pageResult;
     }
 

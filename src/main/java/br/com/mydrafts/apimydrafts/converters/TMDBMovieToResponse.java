@@ -1,5 +1,7 @@
 package br.com.mydrafts.apimydrafts.converters;
 
+import br.com.mydrafts.apimydrafts.dto.tmdb.CompaniesDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.GenresDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import org.modelmapper.AbstractConverter;
@@ -13,18 +15,18 @@ public class TMDBMovieToResponse extends AbstractConverter<MovieDTO, MovieRespon
     @Override
     protected MovieResponseDTO convert(MovieDTO movie) {
         return MovieResponseDTO.builder()
-                .id(movie.getId())
-                .title(movie.getTitle())
-                .titleOriginal(movie.getTitleOriginal())
-                .tagline(movie.getTagline())
-                .overview(movie.getOverview())
-                .poster(movie.getPoster())
-                .backdrop(movie.getBackdrop())
-                .dateRelease(movie.getDateRelease())
-                .language(movie.getLanguage())
-                .genres(movie.getGenres().stream().map(genre -> genre.getName()).collect(Collectors.toList()))
-                .companies(movie.getCompanies().stream().map(company -> company.getName()).collect(Collectors.toList()))
-                .build();
+            .id(movie.getId())
+            .title(movie.getTitle())
+            .titleOriginal(movie.getTitleOriginal())
+            .tagline(movie.getTagline())
+            .overview(movie.getOverview())
+            .poster(movie.getPoster())
+            .backdrop(movie.getBackdrop())
+            .dateRelease(movie.getDateRelease())
+            .language(movie.getLanguage())
+            .genres(movie.getGenres().stream().map(GenresDTO::getName).collect(Collectors.toList()))
+            .companies(movie.getCompanies().stream().map(CompaniesDTO::getName).collect(Collectors.toList()))
+            .build();
     }
 
 }

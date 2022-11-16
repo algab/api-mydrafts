@@ -3,8 +3,8 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.dto.LoginFormDTO;
 import br.com.mydrafts.apimydrafts.services.LoginService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,9 +16,9 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/v1/login")
+@AllArgsConstructor
 public class LoginController {
 
-    @Autowired
     private LoginService service;
 
     @PostMapping

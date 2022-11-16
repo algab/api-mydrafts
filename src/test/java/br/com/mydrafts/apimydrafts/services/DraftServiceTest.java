@@ -10,39 +10,38 @@ import br.com.mydrafts.apimydrafts.repository.UserRepository;
 import br.com.mydrafts.apimydrafts.builder.DraftBuilder;
 import br.com.mydrafts.apimydrafts.builder.ProductionBuilder;
 import br.com.mydrafts.apimydrafts.builder.UserBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.mockito.Mock;
+import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Draft Service")
 class DraftServiceTest {
 
-    @Autowired
     private DraftService service;
 
-    @MockBean
-    private ProductionService productionService;
-
-    @MockBean
+    @Mock
     private DraftRepository draftRepository;
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ProductionService productionService;
+
+    @BeforeEach
+    void setup() {
+        service = new DraftServiceImpl(draftRepository, userRepository, productionService, new ModelMapper());
+    }
 
     @Test
     @DisplayName("Service save draft")
@@ -162,7 +161,7 @@ class DraftServiceTest {
         DraftFormDTO form = DraftBuilder.draftForm(Media.MOVIE);
 
         assertThatExceptionOfType(BusinessException.class)
-                .isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", form));
+            .isThrownBy(() -> service.updateDraft("61586ad5362766670067eda8", form));
     }
 
     @Test
