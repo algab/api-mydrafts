@@ -6,19 +6,18 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class MediaServiceImpl implements MediaService {
 
-    @Autowired
     private TMDBProxy tmdbProxy;
 
-    @Autowired
     private ModelMapper mapper;
 
     @Override
@@ -30,7 +29,7 @@ public class MediaServiceImpl implements MediaService {
         MovieResponseDTO response = mapper.map(movie, MovieResponseDTO.class);
         response.setCrew(credits.getCrew());
 
-        log.info("MediaServiceImpl.getMovie - End - Input: id {} - Output: {}", response);
+        log.info("MediaServiceImpl.getMovie - End - Input: id {} - Output: {}", id, response);
         return response;
     }
 

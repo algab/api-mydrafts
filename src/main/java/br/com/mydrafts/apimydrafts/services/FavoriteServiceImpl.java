@@ -8,26 +8,23 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
 
-    @Autowired
     private FavoriteRepository favoriteRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private ProductionService productionService;
 
-    @Autowired
     private ModelMapper mapper;
 
     private static final String MESSAGE_FAVORITE_CONFLICT = "Favorite already registered";
@@ -39,13 +36,14 @@ public class FavoriteServiceImpl implements FavoriteService {
         log.info("FavoriteServiceImpl.save - Start - Input: body {}", body);
 
         User user = this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> {
-                    log.error("FavoriteServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_USER_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("FavoriteServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_USER_NOT_FOUND);
+            });
 
         Favorite favorite = setDataFavorite(body, user);
         FavoriteDTO favoriteResult = mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
+
         log.info("FavoriteServiceImpl.save - End - Input: body {} - Output: {}", body, favoriteResult);
         return favoriteResult;
     }
@@ -55,10 +53,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         log.info("FavoriteServiceImpl.delete - Start - Input: id {}", id);
 
         Favorite favorite = this.favoriteRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("FavoriteServiceImpl.delete - Error: {}", MESSAGE_FAVORITE_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_FAVORITE_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("FavoriteServiceImpl.delete - Error: {}", MESSAGE_FAVORITE_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_FAVORITE_NOT_FOUND);
+            });
 
         log.info("FavoriteServiceImpl.delete - End - Input: id {}", id);
         this.favoriteRepository.delete(favorite);

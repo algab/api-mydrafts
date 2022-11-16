@@ -10,13 +10,11 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
-import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,15 +22,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class ProductionServiceImpl implements ProductionService {
 
-    @Autowired
     private ProductionRepository repository;
 
-    @Autowired
     private TMDBProxy tmdbProxy;
 
-    @Autowired
     private ModelMapper mapper;
 
     @Override
@@ -45,8 +41,8 @@ public class ProductionServiceImpl implements ProductionService {
         } else {
             dataTV(tmdbID, season, production);
         }
-
         Production productionResponse = this.repository.save(production);
+
         log.info("ProductionServiceImpl.mountProduction - Input: tmdbID {}, season {}, media {} - Output: {}", tmdbID, season, media, productionResponse);
         return productionResponse;
     }
@@ -54,19 +50,13 @@ public class ProductionServiceImpl implements ProductionService {
     @Override
     public Production searchByTmdbID(Integer tmdbID) {
         Optional<Production> production = this.repository.findByTmdbID(tmdbID);
-        if (production.isPresent()) {
-            return production.get();
-        }
-        return null;
+        return production.orElse(null);
     }
 
     @Override
     public Production searchByTmdbIdAndSeason(Integer tmdbID, Integer season) {
         Optional<Production> production = this.repository.findByTmdbIDAndSeason(tmdbID, season);
-        if (production.isPresent()) {
-            return production.get();
-        }
-        return null;
+        return production.orElse(null);
     }
 
     private void dataMovie(Integer tmdbID, Production production) {

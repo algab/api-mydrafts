@@ -11,9 +11,9 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,18 +25,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository repository;
 
-    @Autowired
     private DraftRepository draftRepository;
 
-    @Autowired
     private FavoriteRepository favoriteRepository;
 
-    @Autowired
     private ModelMapper mapper;
 
     private static final String CONFLICT = "CONFLICT";
@@ -66,12 +63,12 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.searchUser - Start - Input: id {}", id);
 
         User user = this.repository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("UserServiceImpl.searchUser - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
-                });
-
+            .orElseThrow(() -> {
+                log.error("UserServiceImpl.searchUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+            });
         UserDTO userResult = mapper.map(user, UserDTO.class);
+
         log.info("UserServiceImpl.searchUser - End - Input: id {} - Output: {}", id, userResult);
         return userResult;
     }
@@ -81,13 +78,13 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.getDrafts - Start - Input: id {}, page {}", id, page);
 
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+            .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         Page<Draft> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
-                .map(draft -> mapper.map(draft, DraftDTO.class))
-                .collect(Collectors.toList());
-
+            .map(draft -> mapper.map(draft, DraftDTO.class))
+            .collect(Collectors.toList());
         Page<DraftDTO> pageDraft = new PageImpl<>(draftsDTO, page, drafts.getTotalElements());
+
         log.info("UserServiceImpl.getDrafts - End - Input: id {}, page {} - Output: {}", id, page, pageDraft);
         return pageDraft;
     }
@@ -97,13 +94,13 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.getFavorites - Start - Input: id {}, page {}", id, page);
 
         User user = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
+            .orElseThrow(() -> new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND));
         Page<Favorite> favorites = this.favoriteRepository.findByUser(user, page);
         List<FavoriteDTO> content = favorites.getContent().stream()
-                .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
-                .collect(Collectors.toList());
-
+            .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
+            .collect(Collectors.toList());
         Page<FavoriteDTO> pageFavorite = new PageImpl<>(content, page, favorites.getTotalElements());
+
         log.info("UserServiceImpl.getFavorites - End - Input: id {}, page {} - Output: {}", id, page, pageFavorite);
         return pageFavorite;
     }
@@ -113,10 +110,10 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.updateUser - Start - Input: id {}", id);
 
         User user = this.repository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+            });
         user.setName(body.getName());
         user.setGender(body.getGender());
         if (user.getEmail().equals(body.getEmail())) {
@@ -140,10 +137,10 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl.deleteUser - Start - Input: id {}", id);
 
         User user = this.repository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("UserServiceImpl.updateUser - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("UserServiceImpl.deleteUser - Error: {}", MESSAGE_USER_NOT_FOUND);
+                return new BusinessException(STATUS_NOT_FOUND, NOT_FOUND, MESSAGE_USER_NOT_FOUND);
+            });
 
         log.info("UserServiceImpl.deleteUser - End - Input: id {}", id);
         this.repository.delete(user);

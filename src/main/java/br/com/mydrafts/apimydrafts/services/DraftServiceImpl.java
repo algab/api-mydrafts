@@ -9,28 +9,23 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
+@AllArgsConstructor
 public class DraftServiceImpl implements DraftService {
 
-    @Autowired
     private DraftRepository draftRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private ProductionService productionService;
 
-    @Autowired
     private ModelMapper mapper;
 
     private static final String MESSAGE_DRAFT_CONFLICT = "Draft already registered";
@@ -43,13 +38,13 @@ public class DraftServiceImpl implements DraftService {
         log.info("DraftServiceImpl.save - Start - Input: body {}", body);
 
         User user = this.userRepository.findById(body.getUserID())
-                .orElseThrow(() -> {
-                    log.error("DraftServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
-                });
-
+            .orElseThrow(() -> {
+                log.error("DraftServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
+            });
         Draft draft = setDataDraft(body, user);
         DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+
         log.info("DraftServiceImpl.save - End - Input: body {} - Output: {}", body, draftResult);
         return draftResult;
     }
@@ -59,12 +54,12 @@ public class DraftServiceImpl implements DraftService {
         log.info("DraftServiceImpl.searchDraft - Start - Input: id {}", id);
 
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("DraftServiceImpl.searchDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
-                });
-
+            .orElseThrow(() -> {
+                log.error("DraftServiceImpl.searchDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+            });
         DraftDTO draftResult = mapper.map(draft, DraftDTO.class);
+
         log.info("DraftServiceImpl.searchDraft - End - Input: id {} - Output: {}", id, draftResult);
         return draftResult;
     }
@@ -74,10 +69,10 @@ public class DraftServiceImpl implements DraftService {
         log.info("DraftServiceImpl.updateDraft - Start - Input: id {}, body {}", id, body);
 
         Draft findDraft = this.draftRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+            });
 
         if (!this.userRepository.existsById(body.getUserID())) {
             log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", MESSAGE_USER_NOT_FOUND);
@@ -86,6 +81,7 @@ public class DraftServiceImpl implements DraftService {
 
         Draft draft = updateDataDraft(findDraft, body);
         DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+
         log.info("DraftServiceImpl.updateDraft - End - Input: id {}, body {} - Output: {}", id, body, draftResult);
         return draftResult;
     }
@@ -95,10 +91,10 @@ public class DraftServiceImpl implements DraftService {
         log.info("DraftServiceImpl.deleteDraft - Start - Input: id {}", id);
 
         Draft draft = this.draftRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                    return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
-                });
+            .orElseThrow(() -> {
+                log.error("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
+                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+            });
 
         log.info("DraftServiceImpl.deleteDraft - End - Input: id {}", id);
         this.draftRepository.delete(draft);

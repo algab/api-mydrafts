@@ -5,8 +5,8 @@ import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.utils.Pagination;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
-    @Autowired
     private TMDBProxy tmdbProxy;
 
     @Override
@@ -34,28 +33,26 @@ public class SearchServiceImpl implements SearchService {
             this.searchMovie(content, name);
         }
         content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
-
         Page<ResultDTO> pageResult = Pagination.applyPage(content, page);
+
         log.info("SearchServiceImpl.searchTMDB - End - Input: page {}, media {}, name {} - Output: {}", page, media, name, pageResult);
         return pageResult;
     }
 
     private void searchMovie(List<ResultDTO> content, String name) {
         ResponseDTO movies = this.tmdbProxy.searchMovie(name);
-        movies.getResults().stream().map(result -> {
+        movies.getResults().forEach(result -> {
             result.setMedia(Media.MOVIE);
-            return result;
-        }).collect(Collectors.toList());
-        content.addAll(movies.getResults());
+            content.add(result);
+        });
     }
 
     private void searchTV(List<ResultDTO> content, String name) {
         ResponseDTO tv = this.tmdbProxy.searchTV(name);
-        tv.getResults().stream().map(result -> {
+        tv.getResults().forEach(result -> {
             result.setMedia(Media.TV);
-            return result;
-        }).collect(Collectors.toList());
-        content.addAll(tv.getResults());
+            content.add(result);
+        });
     }
 
 }
