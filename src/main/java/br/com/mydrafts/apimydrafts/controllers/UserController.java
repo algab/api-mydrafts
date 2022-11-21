@@ -1,5 +1,6 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.annotations.AuthorizeParam;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,8 +35,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PreAuthorize("#id == authentication.principal")
     @GetMapping(path = "/{id}")
+    @AuthorizeParam
     public ResponseEntity<UserDTO> searchUser(@PathVariable("id") String id) {
         log.info("UserController.searchUser - Start - Input: id {}", id);
 
@@ -46,8 +46,8 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}/drafts")
+    @AuthorizeParam
     public ResponseEntity<Page<DraftDTO>> getDrafts(@PathVariable("id") String id, @PageableDefault Pageable page) {
         log.info("UserController.getDrafts - Start - Input: id {}, page {}", id, page);
 
@@ -57,8 +57,8 @@ public class UserController {
         return ResponseEntity.ok(content);
     }
 
-    @PreAuthorize("#id == authentication.principal")
     @GetMapping("/{id}/favorites")
+    @AuthorizeParam
     public ResponseEntity<Page<FavoriteDTO>> getFavorites(@PathVariable("id") String id, @PageableDefault Pageable page) {
         log.info("UserController.getFavorites - Start - Input: id {}, page {}", id, page);
 
@@ -68,8 +68,8 @@ public class UserController {
         return ResponseEntity.ok(content);
     }
 
-    @PreAuthorize("#id == authentication.principal")
     @PutMapping(path = "/{id}")
+    @AuthorizeParam
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") String id, @RequestBody @Valid UserFormDTO body) {
         log.info("UserController.updateUser - Start - Input: id {}", id);
 
@@ -79,8 +79,8 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PreAuthorize("#id == authentication.principal")
     @DeleteMapping(path = "/{id}")
+    @AuthorizeParam
     public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
         log.info("UserController.deleteUser - Start - Input: id {}", id);
 

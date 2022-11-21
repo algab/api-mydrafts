@@ -1,11 +1,12 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.annotations.AuthorizeBody;
+import br.com.mydrafts.apimydrafts.annotations.AuthorizeData;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 import br.com.mydrafts.apimydrafts.services.DraftService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class DraftController {
     private DraftService service;
 
     @PostMapping
+    @AuthorizeBody(clazz = "Draft")
     public ResponseEntity<DraftDTO> save(@RequestBody @Valid DraftFormDTO body) {
         log.info("DraftController.save - Start - Input: body {}", body);
 
@@ -30,6 +32,7 @@ public class DraftController {
     }
 
     @GetMapping("/{id}")
+    @AuthorizeData(clazz = "Draft")
     public ResponseEntity<DraftDTO> search(@PathVariable("id") String id) {
         log.info("DraftController.search - Start - Input: id {}", id);
 
@@ -40,6 +43,7 @@ public class DraftController {
     }
 
     @PutMapping("/{id}")
+    @AuthorizeData(clazz = "Draft")
     public ResponseEntity<DraftDTO> update(@PathVariable("id") String id, @RequestBody @Valid DraftFormDTO body) {
         log.info("DraftController.update - Start - Input: id {}, body {}", id, body);
 
@@ -50,6 +54,7 @@ public class DraftController {
     }
 
     @DeleteMapping("/{id}")
+    @AuthorizeData(clazz = "Draft")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("DraftController.delete - Start - Input: id {}", id);
 

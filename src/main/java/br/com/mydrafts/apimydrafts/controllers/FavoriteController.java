@@ -1,5 +1,7 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.annotations.AuthorizeBody;
+import br.com.mydrafts.apimydrafts.annotations.AuthorizeData;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteFormDTO;
 import br.com.mydrafts.apimydrafts.services.FavoriteService;
@@ -19,6 +21,7 @@ public class FavoriteController {
     private FavoriteService service;
 
     @PostMapping
+    @AuthorizeBody(clazz = "Favorite")
     public ResponseEntity<FavoriteDTO> save(@RequestBody @Valid FavoriteFormDTO body) {
         log.info("FavoriteController.save - Start - Input: body {}", body);
 
@@ -29,6 +32,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
+    @AuthorizeData(clazz = "Favorite")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("FavoriteController.delete - Start - Input: id {}", id);
 

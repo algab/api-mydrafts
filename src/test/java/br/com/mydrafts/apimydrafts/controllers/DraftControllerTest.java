@@ -32,7 +32,9 @@ class DraftControllerTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new DraftController(service)).setControllerAdvice(new RestExceptionHandler()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new DraftController(service))
+            .setControllerAdvice(new RestExceptionHandler())
+            .build();
     }
 
     @Test
