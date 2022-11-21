@@ -19,7 +19,7 @@
 		<model-mapper.version>3.1.0</model-mapper.version>
 		<jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
-		<jwt.version>0.11.2</jwt.version>
+		<jwt.version>0.11.5</jwt.version>
 	</properties>
 
 	<dependencies>
@@ -38,10 +38,6 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
