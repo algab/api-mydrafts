@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.interceptors;
 
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,12 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Value("${secret.jwt}")
     private String secret;
 
+    private final JwtParserBuilder jwt;
+
+    public AuthInterceptor(JwtParserBuilder jwt) {
+        this.jwt = jwt;
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
@@ -29,12 +35,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (nonNull(authorization)) {
                 String token = authorization.substring(7);
                 SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-                if (!validateToken(token, key)) {
-                    throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
-                }
-                return true;
+                return validateToken(token, key);
             }
-            return false;
+            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
         } catch (Exception e) {
             throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
         }
@@ -42,10 +45,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private boolean validateToken(String token, SecretKey key) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            jwt.setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException exception) {
-            return false;
+            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
         }
     }
 
