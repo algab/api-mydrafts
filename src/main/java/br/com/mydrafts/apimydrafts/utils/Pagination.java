@@ -1,14 +1,13 @@
 package br.com.mydrafts.apimydrafts.utils;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pagination {
+
+    private Pagination() {}
 
     public static <T> PageImpl<T> applyPage(List<T> content, Pageable page) {
         Integer initSize = initPage((int) page.getOffset(), content.size());
