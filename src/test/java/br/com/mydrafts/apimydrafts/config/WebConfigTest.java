@@ -51,8 +51,7 @@ class WebConfigTest {
     @Test
     void whenToRegisterInterceptorsMustExecuteMethodAddInterceptor() {
         var interceptorRegistration = Mockito.mock(InterceptorRegistration.class);
-        when(interceptorRegistry.addInterceptor(any()).excludePathPatterns(anyString()))
-            .thenReturn(interceptorRegistration);
+        when(interceptorRegistry.addInterceptor(any())).thenReturn(interceptorRegistration);
 
         webConfig.addInterceptors(interceptorRegistry);
 

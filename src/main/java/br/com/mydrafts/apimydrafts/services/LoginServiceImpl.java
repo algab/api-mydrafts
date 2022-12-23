@@ -41,7 +41,6 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginDTO login(LoginFormDTO login) {
         log.info("LoginServiceImpl.login - Start - Input: email {}", login.getEmail());
-
         User user = repository.findByEmail(login.getEmail())
             .orElseThrow(() -> {
                 log.error("LoginServiceImpl.login - Error: {}", MESSAGE_EMAIL_NOT_FOUND);
@@ -59,7 +58,6 @@ public class LoginServiceImpl implements LoginService {
             log.info("LoginServiceImpl.login - End - Input: email {} - Output: {}", login.getEmail(), loginResponse);
             return loginResponse;
         }
-
         log.error("LoginServiceImpl.login - Error: {}", MESSAGE_PASSWORD_INCORRECT);
         throw new BusinessException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.toString(), MESSAGE_PASSWORD_INCORRECT);
     }

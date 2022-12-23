@@ -25,7 +25,7 @@ public class AuthorizeBodyAspect {
         try {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             AuthorizeBody annotation = signature.getMethod().getAnnotation(AuthorizeBody.class);
-            var id = jwtService.getId();
+            var id = jwtService.getIdByToken();
             if (annotation.clazz().equals("Draft")) {
                 var body = (DraftFormDTO) joinPoint.getArgs()[0];
                 validateBody(body.getUserID(), id);

@@ -29,7 +29,7 @@ public class AuthorizeDataAspect {
         try {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             AuthorizeData annotation = signature.getMethod().getAnnotation(AuthorizeData.class);
-            var id = jwtService.getId();
+            var id = jwtService.getIdByToken();
             if (annotation.clazz().equals("Draft")) {
                 var idDraft = (String) joinPoint.getArgs()[0];
                 validateDraft(idDraft, id);

@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.services;
 
+import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParserBuilder;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,12 +12,17 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
 public class JWTServiceImpl implements JWTService {
 
-    private final JwtParserBuilder jwt;
+    private final JwtBuilder jwtBuilder;
+
+    private final JwtParserBuilder jwtParserBuilder;
 
     private final HttpServletRequest request;
 
@@ -25,10 +30,20 @@ public class JWTServiceImpl implements JWTService {
     private String secret;
 
     @Override
-    public String getId() {
+    public String getIdByToken() {
         var token = getToken();
         var key = getKey();
-        return jwt.setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
+        return jwtParserBuilder.setSigningKey(key).build().parseClaimsJws(token).getBody().getId();
+    }
+
+    @Override
+    public String generateToken(UserDTO user) {
+        SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return jwtBuilder.setId(user.getId()).setSubject(user.getName())
+            .setIssuedAt(new Date())
+            .setExpiration(Date.from(LocalDateTime.now().plusMonths(6L).atZone(ZoneId.systemDefault()).toInstant()))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
     }
 
     @Override
@@ -36,7 +51,7 @@ public class JWTServiceImpl implements JWTService {
         try {
             var token = getToken();
             var key = getKey();
-            jwt.setSigningKey(key).build().parseClaimsJws(token);
+            jwtParserBuilder.setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (JwtException exception) {
             throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());

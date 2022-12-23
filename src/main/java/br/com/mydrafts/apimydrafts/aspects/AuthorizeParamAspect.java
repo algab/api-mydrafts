@@ -19,7 +19,7 @@ public class AuthorizeParamAspect {
     @Before("@annotation(br.com.mydrafts.apimydrafts.annotations.AuthorizeParam)")
     public void authorizeParam(JoinPoint joinPoint) {
         try {
-            var id = jwtService.getId();
+            var id = jwtService.getIdByToken();
             var param = joinPoint.getArgs()[0];
             if (!param.equals(id)) {
                 throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
