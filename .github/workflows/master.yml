@@ -16,8 +16,16 @@ jobs:
           cache: 'maven'
       - name: Install dependencies
         run: mvn clean install
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
       - name: Tests units
         run: mvn clean test jacoco:report
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
       - name: Code Coverage
         uses: codecov/codecov-action@v2
         with:
