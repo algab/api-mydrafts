@@ -26,10 +26,10 @@ public class AuthorizeBodyAspect {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             AuthorizeBody annotation = signature.getMethod().getAnnotation(AuthorizeBody.class);
             var id = jwtService.getIdByToken();
-            if (annotation.clazz().equals("Draft")) {
+            if (annotation.value().equals("Draft")) {
                 var body = (DraftFormDTO) joinPoint.getArgs()[0];
                 validateBody(body.getUserID(), id);
-            } else if (annotation.clazz().equals("Favorite")) {
+            } else {
                 var body = (FavoriteFormDTO) joinPoint.getArgs()[0];
                 validateBody(body.getUserID(), id);
             }

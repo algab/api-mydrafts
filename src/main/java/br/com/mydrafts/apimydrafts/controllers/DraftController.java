@@ -21,7 +21,7 @@ public class DraftController {
     private DraftService service;
 
     @PostMapping
-    @AuthorizeBody(clazz = "Draft")
+    @AuthorizeBody("Draft")
     public ResponseEntity<DraftDTO> save(@RequestBody @Valid DraftFormDTO body) {
         log.info("DraftController.save - Start - Input: body {}", body);
 
@@ -32,7 +32,7 @@ public class DraftController {
     }
 
     @GetMapping("/{id}")
-    @AuthorizeData(clazz = "Draft")
+    @AuthorizeData("Draft")
     public ResponseEntity<DraftDTO> search(@PathVariable("id") String id) {
         log.info("DraftController.search - Start - Input: id {}", id);
 
@@ -43,7 +43,7 @@ public class DraftController {
     }
 
     @PutMapping("/{id}")
-    @AuthorizeData(clazz = "Draft")
+    @AuthorizeData("Draft")
     public ResponseEntity<DraftDTO> update(@PathVariable("id") String id, @RequestBody @Valid DraftFormDTO body) {
         log.info("DraftController.update - Start - Input: id {}, body {}", id, body);
 
@@ -54,7 +54,7 @@ public class DraftController {
     }
 
     @DeleteMapping("/{id}")
-    @AuthorizeData(clazz = "Draft")
+    @AuthorizeData("Draft")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("DraftController.delete - Start - Input: id {}", id);
 

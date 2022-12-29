@@ -7,7 +7,7 @@ import br.com.mydrafts.apimydrafts.dto.FavoriteFormDTO;
 
 public final class FavoriteFixture {
 
-    public static FavoriteFormDTO favoriteForm() {
+    public static FavoriteFormDTO getFavoriteForm() {
         return FavoriteFormDTO.builder()
             .media(Media.MOVIE)
             .tmdbID(550988)

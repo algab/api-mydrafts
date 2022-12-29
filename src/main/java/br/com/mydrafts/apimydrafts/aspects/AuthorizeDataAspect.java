@@ -30,10 +30,10 @@ public class AuthorizeDataAspect {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             AuthorizeData annotation = signature.getMethod().getAnnotation(AuthorizeData.class);
             var id = jwtService.getIdByToken();
-            if (annotation.clazz().equals("Draft")) {
+            if (annotation.value().equals("Draft")) {
                 var idDraft = (String) joinPoint.getArgs()[0];
                 validateDraft(idDraft, id);
-            } else if (annotation.clazz().equals("Favorite")) {
+            } else {
                 var idFavorite = (String) joinPoint.getArgs()[0];
                 validateFavorite(idFavorite, id);
             }
@@ -49,8 +49,9 @@ public class AuthorizeDataAspect {
             if (!idUser.equals(id)) {
                 throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
             }
+        } else {
+            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
         }
-        throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
     }
 
     private void validateFavorite(String idFavorite, String id) {
@@ -60,8 +61,9 @@ public class AuthorizeDataAspect {
             if (!idUser.equals(id)) {
                 throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
             }
+        } else {
+            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
         }
-        throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
     }
 
 }

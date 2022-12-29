@@ -21,7 +21,7 @@ public class FavoriteController {
     private FavoriteService service;
 
     @PostMapping
-    @AuthorizeBody(clazz = "Favorite")
+    @AuthorizeBody("Favorite")
     public ResponseEntity<FavoriteDTO> save(@RequestBody @Valid FavoriteFormDTO body) {
         log.info("FavoriteController.save - Start - Input: body {}", body);
 
@@ -32,7 +32,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{id}")
-    @AuthorizeData(clazz = "Favorite")
+    @AuthorizeData("Favorite")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         log.info("FavoriteController.delete - Start - Input: id {}", id);
 

@@ -7,7 +7,7 @@ import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 
 public final class DraftFixture {
 
-    public static DraftFormDTO draftForm(Media media) {
+    public static DraftFormDTO getDraftForm(Media media) {
         return DraftFormDTO.builder()
             .description("Very Good")
             .media(media)

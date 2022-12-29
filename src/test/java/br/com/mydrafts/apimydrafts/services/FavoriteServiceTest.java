@@ -49,7 +49,7 @@ class FavoriteServiceTest {
         when(productionService.searchByTmdbID(any())).thenReturn(ProductionFixture.getProduction(Media.MOVIE));
         when(favoriteRepository.save(any())).thenReturn(FavoriteFixture.getFavorite(Media.MOVIE));
 
-        FavoriteDTO favoriteDTO = service.save(FavoriteFixture.favoriteForm());
+        FavoriteDTO favoriteDTO = service.save(FavoriteFixture.getFavoriteForm());
 
         assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionFixture.getProduction(Media.MOVIE).getId());
     }
@@ -61,7 +61,7 @@ class FavoriteServiceTest {
         when(productionService.searchByTmdbID(any())).thenReturn(null);
         when(favoriteRepository.save(any())).thenReturn(FavoriteFixture.getFavorite(Media.MOVIE));
 
-        FavoriteDTO favoriteDTO = service.save(FavoriteFixture.favoriteForm());
+        FavoriteDTO favoriteDTO = service.save(FavoriteFixture.getFavoriteForm());
 
         assertThat(favoriteDTO.getProduction().getId()).isEqualTo(ProductionFixture.getProduction(Media.MOVIE).getId());
     }
@@ -73,7 +73,7 @@ class FavoriteServiceTest {
         when(productionService.searchByTmdbID(any())).thenReturn(ProductionFixture.getProduction(Media.MOVIE));
         when(favoriteRepository.existsByUserAndProduction(any(), any())).thenReturn(true);
 
-        FavoriteFormDTO form = FavoriteFixture.favoriteForm();
+        FavoriteFormDTO form = FavoriteFixture.getFavoriteForm();
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(form));
     }
@@ -83,7 +83,7 @@ class FavoriteServiceTest {
     void saveFavoriteShouldReturnUserNotFound() {
         when(userRepository.findById(anyString())).thenReturn(Optional.empty());
 
-        FavoriteFormDTO form = FavoriteFixture.favoriteForm();
+        FavoriteFormDTO form = FavoriteFixture.getFavoriteForm();
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(form));
     }
