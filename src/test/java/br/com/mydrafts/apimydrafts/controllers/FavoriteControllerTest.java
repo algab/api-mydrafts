@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.FavoriteService;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
-import br.com.mydrafts.apimydrafts.utils.TestUtil;
+import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -39,7 +39,7 @@ class FavoriteControllerTest {
     @Test
     @DisplayName("Controller save favorite")
     void saveFavoriteShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/favoriteRequest.json");
+        String json = TestUtils.readFileAsString("/json/favoriteRequest.json");
         when(this.service.save(any())).thenReturn(FavoriteFixture.getFavoriteDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_FAVORITE)

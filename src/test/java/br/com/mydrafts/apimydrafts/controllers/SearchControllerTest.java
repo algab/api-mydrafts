@@ -5,7 +5,7 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.SearchService;
 import br.com.mydrafts.apimydrafts.fixtures.SearchFixture;
-import br.com.mydrafts.apimydrafts.utils.TestUtil;
+import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -49,7 +49,7 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search movie")
     void searchMovieTMDB() throws Exception {
-        String json = TestUtil.readFileAsString("/json/searchMovie.json");
+        String json = TestUtils.readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
@@ -67,7 +67,7 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search tv show")
     void searchTVTMDB() throws Exception {
-        String json = TestUtil.readFileAsString("/json/searchTV.json");
+        String json = TestUtils.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.TV, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
@@ -85,7 +85,7 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search any media")
     void searchAnyMediaTMDB() throws Exception {
-        String json = TestUtil.readFileAsString("/json/searchTV.json");
+        String json = TestUtils.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), null, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)

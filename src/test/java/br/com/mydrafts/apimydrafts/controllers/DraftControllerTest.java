@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.DraftService;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
-import br.com.mydrafts.apimydrafts.utils.TestUtil;
+import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -40,7 +40,7 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller save draft")
     void saveDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/draftRequest.json");
+        String json = TestUtils.readFileAsString("/json/draftRequest.json");
         when(this.service.save(any())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
@@ -54,7 +54,7 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller search draft by id")
     void searchDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/draft.json");
+        String json = TestUtils.readFileAsString("/json/draft.json");
         when(this.service.searchDraft(anyString())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
@@ -67,7 +67,7 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller update draft")
     void updateDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/draftRequest.json");
+        String json = TestUtils.readFileAsString("/json/draftRequest.json");
         when(this.service.updateDraft(anyString(), any())).thenReturn(DraftFixture.getDraftDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))

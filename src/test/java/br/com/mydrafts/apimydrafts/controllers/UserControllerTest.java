@@ -4,7 +4,7 @@ import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.UserService;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
-import br.com.mydrafts.apimydrafts.utils.TestUtil;
+import br.com.mydrafts.apimydrafts.TestUtils;
 import br.com.mydrafts.apimydrafts.fixtures.UserFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller save user")
     void saveUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/userRequest.json");
+        String json = TestUtils.readFileAsString("/json/userRequest.json");
         when(this.service.saveUser(any())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
@@ -65,7 +65,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller save user bad request")
     void saveUserShouldReturnBadRequest() throws Exception {
-        String json = TestUtil.readFileAsString("/json/userBadRequest.json");
+        String json = TestUtils.readFileAsString("/json/userBadRequest.json");
         when(this.service.saveUser(any())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
@@ -79,7 +79,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller search user by id")
     void searchUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/user.json");
+        String json = TestUtils.readFileAsString("/json/user.json");
         when(this.service.searchUser(anyString())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, UserFixture.getUser().getId()))
@@ -92,7 +92,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller get drafts by user")
     void getDraftsByUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/draftsUser.json");
+        String json = TestUtils.readFileAsString("/json/draftsUser.json");
         when(this.service.getDrafts(any(), anyString()))
             .thenReturn(new PageImpl<>(Collections.singletonList(DraftFixture.getDraftDTO()), PageRequest.of(0, 10), 1));
 
@@ -106,7 +106,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller get favorites by user")
     void getFavoritesByUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/favoritesUser.json");
+        String json = TestUtils.readFileAsString("/json/favoritesUser.json");
         when(this.service.getFavorites(any(), anyString()))
             .thenReturn(new PageImpl<>(Collections.singletonList(FavoriteFixture.getFavoriteDTO()), PageRequest.of(0, 10), 1));
 
@@ -120,7 +120,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller update user by id")
     void updateUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/userRequest.json");
+        String json = TestUtils.readFileAsString("/json/userRequest.json");
         when(this.service.updateUser(anyString(), any())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserFixture.getUser().getId()))

@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.MediaService;
 import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
-import br.com.mydrafts.apimydrafts.utils.TestUtil;
+import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class MediaControllerTest {
     @Test
     @DisplayName("Get movie by id")
     void getMovieSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/movie.json");
+        String json = TestUtils.readFileAsString("/json/movie.json");
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaFixture.getMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", PATH_MEDIA))
@@ -58,7 +58,7 @@ class MediaControllerTest {
     @Test
     @DisplayName("Get tv show by id")
     void getTVSuccessful() throws Exception {
-        String json = TestUtil.readFileAsString("/json/tv.json");
+        String json = TestUtils.readFileAsString("/json/tv.json");
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaFixture.getTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", PATH_MEDIA))
