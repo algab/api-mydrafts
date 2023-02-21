@@ -14,6 +14,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.FAVORITE_CONFLICT;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.FAVORITE_NOT_FOUND;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.USER_NOT_FOUND;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -27,18 +33,18 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     private ModelMapper mapper;
 
-    private static final String MESSAGE_FAVORITE_CONFLICT = "Favorite already registered";
-    private static final String MESSAGE_USER_NOT_FOUND = "User not found";
-    private static final String MESSAGE_FAVORITE_NOT_FOUND = "Favorite not found";
-
     @Override
     public FavoriteDTO save(FavoriteFormDTO body) {
         log.info("FavoriteServiceImpl.save - Start - Input: body {}", body);
 
         User user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
-                log.error("FavoriteServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_USER_NOT_FOUND);
+                log.error("FavoriteServiceImpl.save - Error: {}", USER_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.toString(),
+                    USER_NOT_FOUND
+                );
             });
 
         Favorite favorite = setDataFavorite(body, user);
@@ -54,8 +60,12 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         Favorite favorite = this.favoriteRepository.findById(id)
             .orElseThrow(() -> {
-                log.error("FavoriteServiceImpl.delete - Error: {}", MESSAGE_FAVORITE_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.toString(), MESSAGE_FAVORITE_NOT_FOUND);
+                log.error("FavoriteServiceImpl.delete - Error: {}", FAVORITE_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.toString(),
+                    FAVORITE_NOT_FOUND
+                );
             });
 
         log.info("FavoriteServiceImpl.delete - End - Input: id {}", id);
@@ -63,17 +73,20 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     private Favorite setDataFavorite(FavoriteFormDTO body, User user) {
-        Favorite favorite = Favorite.builder().build();
-        favorite.setUser(user);
-        Production production = this.productionService.searchByTmdbID(body.getTmdbID());
-        if (production != null) {
-            if (this.favoriteRepository.existsByUserAndProduction(user, production)) {
-                log.error("FavoriteServiceImpl.setDataFavorite - Error: {}", MESSAGE_FAVORITE_CONFLICT);
-                throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), MESSAGE_FAVORITE_CONFLICT);
+        Favorite favorite = Favorite.builder().user(user).build();
+        Optional<Production> production = this.productionService.searchProduction(body.getTmdbID(), body.getMedia());
+        if (production.isPresent()) {
+            if (this.favoriteRepository.existsByUserAndProduction(user, production.get())) {
+                log.error("FavoriteServiceImpl.setDataFavorite - Error: {}", FAVORITE_CONFLICT);
+                throw new BusinessException(
+                    HttpStatus.CONFLICT.value(),
+                    HttpStatus.CONFLICT.getReasonPhrase(),
+                    FAVORITE_CONFLICT
+                );
             }
-            favorite.setProduction(production);
+            favorite.setProduction(production.get());
         } else {
-            Production productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia(), null);
+            Production productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia());
             favorite.setProduction(productionResponse);
         }
         return favorite;

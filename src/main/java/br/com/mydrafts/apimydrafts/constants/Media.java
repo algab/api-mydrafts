@@ -7,11 +7,11 @@ public enum Media {
     MOVIE("movie"),
     TV("tv");
 
+    private final String value;
+
     Media(String value) {
         this.value = value;
     }
-
-    private String value;
 
     @JsonCreator
     public static Media fromValue(String value) {

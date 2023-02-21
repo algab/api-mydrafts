@@ -12,7 +12,11 @@ public class FeignErrorConfig implements ErrorDecoder {
 
     @Override
     public Exception decode(String s, Response response) {
-        return new BusinessException(response.status(), HttpStatus.valueOf(response.status()).toString(), response.reason());
+        return new BusinessException(
+            response.status(),
+            HttpStatus.valueOf(response.status()).getReasonPhrase(),
+            response.reason()
+        );
     }
 
 }

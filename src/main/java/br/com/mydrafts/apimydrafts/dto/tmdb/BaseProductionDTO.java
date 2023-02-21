@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class BaseResponseDTO {
+public class BaseProductionDTO {
 
     private Integer id;
 

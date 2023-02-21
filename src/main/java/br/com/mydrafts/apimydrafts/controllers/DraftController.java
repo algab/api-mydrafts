@@ -4,6 +4,7 @@ import br.com.mydrafts.apimydrafts.annotations.AuthorizeBody;
 import br.com.mydrafts.apimydrafts.annotations.AuthorizeData;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
 import br.com.mydrafts.apimydrafts.services.DraftService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +45,7 @@ public class DraftController {
 
     @PutMapping("/{id}")
     @AuthorizeData("Draft")
-    public ResponseEntity<DraftDTO> update(@PathVariable("id") String id, @RequestBody @Valid DraftFormDTO body) {
+    public ResponseEntity<DraftDTO> update(@PathVariable("id") String id, @RequestBody @Valid DraftUpdateFormDTO body) {
         log.info("DraftController.update - Start - Input: id {}, body {}", id, body);
 
         DraftDTO draft = this.service.updateDraft(id, body);

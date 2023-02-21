@@ -43,10 +43,10 @@ public class TvDTO {
     @JsonAlias({"created_by"})
     private List<CreatedDTO> created;
 
-    private List<GenresDTO> genres;
+    private List<GenreDTO> genres;
 
     @JsonAlias({"production_companies"})
-    private List<CompaniesDTO> companies;
+    private List<CompanyDTO> companies;
 
     private List<NetworkDTO> networks;
 

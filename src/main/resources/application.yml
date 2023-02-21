@@ -8,8 +8,8 @@ server:
   port: ${PORT:8080}
 tmdb:
   language: pt-BR
-  api-key: ${API_KEY}
-  api-url: https://api.themoviedb.org/3
-  imgs-url: https://image.tmdb.org/t/p/original
+  key: ${API_KEY}
+  host: https://api.themoviedb.org/3
+  image: https://image.tmdb.org/t/p/original
 secret:
-  jwt: aMH%Q#LHJL@oCWZko@x)+cYk,r:}kHz@T6rlj4st&UA(rZS:B**.KFY|yW[Aer@zOUBz?uJ5*JnZi7Xk
+  jwt: ${SECRET_JWT}

@@ -4,7 +4,10 @@ import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.Draft;
 import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.documents.User;
-import br.com.mydrafts.apimydrafts.dto.*;
+import br.com.mydrafts.apimydrafts.dto.DraftDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
@@ -14,6 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.Optional;
+
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.DRAFT_CONFLICT;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.DRAFT_NOT_FOUND;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.DRAFT_TV_BAD_REQUEST;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.DRAFT_TV_SEASON;
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.USER_NOT_FOUND;
 
 @Slf4j
 @Service
@@ -28,19 +40,18 @@ public class DraftServiceImpl implements DraftService {
 
     private ModelMapper mapper;
 
-    private static final String MESSAGE_DRAFT_CONFLICT = "Draft already registered";
-    private static final String MESSAGE_USER_NOT_FOUND = "User not found";
-    private static final String MESSAGE_DRAFT_NOT_FOUND = "Draft not found";
-    private static final String MESSAGE_TV_BAD_REQUEST = "The season cannot be null";
-
     @Override
     public DraftDTO save(DraftFormDTO body) {
         log.info("DraftServiceImpl.save - Start - Input: body {}", body);
 
         User user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
-                log.error("DraftServiceImpl.save - Error: {}", MESSAGE_USER_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
+                log.error("DraftServiceImpl.save - Error: {}", USER_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.getReasonPhrase(),
+                    USER_NOT_FOUND
+                );
             });
         Draft draft = setDataDraft(body, user);
         DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
@@ -55,8 +66,12 @@ public class DraftServiceImpl implements DraftService {
 
         Draft draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
-                log.error("DraftServiceImpl.searchDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+                log.error("DraftServiceImpl.searchDraft - Error: {}", DRAFT_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.getReasonPhrase(),
+                    DRAFT_NOT_FOUND
+                );
             });
         DraftDTO draftResult = mapper.map(draft, DraftDTO.class);
 
@@ -65,18 +80,22 @@ public class DraftServiceImpl implements DraftService {
     }
 
     @Override
-    public DraftDTO updateDraft(String id, DraftFormDTO body) {
+    public DraftDTO updateDraft(String id, DraftUpdateFormDTO body) {
         log.info("DraftServiceImpl.updateDraft - Start - Input: id {}, body {}", id, body);
 
         Draft findDraft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
-                log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+                log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", DRAFT_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.getReasonPhrase(),
+                    DRAFT_NOT_FOUND
+                );
             });
 
         if (!this.userRepository.existsById(body.getUserID())) {
-            log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", MESSAGE_USER_NOT_FOUND);
-            throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_USER_NOT_FOUND);
+            log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", USER_NOT_FOUND);
+            throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), USER_NOT_FOUND);
         }
 
         Draft draft = updateDataDraft(findDraft, body);
@@ -92,8 +111,12 @@ public class DraftServiceImpl implements DraftService {
 
         Draft draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
-                log.error("DraftServiceImpl.updateDraft - Error: {}", MESSAGE_DRAFT_NOT_FOUND);
-                return new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), MESSAGE_DRAFT_NOT_FOUND);
+                log.error("DraftServiceImpl.updateDraft - Error: {}", DRAFT_NOT_FOUND);
+                return new BusinessException(
+                    HttpStatus.NOT_FOUND.value(),
+                    HttpStatus.NOT_FOUND.getReasonPhrase(),
+                    DRAFT_NOT_FOUND
+                );
             });
 
         log.info("DraftServiceImpl.deleteDraft - End - Input: id {}", id);
@@ -103,41 +126,88 @@ public class DraftServiceImpl implements DraftService {
     private Draft setDataDraft(DraftFormDTO body, User user) {
         Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
         Production production = searchProduction(body.getTmdbID(), body.getSeason(), body.getMedia());
-        if (production != null) {
-            if (this.draftRepository.existsByUserAndProduction(user, production)) {
-                log.error("DraftServiceImpl.setDataDraft - Error: {}", MESSAGE_DRAFT_CONFLICT);
-                throw new BusinessException(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), MESSAGE_DRAFT_CONFLICT);
-            }
-            draft.setProduction(production);
-        } else {
-            Production productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia(), body.getSeason());
-            draft.setProduction(productionResponse);
+        if (this.draftRepository.existsByUserAndProduction(user, production)) {
+            log.error("DraftServiceImpl.setDataDraft - Error: {}", DRAFT_CONFLICT);
+            throw new BusinessException(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                DRAFT_CONFLICT
+            );
         }
         draft.setUser(user);
         draft.setRating(body.getRating());
         draft.setDescription(body.getDescription());
+        draft.setSeason(body.getSeason());
+        draft.setProduction(production);
         return draft;
     }
 
     private Production searchProduction(Integer tmdbID, Integer season, Media media) {
         if (media.equals(Media.MOVIE)) {
-            return this.productionService.searchByTmdbID(tmdbID);
+            Optional<Production> production = this.productionService.searchProduction(tmdbID, media);
+            return production.orElseGet(() -> this.productionService.mountProduction(tmdbID, media));
         }
-        return verifyTV(tmdbID, season);
+        return verifyTV(tmdbID, season, media);
     }
 
-    private Production verifyTV(Integer tmdbID, Integer season) {
-        if (season == null) {
-            log.error("DraftServiceImpl.verifyTV - Error: {}", MESSAGE_TV_BAD_REQUEST);
-            throw new BusinessException(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), MESSAGE_TV_BAD_REQUEST);
+    private Production verifyTV(Integer tmdbID, Integer season, Media media) {
+        if (Objects.isNull(season)) {
+            log.error("DraftServiceImpl.verifyTV - Error: {}", DRAFT_TV_BAD_REQUEST);
+            throw new BusinessException(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                DRAFT_TV_BAD_REQUEST
+            );
         }
-        return this.productionService.searchByTmdbIdAndSeason(tmdbID, season);
+        Optional<Production> production = this.productionService.searchProduction(tmdbID, media);
+        if (production.isPresent()) {
+            return checkSeason(production.get(), season);
+        } else {
+            Production productionSaved = this.productionService.mountProduction(tmdbID, media);
+            return checkSeason(productionSaved, season);
+        }
     }
 
-    private Draft updateDataDraft(Draft draft, DraftFormDTO body) {
+    private Production checkSeason(Production production, Integer season) {
+        TvResponseDTO tv = (TvResponseDTO) production.getData();
+        if (seasonNotExists(tv, season)) {
+            log.error("DraftServiceImpl.checkSeason - Error: {}", DRAFT_TV_SEASON);
+            throw new BusinessException(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                DRAFT_TV_SEASON
+            );
+        } else {
+            return production;
+        }
+    }
+
+    private Draft updateDataDraft(Draft draft, DraftUpdateFormDTO body) {
+        if (draft.getProduction().getMedia().equals(Media.TV)) {
+            if (Objects.isNull(body.getSeason())) {
+                log.error("DraftServiceImpl.updateDataDraft - Error: {}", DRAFT_TV_BAD_REQUEST);
+                throw new BusinessException(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    DRAFT_TV_BAD_REQUEST
+                );
+            } else if (seasonNotExists((TvResponseDTO) draft.getProduction().getData(), body.getSeason())) {
+                log.error("DraftServiceImpl.updateDataDraft - Error: {}", DRAFT_TV_SEASON);
+                throw new BusinessException(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    DRAFT_TV_SEASON
+                );
+            }
+        }
         draft.setRating(body.getRating());
+        draft.setSeason(body.getSeason());
         draft.setDescription(body.getDescription());
         return draft;
+    }
+
+    private boolean seasonNotExists(TvResponseDTO tv, Integer season) {
+        return tv.getSeasons().stream().noneMatch(data -> data.getNumber().equals(season));
     }
 
 }

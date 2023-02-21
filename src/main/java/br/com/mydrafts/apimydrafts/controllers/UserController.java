@@ -27,11 +27,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserFormDTO body) {
-        log.info("UserController.saveUser - Start - Input: name {}, email {}", body.getName(), body.getEmail());
+        log.info("UserController.saveUser - Start - Input: name {}, email {}", body.getFirstName(), body.getEmail());
 
         UserDTO user = this.service.saveUser(body);
 
-        log.info("UserController.saveUser - End - - Input: name {}, email {} - Output: {}", body.getName(), body.getEmail(), user);
+        log.info("UserController.saveUser - End - - Input: name {}, email {} - Output: {}", body.getFirstName(), body.getEmail(), user);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 

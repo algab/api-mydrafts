@@ -1,16 +1,16 @@
 package br.com.mydrafts.apimydrafts.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginFormDTO {
@@ -19,7 +19,7 @@ public class LoginFormDTO {
     @NotEmpty(message = "email is required")
     private String email;
 
-    @Size(min = 6, message = "password needs at least 6 characters")
+    @Size(min = 8, message = "password needs at least 8 characters")
     @NotEmpty(message = "password is required")
     private String password;
 

@@ -35,9 +35,9 @@ public class MovieDTO {
     @JsonAlias({"original_language"})
     private String language;
 
-    private List<GenresDTO> genres;
+    private List<GenreDTO> genres;
 
     @JsonAlias({"production_companies"})
-    private List<CompaniesDTO> companies;
+    private List<CompanyDTO> companies;
 
 }

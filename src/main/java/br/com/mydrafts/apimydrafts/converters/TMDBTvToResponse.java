@@ -24,8 +24,8 @@ public class TMDBTvToResponse extends AbstractConverter<TvDTO, TvResponseDTO> {
             .language(tv.getLanguage())
             .seasons(tv.getSeasons())
             .created(tv.getCreated().stream().map(CreatedDTO::getName).collect(Collectors.toList()))
-            .genres(tv.getGenres().stream().map(GenresDTO::getName).collect(Collectors.toList()))
-            .companies(tv.getCompanies().stream().map(CompaniesDTO::getName).collect(Collectors.toList()))
+            .genres(tv.getGenres().stream().map(GenreDTO::getName).collect(Collectors.toList()))
+            .companies(tv.getCompanies().stream().map(CompanyDTO::getName).collect(Collectors.toList()))
             .networks(tv.getNetworks().stream().map(NetworkDTO::getName).collect(Collectors.toList()))
             .build();
     }

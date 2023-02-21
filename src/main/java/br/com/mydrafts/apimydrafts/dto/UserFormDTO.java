@@ -17,19 +17,23 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserFormDTO {
 
-    @Size(min = 6, message = "name needs at least 6 characters")
-    @NotEmpty(message = "name is required")
-    private String name;
+    @Size(min = 3, message = "firstName needs at least 3 characters")
+    @NotEmpty(message = "firstName is required")
+    private String firstName;
+
+    @Size(min = 3, message = "lastName needs at least 3 characters")
+    @NotEmpty(message = "lastName is required")
+    private String lastName;
 
     @Email(message = "email format is invalid")
     @NotEmpty(message = "email is required")
     private String email;
 
-    @Size(min = 6, message = "password needs at least 6 characters")
+    @Size(min = 8, message = "password needs at least 8 characters")
     @NotEmpty(message = "password is required")
     private String password;
 
-    @NotNull(message = "gender is required")
+    @NotNull(message = "the gender field accepts the values: MALE and FEMALE")
     private Gender gender;
 
 }

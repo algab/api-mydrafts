@@ -16,7 +16,7 @@ public class TMDBProxy {
 
     private final TMDBClient client;
 
-    @Value("${tmdb.api-key}")
+    @Value("${tmdb.key}")
     private String apiKey;
 
     @Value("${tmdb.language}")

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -20,13 +19,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException exception) {
-        ExceptionResponse responseException = ExceptionResponse.builder()
+        ExceptionResponse response = ExceptionResponse.builder()
             .status(exception.getStatus())
             .error(exception.getError())
             .message(exception.getMessage())
-            .timestamp(LocalDateTime.now().toString())
             .build();
-        return ResponseEntity.status(exception.getStatus()).body(responseException);
+        return ResponseEntity.status(exception.getStatus()).body(response);
     }
 
     @Override
@@ -39,13 +37,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         String message = ex.getFieldErrors().stream()
             .map(FieldError::getDefaultMessage)
             .collect(Collectors.joining(", "));
-        ExceptionResponse responseException = ExceptionResponse.builder()
+        ExceptionResponse response = ExceptionResponse.builder()
             .status(status.value())
-            .error(HttpStatus.BAD_REQUEST.toString())
+            .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
             .message(message)
-            .timestamp(LocalDateTime.now().toString())
             .build();
-        return ResponseEntity.status(status.value()).body(responseException);
+        return ResponseEntity.status(status.value()).body(response);
     }
 
 }

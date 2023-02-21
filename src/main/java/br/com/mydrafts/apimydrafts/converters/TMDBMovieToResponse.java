@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.converters;
 
-import br.com.mydrafts.apimydrafts.dto.tmdb.CompaniesDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.GenresDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CompanyDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.GenreDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import org.modelmapper.AbstractConverter;
@@ -24,8 +24,8 @@ public class TMDBMovieToResponse extends AbstractConverter<MovieDTO, MovieRespon
             .backdrop(movie.getBackdrop())
             .dateRelease(movie.getDateRelease())
             .language(movie.getLanguage())
-            .genres(movie.getGenres().stream().map(GenresDTO::getName).collect(Collectors.toList()))
-            .companies(movie.getCompanies().stream().map(CompaniesDTO::getName).collect(Collectors.toList()))
+            .genres(movie.getGenres().stream().map(GenreDTO::getName).collect(Collectors.toList()))
+            .companies(movie.getCompanies().stream().map(CompanyDTO::getName).collect(Collectors.toList()))
             .build();
     }
 

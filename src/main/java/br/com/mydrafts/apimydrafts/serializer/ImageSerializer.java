@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class ImageSerializer extends JsonSerializer<String> {
 
-    @Value("${tmdb.imgs-url}")
+    @Value("${tmdb.image}")
     private String url;
 
     @Override

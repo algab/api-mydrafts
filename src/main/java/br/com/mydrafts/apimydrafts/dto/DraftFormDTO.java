@@ -17,22 +17,22 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class DraftFormDTO {
 
-    @Min(value = 1, message = "minimum rating is 1")
-    @Max(value = 5, message = "maximum rating is 5")
-    @NotNull(message = "rating is required")
-    private Double rating;
-
-    @NotNull(message = "media is required")
-    private Media media;
-
     @NotNull(message = "tmdbID is required")
     private Integer tmdbID;
 
     @NotEmpty(message = "userID is required")
     private String userID;
 
-    private String description;
+    @Min(value = 1, message = "minimum rating is 1")
+    @Max(value = 5, message = "maximum rating is 5")
+    @NotNull(message = "rating is required")
+    private Integer rating;
+
+    @NotNull(message = "the media field accepts the values: movie and tv")
+    private Media media;
 
     private Integer season;
+
+    private String description;
 
 }

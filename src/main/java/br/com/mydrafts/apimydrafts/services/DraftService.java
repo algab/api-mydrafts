@@ -2,6 +2,7 @@ package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
 
 public interface DraftService {
 
@@ -9,7 +10,7 @@ public interface DraftService {
 
     DraftDTO searchDraft(String id);
 
-    DraftDTO updateDraft(String id, DraftFormDTO body);
+    DraftDTO updateDraft(String id, DraftUpdateFormDTO body);
 
     void deleteDraft(String id);
 

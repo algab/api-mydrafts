@@ -1,14 +1,26 @@
 package br.com.mydrafts.apimydrafts.constants;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 public enum Gender {
 
-    MASCULINO("MASCULINO"),
-    FEMININO("FEMININO");
+    MALE("MALE"),
+    FEMALE("FEMALE");
+
+    private final String value;
 
     Gender(String value) {
         this.value = value;
     }
 
-    private String value;
+    @JsonCreator
+    public static Gender fromValue(String value) {
+        for (Gender gender : Gender.values()) {
+            if (gender.value.equalsIgnoreCase(value)) {
+                return gender;
+            }
+        }
+        return null;
+    }
 
 }

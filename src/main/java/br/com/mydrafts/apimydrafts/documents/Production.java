@@ -1,14 +1,15 @@
 package br.com.mydrafts.apimydrafts.documents;
 
-import lombok.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.dto.tmdb.BaseResponseDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.BaseProductionDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,10 +21,8 @@ public class Production {
 
     private Integer tmdbID;
 
-    private Integer season;
-
     private Media media;
 
-    private BaseResponseDTO data;
+    private BaseProductionDTO data;
 
 }
