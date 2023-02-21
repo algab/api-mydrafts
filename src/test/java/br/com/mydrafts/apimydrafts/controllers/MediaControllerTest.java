@@ -3,13 +3,11 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.MediaService;
 import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
-import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -36,18 +34,17 @@ class MediaControllerTest {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new MediaController(service)).setControllerAdvice(new RestExceptionHandler()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new MediaController(service))
+            .setControllerAdvice(new RestExceptionHandler())
+            .build();
     }
 
     @Test
     @DisplayName("Get movie by id")
     void getMovieSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/movie.json");
         when(this.service.getMovie(any(Integer.class))).thenReturn(MediaFixture.getMovie());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", PATH_MEDIA))
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/movie/1", PATH_MEDIA));
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("title").value(MediaFixture.getMovie().getTitle()));
@@ -58,12 +55,9 @@ class MediaControllerTest {
     @Test
     @DisplayName("Get tv show by id")
     void getTVSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/tv.json");
         when(this.service.getTV(any(Integer.class))).thenReturn(MediaFixture.getTV());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", PATH_MEDIA))
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/tv/1", PATH_MEDIA));
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("title").value(MediaFixture.getTV().getTitle()));

@@ -7,10 +7,11 @@ import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 
 public final class UserFixture {
 
-    public static UserFormDTO userForm() {
+    public static UserFormDTO getUserForm() {
         return UserFormDTO.builder()
-            .name("Alvaro")
-            .gender(Gender.MASCULINO)
+            .firstName("Alvaro")
+            .lastName("Oliveira")
+            .gender(Gender.MALE)
             .email("alvaro@email.com")
             .password("12345678")
             .build();
@@ -19,8 +20,9 @@ public final class UserFixture {
     public static User getUser() {
         return User.builder()
             .id("61586ad5362766670067edd5")
-            .name("Alvaro")
-            .gender(Gender.MASCULINO)
+            .firstName("Alvaro")
+            .lastName("Oliveira")
+            .gender(Gender.MALE)
             .email("alvaro@email.com")
             .password("$2a$10$Em8McmNwrOTvMu2Xelw0e.i33d5RTMVkciU74H5XmjpbCyREqvrrG")
             .build();
@@ -29,9 +31,10 @@ public final class UserFixture {
     public static UserDTO getUserDTO() {
         return UserDTO.builder()
             .id("61586ad5362766670067edd5")
-            .name("Alvaro")
+            .firstName("Alvaro")
+            .lastName("Oliveira")
             .email("alvaro@email.com")
-            .gender(Gender.MASCULINO)
+            .gender(Gender.MALE)
             .build();
     }
 

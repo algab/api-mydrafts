@@ -1,9 +1,13 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.constants.Media;
+import br.com.mydrafts.apimydrafts.dto.DraftDTO;
+import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
+import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.services.DraftService;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
-import br.com.mydrafts.apimydrafts.TestUtils;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -28,6 +32,8 @@ class DraftControllerTest {
     @Mock
     private DraftService service;
 
+    private static final Gson gson = new Gson();
+
     private static final String PATH_DRAFT = "/v1/drafts";
 
     @BeforeEach
@@ -40,11 +46,12 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller save draft")
     void saveDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/draftRequest.json");
-        when(this.service.save(any())).thenReturn(DraftFixture.getDraftDTO());
+        ProductionDTO production = ProductionFixture.getProductionMovieDTO();
+        DraftDTO draft = DraftFixture.getDraftDTO(production);
+        when(this.service.save(any())).thenReturn(draft);
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
-            .content(json)
+            .content(gson.toJson(DraftFixture.getDraftForm(550988, Media.MOVIE, null)))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
@@ -54,12 +61,10 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller search draft by id")
     void searchDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/draft.json");
-        when(this.service.searchDraft(anyString())).thenReturn(DraftFixture.getDraftDTO());
+        ProductionDTO production = ProductionFixture.getProductionMovieDTO();
+        when(this.service.searchDraft(anyString())).thenReturn(DraftFixture.getDraftDTO(production));
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT));
 
         mockMvc.perform(request).andExpect(status().isOk());
     }
@@ -67,11 +72,11 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller update draft")
     void updateDraftShouldReturnSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/draftRequest.json");
-        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftFixture.getDraftDTO());
+        ProductionDTO production = ProductionFixture.getProductionMovieDTO();
+        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftFixture.getDraftDTO(production));
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-            .content(json)
+            .content(gson.toJson(DraftFixture.getDraftUpdateForm(null)))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
@@ -83,8 +88,7 @@ class DraftControllerTest {
     void deleteDraftShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).deleteDraft(anyString());
 
-        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT));
 
         mockMvc.perform(request).andExpect(status().isNoContent());
     }

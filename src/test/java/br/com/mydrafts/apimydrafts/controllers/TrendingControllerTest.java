@@ -3,7 +3,6 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.TrendingService;
-import br.com.mydrafts.apimydrafts.TestUtils;
 import br.com.mydrafts.apimydrafts.fixtures.TrendingFixture;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -48,12 +46,9 @@ class TrendingControllerTest {
     @Test
     @DisplayName("Controller trending movies and tv")
     void trendingTMDB() throws Exception {
-        String json = TestUtils.readFileAsString("/json/trending.json");
         when(this.service.trendingTMDB(PageRequest.of(0, 10))).thenReturn(trending());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(PATH_TRENDING)
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.get(PATH_TRENDING);
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));

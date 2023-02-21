@@ -3,7 +3,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.FavoriteService;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
-import br.com.mydrafts.apimydrafts.TestUtils;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,21 +29,24 @@ class FavoriteControllerTest {
     @Mock
     private FavoriteService service;
 
+    private static final Gson gson = new Gson();
+
     private static final String PATH_FAVORITE = "/v1/favorites";
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new FavoriteController(service)).setControllerAdvice(new RestExceptionHandler()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new FavoriteController(service))
+            .setControllerAdvice(new RestExceptionHandler())
+            .build();
     }
 
     @Test
     @DisplayName("Controller save favorite")
     void saveFavoriteShouldReturnSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/favoriteRequest.json");
         when(this.service.save(any())).thenReturn(FavoriteFixture.getFavoriteDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_FAVORITE)
-            .content(json)
+            .content(gson.toJson(FavoriteFixture.getFavoriteForm()))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
@@ -55,8 +58,9 @@ class FavoriteControllerTest {
     void deleteFavoriteShouldReturnSuccessful() throws Exception {
         doNothing().when(this.service).delete(anyString());
 
-        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_FAVORITE))
-            .contentType(MediaType.APPLICATION_JSON);
+        RequestBuilder request = MockMvcRequestBuilders.delete(
+            String.format("%s/6158fb48b7179927e035ae7c", PATH_FAVORITE)
+        );
 
         mockMvc.perform(request).andExpect(status().isNoContent());
     }

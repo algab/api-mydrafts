@@ -3,12 +3,14 @@ package br.com.mydrafts.apimydrafts.services;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.Draft;
 import br.com.mydrafts.apimydrafts.documents.Favorite;
+import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.documents.User;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
+import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
 import br.com.mydrafts.apimydrafts.repository.UserRepository;
@@ -58,9 +60,9 @@ class UserServiceTest {
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(UserFixture.getUser());
 
-        UserDTO user = service.saveUser(UserFixture.userForm());
+        UserDTO user = service.saveUser(UserFixture.getUserForm());
 
-        assertThat(user.getName()).isEqualTo(UserFixture.getUser().getName());
+        assertThat(user.getFirstName()).isEqualTo(UserFixture.getUser().getFirstName());
         assertThat(user.getEmail()).isEqualTo(UserFixture.getUser().getEmail());
     }
 
@@ -69,7 +71,7 @@ class UserServiceTest {
     void saveUserShouldReturnEmailConflict() {
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
-        UserFormDTO userForm = UserFixture.userForm();
+        UserFormDTO userForm = UserFixture.getUserForm();
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(userForm));
     }
@@ -81,7 +83,7 @@ class UserServiceTest {
 
         UserDTO user = service.searchUser(UserFixture.getUser().getId());
 
-        assertThat(user.getName()).isEqualTo(UserFixture.getUser().getName());
+        assertThat(user.getFirstName()).isEqualTo(UserFixture.getUser().getFirstName());
         assertThat(user.getEmail()).isEqualTo(UserFixture.getUser().getEmail());
     }
 
@@ -146,21 +148,23 @@ class UserServiceTest {
     void updateUserShouldReturnSuccessful() {
         User user = UserFixture.getUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
-        UserFormDTO userForm = UserFixture.userForm();
-        userForm.setName("Alvaro Test");
-        user.setName("Alvaro Test");
+        UserFormDTO userForm = UserFixture.getUserForm();
+        userForm.setFirstName("User");
+        userForm.setLastName("Test");
+        user.setFirstName("User");
+        user.setLastName("Test");
         when(repository.save(any())).thenReturn(user);
 
         UserDTO saveUser = service.updateUser(UserFixture.getUser().getId(), userForm);
 
-        assertThat(saveUser.getName()).isEqualTo(user.getName());
+        assertThat(saveUser.getFirstName()).isEqualTo(user.getFirstName());
     }
 
     @Test
     @DisplayName("Service update user email")
     void updateUserEmailShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
-        UserFormDTO userForm = UserFixture.userForm();
+        UserFormDTO userForm = UserFixture.getUserForm();
         userForm.setEmail("alvarotest@email.com");
         User user = UserFixture.getUser();
         user.setEmail("alvarotest@email.com");
@@ -176,7 +180,7 @@ class UserServiceTest {
     @DisplayName("Service update user email conflict")
     void updateUserShouldReturnEmailConflict() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
-        UserFormDTO userForm = UserFixture.userForm();
+        UserFormDTO userForm = UserFixture.getUserForm();
         userForm.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(true);
 
@@ -190,7 +194,7 @@ class UserServiceTest {
     void updateUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        UserFormDTO userForm = UserFixture.userForm();
+        UserFormDTO userForm = UserFixture.getUserForm();
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", userForm));
     }
@@ -215,11 +219,20 @@ class UserServiceTest {
     }
 
     private Page<Draft> pageDraft() {
-        return new PageImpl<>(Collections.singletonList(DraftFixture.getDraft(Media.MOVIE)), PageRequest.of(0, 10), 1);
+        Production production = ProductionFixture.getProductionMovie();
+        return new PageImpl<>(
+            Collections.singletonList(DraftFixture.getDraft(production)),
+            PageRequest.of(0, 10),
+            1
+        );
     }
 
     private Page<Favorite> pageFavorite() {
-        return new PageImpl<>(Collections.singletonList(FavoriteFixture.getFavorite(Media.MOVIE)), PageRequest.of(0, 10), 1);
+        return new PageImpl<>(
+            Collections.singletonList(FavoriteFixture.getFavorite()),
+            PageRequest.of(0, 10),
+            1
+        );
     }
 
 }

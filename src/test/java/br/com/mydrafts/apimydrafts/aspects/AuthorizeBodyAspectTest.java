@@ -47,7 +47,7 @@ class AuthorizeBodyAspectTest {
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
-        when(joinPoint.getArgs()).thenReturn(new Object[] {getDraftForm(Media.MOVIE)});
+        when(joinPoint.getArgs()).thenReturn(new Object[] {getDraftForm(550988, Media.MOVIE, null)});
 
         authorizeBodyAspect.authorizeBody(joinPoint);
 

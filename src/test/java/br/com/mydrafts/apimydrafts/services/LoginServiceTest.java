@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
@@ -27,24 +26,27 @@ class LoginServiceTest {
     private LoginService service;
 
     @Mock
+    private JWTService jwtService;
+
+    @Mock
     private UserRepository repository;
 
     @BeforeEach
     void setup() {
-        service = new LoginServiceImpl(repository, new ModelMapper());
-        ReflectionTestUtils.setField(service, "secret", "aMH%Q#LHJL@oCWZko@x)+cYk,r:}kHz@T6rlj4st");
+        service = new LoginServiceImpl(repository, jwtService, new ModelMapper());
     }
 
     @Test
     @DisplayName("Service login user successful")
     void loginUserShouldReturnSuccessful() {
         LoginFormDTO loginForm = new LoginFormDTO("alvaro@email.com", "12345678");
-        when(repository.findByEmail(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
+        when(repository.findByEmail(loginForm.getEmail())).thenReturn(Optional.of(UserFixture.getUser()));
+        when(jwtService.generateToken(UserFixture.getUserDTO())).thenReturn("token");
 
         LoginDTO login = service.login(loginForm);
 
         assertThat(login.getToken()).isNotEmpty();
-        assertThat(login.getUser().getName()).isEqualTo(UserFixture.getUser().getName());
+        assertThat(login.getUser().getFirstName()).isEqualTo(UserFixture.getUser().getFirstName());
     }
 
     @Test

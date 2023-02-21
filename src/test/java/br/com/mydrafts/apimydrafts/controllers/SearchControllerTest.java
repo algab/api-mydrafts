@@ -5,7 +5,6 @@ import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.SearchService;
 import br.com.mydrafts.apimydrafts.fixtures.SearchFixture;
-import br.com.mydrafts.apimydrafts.TestUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -49,14 +47,11 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search movie")
     void searchMovieTMDB() throws Exception {
-        String json = TestUtils.readFileAsString("/json/searchMovie.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "shang")).thenReturn(searchMovie());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
             .param("name", "shang")
-            .param("media", "movie")
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+            .param("media", "movie");
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
@@ -67,14 +62,11 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search tv show")
     void searchTVTMDB() throws Exception {
-        String json = TestUtils.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), Media.TV, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
             .param("name", "what")
-            .param("media", "tv")
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+            .param("media", "tv");
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
@@ -85,14 +77,11 @@ class SearchControllerTest {
     @Test
     @DisplayName("Search any media")
     void searchAnyMediaTMDB() throws Exception {
-        String json = TestUtils.readFileAsString("/json/searchTV.json");
         when(this.service.searchTMDB(PageRequest.of(0, 10), null, "what")).thenReturn(searchTV());
 
         RequestBuilder request = MockMvcRequestBuilders.get(PATH_SEARCH)
             .param("name", "what")
-            .param("media", "test")
-            .content(json)
-            .contentType(MediaType.APPLICATION_JSON);
+            .param("media", "test");
 
         mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));

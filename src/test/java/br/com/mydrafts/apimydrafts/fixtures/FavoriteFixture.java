@@ -15,18 +15,18 @@ public final class FavoriteFixture {
             .build();
     }
 
-    public static Favorite getFavorite(Media media) {
+    public static Favorite getFavorite() {
         return Favorite.builder()
             .id("1000")
             .user(UserFixture.getUser())
-            .production(ProductionFixture.getProduction(media))
+            .production(ProductionFixture.getProductionMovie())
             .build();
     }
 
     public static FavoriteDTO getFavoriteDTO() {
         return FavoriteDTO.builder()
             .id("1")
-            .production(ProductionFixture.getProductionDTO())
+            .production(ProductionFixture.getProductionMovieDTO())
             .build();
     }
 

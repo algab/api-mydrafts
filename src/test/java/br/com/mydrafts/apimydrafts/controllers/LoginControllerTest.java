@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.fixtures.LoginFixture;
 import br.com.mydrafts.apimydrafts.services.LoginService;
-import br.com.mydrafts.apimydrafts.TestUtils;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,6 +26,8 @@ class LoginControllerTest {
 
     @Mock
     private LoginService loginService;
+
+    private static final Gson gson = new Gson();
 
     private static final String PATH_LOGIN = "/v1/login";
 
@@ -40,11 +41,10 @@ class LoginControllerTest {
     @Test
     @DisplayName("Controller login")
     void loginUserShouldReturnSuccessful() throws Exception {
-        String json = TestUtils.readFileAsString("/json/login.json");
-        when(this.loginService.login(any())).thenReturn(LoginFixture.getLogin());
+        when(this.loginService.login(LoginFixture.getLoginForm())).thenReturn(LoginFixture.getLogin());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
-            .content(json)
+            .content(gson.toJson(LoginFixture.getLoginForm()))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 

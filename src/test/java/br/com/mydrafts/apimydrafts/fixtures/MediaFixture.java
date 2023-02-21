@@ -1,10 +1,10 @@
 package br.com.mydrafts.apimydrafts.fixtures;
 
-import br.com.mydrafts.apimydrafts.dto.tmdb.CompaniesDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.CompanyDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.CreatedDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.CreditsDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.CrewDTO;
-import br.com.mydrafts.apimydrafts.dto.tmdb.GenresDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.GenreDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.NetworkDTO;
@@ -136,15 +136,15 @@ public final class MediaFixture {
             .build();
     }
 
-    public static GenresDTO genres() {
-        return GenresDTO.builder()
+    public static GenreDTO genres() {
+        return GenreDTO.builder()
             .id(1)
             .name("Ação")
             .build();
     }
 
-    public static CompaniesDTO companies() {
-        return CompaniesDTO.builder()
+    public static CompanyDTO companies() {
+        return CompanyDTO.builder()
             .id(1)
             .name("DC Comics")
             .logo("http://teste.com/dc-comics.jpg")

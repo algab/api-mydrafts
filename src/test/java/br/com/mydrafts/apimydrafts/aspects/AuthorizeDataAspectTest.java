@@ -1,11 +1,12 @@
 package br.com.mydrafts.apimydrafts.aspects;
 
-import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.controllers.DraftController;
 import br.com.mydrafts.apimydrafts.controllers.FavoriteController;
+import br.com.mydrafts.apimydrafts.documents.Production;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
+import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.repository.DraftRepository;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
 import br.com.mydrafts.apimydrafts.services.JWTService;
@@ -51,11 +52,12 @@ class AuthorizeDataAspectTest {
     @Test
     void validateDataDraftShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
+        Production production = ProductionFixture.getProductionMovie();
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(Media.MOVIE)));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(production)));
 
         authorizeDataAspect.authorizeData(joinPoint);
 
@@ -77,12 +79,13 @@ class AuthorizeDataAspectTest {
 
     @Test
     void whenUserAndDraftDifferentShouldReturnException() throws NoSuchMethodException {
+        Production production = ProductionFixture.getProductionMovie();
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd8");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(Media.MOVIE)));
+        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(production)));
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }
@@ -94,7 +97,7 @@ class AuthorizeDataAspectTest {
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite(Media.TV)));
+        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
 
         authorizeDataAspect.authorizeData(joinPoint);
 
@@ -121,7 +124,7 @@ class AuthorizeDataAspectTest {
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd8");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite(Media.TV)));
+        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }

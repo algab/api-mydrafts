@@ -48,7 +48,7 @@ class ProductionServiceTest {
         when(proxy.getMovieCredits(anyInt())).thenReturn(MediaFixture.credits());
         when(productionRepository.save(any())).thenReturn(getProductionMovie());
 
-        Production production = service.mountProduction(10, Media.MOVIE, null);
+        Production production = service.mountProduction(10, Media.MOVIE);
 
         assertThat(getProductionMovie().getData().getId()).isEqualTo(production.getData().getId());
     }
@@ -59,9 +59,9 @@ class ProductionServiceTest {
         when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
-        Production production = service.mountProduction(10, Media.TV, 1);
+        Production production = service.mountProduction(10, Media.TV);
 
-        assertThat(getProductionTV().getSeason()).isEqualTo(production.getSeason());
+        assertThat(production.getData().getId()).isEqualTo(getProductionTV().getData().getId());
     }
 
     @Test
@@ -70,7 +70,7 @@ class ProductionServiceTest {
         when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
-        Production production = service.mountProduction(10, Media.TV, null);
+        Production production = service.mountProduction(10, Media.TV);
 
         assertThat(getProductionTV().getData().getId()).isEqualTo(production.getData().getId());
     }
@@ -78,51 +78,34 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service search by tmdb id")
     void searchByTmdbIDShouldReturnSuccessful() {
-        when(productionRepository.findByTmdbID(anyInt())).thenReturn(Optional.of(ProductionFixture.getProduction(Media.MOVIE)));
+        Production productionMovie = ProductionFixture.getProductionMovie();
+        when(productionRepository.findByTmdbIDAndMedia(anyInt(), any()))
+            .thenReturn(Optional.of(productionMovie));
 
-        Production production = service.searchByTmdbID(10);
+        Optional<Production> production = service.searchProduction(10, Media.MOVIE);
 
-        assertThat(ProductionFixture.getProduction(Media.MOVIE).getMedia()).isEqualTo(production.getMedia());
+        assertThat(production).isPresent();
+        assertThat(production.get().getMedia()).isEqualTo(productionMovie.getMedia());
     }
 
     @Test
     @DisplayName("Service search by tmdb id not found")
     void searchByTmdbIDShouldReturnNotFound() {
-        when(productionRepository.findByTmdbID(anyInt())).thenReturn(Optional.empty());
+        when(productionRepository.findByTmdbIDAndMedia(anyInt(), any())).thenReturn(Optional.empty());
 
-        Production production = service.searchByTmdbID(10);
+        Optional<Production> production = service.searchProduction(10, Media.TV);
 
-        assertThat(production).isNull();
-    }
-
-    @Test
-    @DisplayName("Service search by tmdb id and tv season")
-    void searchByTmdbIDAndSeasonShouldReturnSuccessful() {
-        when(productionRepository.findByTmdbIDAndSeason(anyInt(), anyInt())).thenReturn(Optional.of(ProductionFixture.getProduction(Media.TV)));
-
-        Production production = service.searchByTmdbIdAndSeason(10, 1);
-
-        assertThat(ProductionFixture.getProduction(Media.TV).getMedia()).isEqualTo(production.getMedia());
-    }
-
-    @Test
-    @DisplayName("Service search by tmdb id and tv season not found")
-    void searchByTmdbIDAndSeasonShouldReturnNotFound() {
-        when(productionRepository.findByTmdbIDAndSeason(anyInt(), anyInt())).thenReturn(Optional.empty());
-
-        Production production = service.searchByTmdbIdAndSeason(10, 1);
-
-        assertThat(production).isNull();
+        assertThat(production).isEmpty();
     }
 
     private Production getProductionMovie() {
-        Production production = ProductionFixture.getProduction(Media.MOVIE);
+        Production production = ProductionFixture.getProductionMovie();
         production.setData(MediaFixture.getMovie());
         return production;
     }
 
     private Production getProductionTV() {
-        Production production = ProductionFixture.getProduction(Media.TV);
+        Production production = ProductionFixture.getProductionTV();
         production.setData(MediaFixture.getTV());
         return production;
     }

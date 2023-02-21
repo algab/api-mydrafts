@@ -5,8 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDate;
-
 @DisplayName("Tests for exception response")
 class ExceptionResponseTest {
 
@@ -20,7 +18,6 @@ class ExceptionResponseTest {
         exception.setStatus(HttpStatus.BAD_REQUEST.value());
         exception.setError(ERROR_HTTP);
         exception.setMessage(MESSAGE_ERROR);
-        exception.setTimestamp(LocalDate.now().toString());
 
         Assertions.assertThat(HttpStatus.BAD_REQUEST.value()).isEqualTo(exception.getStatus());
         Assertions.assertThat(exception.getError()).isEqualTo(ERROR_HTTP);
