@@ -12,4 +12,4 @@ tmdb:
   host: https://api.themoviedb.org/3
   image: https://image.tmdb.org/t/p/original
 secret:
-  jwt: ${SECRET_JWT}
+  jwt: ${SECRET_JWT || aMH%Q#LHJL@oCWZko@x)+cYk,r:}kHz@T6rlj4st&UA(rZS:B**.KFY|yW[Aer@zOUBz?uJ5*JnZi7Xk}

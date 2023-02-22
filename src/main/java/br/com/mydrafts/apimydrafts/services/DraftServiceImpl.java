@@ -42,8 +42,6 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public DraftDTO save(DraftFormDTO body) {
-        log.info("DraftServiceImpl.save - Start - Input: body {}", body);
-
         User user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.save - Error: {}", USER_NOT_FOUND);
@@ -54,16 +52,11 @@ public class DraftServiceImpl implements DraftService {
                 );
             });
         Draft draft = setDataDraft(body, user);
-        DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
-
-        log.info("DraftServiceImpl.save - End - Input: body {} - Output: {}", body, draftResult);
-        return draftResult;
+        return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
     }
 
     @Override
     public DraftDTO searchDraft(String id) {
-        log.info("DraftServiceImpl.searchDraft - Start - Input: id {}", id);
-
         Draft draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.searchDraft - Error: {}", DRAFT_NOT_FOUND);
@@ -73,16 +66,11 @@ public class DraftServiceImpl implements DraftService {
                     DRAFT_NOT_FOUND
                 );
             });
-        DraftDTO draftResult = mapper.map(draft, DraftDTO.class);
-
-        log.info("DraftServiceImpl.searchDraft - End - Input: id {} - Output: {}", id, draftResult);
-        return draftResult;
+        return mapper.map(draft, DraftDTO.class);
     }
 
     @Override
     public DraftDTO updateDraft(String id, DraftUpdateFormDTO body) {
-        log.info("DraftServiceImpl.updateDraft - Start - Input: id {}, body {}", id, body);
-
         Draft findDraft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", DRAFT_NOT_FOUND);
@@ -97,18 +85,12 @@ public class DraftServiceImpl implements DraftService {
             log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", USER_NOT_FOUND);
             throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), USER_NOT_FOUND);
         }
-
         Draft draft = updateDataDraft(findDraft, body);
-        DraftDTO draftResult = mapper.map(this.draftRepository.save(draft), DraftDTO.class);
-
-        log.info("DraftServiceImpl.updateDraft - End - Input: id {}, body {} - Output: {}", id, body, draftResult);
-        return draftResult;
+        return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
     }
 
     @Override
     public void deleteDraft(String id) {
-        log.info("DraftServiceImpl.deleteDraft - Start - Input: id {}", id);
-
         Draft draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.updateDraft - Error: {}", DRAFT_NOT_FOUND);
@@ -118,8 +100,6 @@ public class DraftServiceImpl implements DraftService {
                     DRAFT_NOT_FOUND
                 );
             });
-
-        log.info("DraftServiceImpl.deleteDraft - End - Input: id {}", id);
         this.draftRepository.delete(draft);
     }
 

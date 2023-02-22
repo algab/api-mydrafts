@@ -23,11 +23,14 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginFormDTO body) {
-        log.info("LoginController.login - Start - Input: email {}", body.getEmail());
+        long start = System.currentTimeMillis();
+        log.info("LoginController.login - Start - Input: email [{}]", body.getEmail());
 
         LoginDTO user = service.login(body);
 
-        log.info("LoginController.login - End - Input: email {} - Output: {}", body.getEmail(), user);
+        log.info("LoginController.login - End - Input: email [{}] - time: {} ms",
+            body.getEmail(), System.currentTimeMillis() - start
+        );
         return ResponseEntity.ok(user);
     }
 

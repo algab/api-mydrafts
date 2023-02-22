@@ -24,44 +24,54 @@ public class DraftController {
     @PostMapping
     @AuthorizeBody("Draft")
     public ResponseEntity<DraftDTO> save(@RequestBody @Valid DraftFormDTO body) {
-        log.info("DraftController.save - Start - Input: body {}", body);
+        long start = System.currentTimeMillis();
+        log.info("DraftController.save - Start - Input: body [{}]", body);
 
         DraftDTO draft = this.service.save(body);
 
-        log.info("DraftController.save - End - Input: body {} - Output: {}", body, draft);
+        log.info("DraftController.save - End - Input: body [{}] - Output: [{}] - time: {} ms",
+            body, draft, System.currentTimeMillis() - start
+        );
         return ResponseEntity.status(201).body(draft);
     }
 
     @GetMapping("/{id}")
     @AuthorizeData("Draft")
     public ResponseEntity<DraftDTO> search(@PathVariable("id") String id) {
-        log.info("DraftController.search - Start - Input: id {}", id);
+        long start = System.currentTimeMillis();
+        log.info("DraftController.search - Start - Input: id [{}]", id);
 
         DraftDTO draft = this.service.searchDraft(id);
 
-        log.info("DraftController.search - End - Input: id {} - Output: {}", id, draft);
+        log.info("DraftController.search - End - Input: id [{}] - Output: [{}] - time: {} ms",
+            id, draft, System.currentTimeMillis() - start
+        );
         return ResponseEntity.ok(draft);
     }
 
     @PutMapping("/{id}")
     @AuthorizeData("Draft")
     public ResponseEntity<DraftDTO> update(@PathVariable("id") String id, @RequestBody @Valid DraftUpdateFormDTO body) {
-        log.info("DraftController.update - Start - Input: id {}, body {}", id, body);
+        long start = System.currentTimeMillis();
+        log.info("DraftController.update - Start - Input: id [{}], body [{}]", id, body);
 
         DraftDTO draft = this.service.updateDraft(id, body);
 
-        log.info("DraftController.update - End - Input: id {}, body {} - Output: {}", id, body, draft);
+        log.info("DraftController.update - End - Input: id [{}], body [{}] - Output: [{}] - time: {} ms",
+            id, body, draft, System.currentTimeMillis() - start
+        );
         return ResponseEntity.ok(draft);
     }
 
     @DeleteMapping("/{id}")
     @AuthorizeData("Draft")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
-        log.info("DraftController.delete - Start - Input: id {}", id);
+        long start = System.currentTimeMillis();
+        log.info("DraftController.delete - Start - Input: id [{}]", id);
 
         this.service.deleteDraft(id);
 
-        log.info("DraftController.delete - End - Input: id {}", id);
+        log.info("DraftController.delete - End - Input: id [{}] - time: {} ms", id, System.currentTimeMillis() - start);
         return ResponseEntity.noContent().build();
     }
 

@@ -23,16 +23,11 @@ public class TrendingServiceImpl implements TrendingService {
 
     @Override
     public Page<ResultDTO> trendingTMDB(Pageable page) {
-        log.info("TrendingServiceImpl.trendingTMDB - Start - Input: page {}", page);
-
         List<ResultDTO> content = new ArrayList<>();
         this.trendingMovie(content);
         this.trendingTV(content);
         content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
-        Page<ResultDTO> pageResult = PaginationUtil.applyPage(content, page);
-
-        log.info("TrendingServiceImpl.trendingTMDB - End - Input: page {} - Output: {}", page, pageResult.getContent());
-        return pageResult;
+        return PaginationUtil.applyPage(content, page);
     }
 
     private void trendingMovie(List<ResultDTO> content) {

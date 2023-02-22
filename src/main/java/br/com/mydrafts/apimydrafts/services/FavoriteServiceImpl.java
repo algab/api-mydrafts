@@ -35,8 +35,6 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public FavoriteDTO save(FavoriteFormDTO body) {
-        log.info("FavoriteServiceImpl.save - Start - Input: body {}", body);
-
         User user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
                 log.error("FavoriteServiceImpl.save - Error: {}", USER_NOT_FOUND);
@@ -46,18 +44,12 @@ public class FavoriteServiceImpl implements FavoriteService {
                     USER_NOT_FOUND
                 );
             });
-
         Favorite favorite = setDataFavorite(body, user);
-        FavoriteDTO favoriteResult = mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
-
-        log.info("FavoriteServiceImpl.save - End - Input: body {} - Output: {}", body, favoriteResult);
-        return favoriteResult;
+        return mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
     }
 
     @Override
     public void delete(String id) {
-        log.info("FavoriteServiceImpl.delete - Start - Input: id {}", id);
-
         Favorite favorite = this.favoriteRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("FavoriteServiceImpl.delete - Error: {}", FAVORITE_NOT_FOUND);
@@ -67,8 +59,6 @@ public class FavoriteServiceImpl implements FavoriteService {
                     FAVORITE_NOT_FOUND
                 );
             });
-
-        log.info("FavoriteServiceImpl.delete - End - Input: id {}", id);
         this.favoriteRepository.delete(favorite);
     }
 

@@ -30,18 +30,13 @@ public class ProductionServiceImpl implements ProductionService {
 
     @Override
     public Production mountProduction(Integer tmdbID, Media media) {
-        log.info("ProductionServiceImpl.mountProduction - Input: tmdbID {}, media {}", tmdbID, media);
-
         Production production = Production.builder().media(media).tmdbID(tmdbID).build();
         if (media.equals(Media.MOVIE)) {
             dataMovie(tmdbID, production);
         } else {
             dataTV(tmdbID, production);
         }
-        Production productionResponse = this.repository.save(production);
-
-        log.info("ProductionServiceImpl.mountProduction - Input: tmdbID {}, media {} - Output: {}", tmdbID, media, productionResponse);
-        return productionResponse;
+        return this.repository.save(production);
     }
 
     @Override

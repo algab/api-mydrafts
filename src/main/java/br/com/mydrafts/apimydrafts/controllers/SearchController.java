@@ -28,11 +28,14 @@ public class SearchController {
             @RequestParam(value = "media", required = false) String type,
             @RequestParam("name") String name
     ) {
-        log.info("SearchController.searchTMDB - Start - Input: page {}, type {}, name {}", page, type, name);
+        long start = System.currentTimeMillis();
+        log.info("SearchController.searchTMDB - Start - Input: page [{}], type [{}], name [{}]", page, type, name);
 
         Page<ResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
 
-        log.info("SearchController.searchTMDB - End - Input: page {}, type {}, name {} - Output: {}", page, type, name, response.getContent());
+        log.info("SearchController.searchTMDB - End - Input: page [{}], type [{}], name [{}] - Output: [{}] - time: {} ms",
+            page, type, name, response.getContent(), System.currentTimeMillis() - start
+        );
         return ResponseEntity.ok(response);
     }
 

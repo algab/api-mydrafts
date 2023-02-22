@@ -29,7 +29,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public LoginDTO login(LoginFormDTO login) {
-        log.info("LoginServiceImpl.login - Start - Input: email {}", login.getEmail());
         User user = repository.findByEmail(login.getEmail())
             .orElseThrow(() -> {
                 log.error("LoginServiceImpl.login - Error: {}", EMAIL_NOT_FOUND);
@@ -42,9 +41,7 @@ public class LoginServiceImpl implements LoginService {
         if (new BCryptPasswordEncoder().matches(login.getPassword(), user.getPassword())) {
             UserDTO userResponse = mapper.map(user, UserDTO.class);
             String token = jwtService.generateToken(userResponse);
-            LoginDTO loginResponse = LoginDTO.builder().token(token).user(userResponse).build();
-            log.info("LoginServiceImpl.login - End - Input: email {} - Output: {}", login.getEmail(), loginResponse);
-            return loginResponse;
+            return LoginDTO.builder().token(token).user(userResponse).build();
         }
         log.error("LoginServiceImpl.login - Error: {}", PASSWORD_INCORRECT);
         throw new BusinessException(

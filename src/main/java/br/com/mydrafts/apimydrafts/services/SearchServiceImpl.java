@@ -24,8 +24,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<ResultDTO> searchTMDB(Pageable page, Media media, String name) {
-        log.info("SearchServiceImpl.searchTMDB - Start - Input: page {}, media {}, name {}", page, media, name);
-
         List<ResultDTO> content = new ArrayList<>();
         if (media == Media.TV) {
             this.searchTV(content, name);
@@ -33,10 +31,7 @@ public class SearchServiceImpl implements SearchService {
             this.searchMovie(content, name);
         }
         content.sort(Comparator.comparing(ResultDTO::getPopularity).reversed());
-        Page<ResultDTO> pageResult = PaginationUtil.applyPage(content, page);
-
-        log.info("SearchServiceImpl.searchTMDB - End - Input: page {}, media {}, name {} - Output: {}", page, media, name, pageResult.getContent());
-        return pageResult;
+        return PaginationUtil.applyPage(content, page);
     }
 
     private void searchMovie(List<ResultDTO> content, String name) {

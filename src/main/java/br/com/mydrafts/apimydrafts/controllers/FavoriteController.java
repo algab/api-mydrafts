@@ -23,22 +23,26 @@ public class FavoriteController {
     @PostMapping
     @AuthorizeBody("Favorite")
     public ResponseEntity<FavoriteDTO> save(@RequestBody @Valid FavoriteFormDTO body) {
-        log.info("FavoriteController.save - Start - Input: body {}", body);
+        long start = System.currentTimeMillis();
+        log.info("FavoriteController.save - Start - Input: body [{}]", body);
 
         FavoriteDTO favorite = this.service.save(body);
 
-        log.info("FavoriteController.save - End - Input: body {} - Output: {}", body, favorite);
+        log.info("FavoriteController.save - End - Input: body [{}] - Output: [{}] - time: {} ms",
+            body, favorite, System.currentTimeMillis() - start
+        );
         return ResponseEntity.status(201).body(favorite);
     }
 
     @DeleteMapping("/{id}")
     @AuthorizeData("Favorite")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
-        log.info("FavoriteController.delete - Start - Input: id {}", id);
+        long start = System.currentTimeMillis();
+        log.info("FavoriteController.delete - Start - Input: id [{}]", id);
 
         this.service.delete(id);
 
-        log.info("FavoriteController.delete - End - Input: id {}", id);
+        log.info("FavoriteController.delete - End - Input: id [{}] - time: {} ms", id, System.currentTimeMillis() - start);
         return ResponseEntity.noContent().build();
     }
 
