@@ -26,13 +26,13 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserFormDTO body) {
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserFormDTO body) {
         long start = System.currentTimeMillis();
         log.info("UserController.saveUser - Start - Input: firstName [{}], firstName [{}], email [{}], gender [{}]",
             body.getFirstName(), body.getLastName(), body.getEmail(), body.getGender()
         );
 
-        UserDTO user = this.service.saveUser(body);
+        UserDTO user = this.service.save(body);
 
         log.info("UserController.saveUser - End - Input: firstName [{}], firstName [{}], email [{}], gender [{}] - time: {} ms",
             body.getFirstName(), body.getLastName(), body.getEmail(), body.getGender(), System.currentTimeMillis() - start
@@ -42,13 +42,13 @@ public class UserController {
 
     @GetMapping(path = "/{id}")
     @AuthorizeParam
-    public ResponseEntity<UserDTO> searchUser(@PathVariable("id") String id) {
+    public ResponseEntity<UserDTO> search(@PathVariable("id") String id) {
         long start = System.currentTimeMillis();
-        log.info("UserController.searchUser - Start - Input: id [{}]", id);
+        log.debug("UserController.searchUser - Start - Input: id [{}]", id);
 
-        UserDTO user = this.service.searchUser(id);
+        UserDTO user = this.service.search(id);
 
-        log.info("UserController.searchUser - End - Input: id [{}] - Output: [{}] - time: {} ms",
+        log.debug("UserController.searchUser - End - Input: id [{}] - Output: [{}] - time: {} ms",
             id, user, System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(user);
@@ -58,39 +58,39 @@ public class UserController {
     @AuthorizeParam
     public ResponseEntity<Page<DraftDTO>> getDrafts(@PathVariable("id") String id, @PageableDefault Pageable page) {
         long start = System.currentTimeMillis();
-        log.info("UserController.getDrafts - Start - Input: id [{}], page [{}]", id, page);
+        log.debug("UserController.getDrafts - Start - Input: id [{}], page [{}]", id, page);
 
-        Page<DraftDTO> content = this.service.getDrafts(page, id);
+        Page<DraftDTO> drafts = this.service.getDrafts(page, id);
 
-        log.info("UserController.getDrafts - End - Input: id [{}], page [{}] - Output: [{}] - time: {} ms",
-            id, page, content, System.currentTimeMillis() - start
+        log.debug("UserController.getDrafts - End - Input: id [{}], page [{}] - Output: [{}] - time: {} ms",
+            id, page, drafts.getContent(), System.currentTimeMillis() - start
         );
-        return ResponseEntity.ok(content);
+        return ResponseEntity.ok(drafts);
     }
 
     @GetMapping("/{id}/favorites")
     @AuthorizeParam
     public ResponseEntity<Page<FavoriteDTO>> getFavorites(@PathVariable("id") String id, @PageableDefault Pageable page) {
         long start = System.currentTimeMillis();
-        log.info("UserController.getFavorites - Start - Input: id [{}], page [{}]", id, page);
+        log.debug("UserController.getFavorites - Start - Input: id [{}], page [{}]", id, page);
 
-        Page<FavoriteDTO> content = this.service.getFavorites(page, id);
+        Page<FavoriteDTO> favorites = this.service.getFavorites(page, id);
 
-        log.info("UserController.getFavorites - End - Input: id [{}], page [{}] - Output: [{}] - time: {} ms",
-            id, page, content, System.currentTimeMillis() - start
+        log.debug("UserController.getFavorites - End - Input: id [{}], page [{}] - Output: [{}] - time: {} ms",
+            id, page, favorites.getContent(), System.currentTimeMillis() - start
         );
-        return ResponseEntity.ok(content);
+        return ResponseEntity.ok(favorites);
     }
 
     @PutMapping(path = "/{id}")
     @AuthorizeParam
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") String id, @RequestBody @Valid UserFormDTO body) {
+    public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody @Valid UserFormDTO body) {
         long start = System.currentTimeMillis();
         log.info("UserController.updateUser - Start - Input: id [{}], firstName [{}], firstName [{}], email [{}], gender [{}]",
             id, body.getFirstName(), body.getLastName(), body.getEmail(), body.getGender()
         );
 
-        UserDTO user = this.service.updateUser(id, body);
+        UserDTO user = this.service.update(id, body);
 
         log.info("UserController.updateUser - End - Input: id [{}], firstName [{}], firstName [{}], email [{}], gender [{}] - time: {} ms",
             id, body.getFirstName(), body.getLastName(), body.getEmail(), body.getGender(), System.currentTimeMillis() - start
@@ -100,11 +100,11 @@ public class UserController {
 
     @DeleteMapping(path = "/{id}")
     @AuthorizeParam
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") String id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
         long start = System.currentTimeMillis();
         log.info("UserController.deleteUser - Start - Input: id [{}]", id);
 
-        this.service.deleteUser(id);
+        this.service.delete(id);
 
         log.info("UserController.deleteUser - End - Input: id [{}] - time: {} ms", id, System.currentTimeMillis() - start);
         return ResponseEntity.noContent().build();

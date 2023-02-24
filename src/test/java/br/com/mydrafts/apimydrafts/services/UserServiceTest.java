@@ -60,7 +60,7 @@ class UserServiceTest {
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(UserFixture.getUser());
 
-        UserDTO user = service.saveUser(UserFixture.getUserForm());
+        UserDTO user = service.save(UserFixture.getUserForm());
 
         assertThat(user.getFirstName()).isEqualTo(UserFixture.getUser().getFirstName());
         assertThat(user.getEmail()).isEqualTo(UserFixture.getUser().getEmail());
@@ -73,7 +73,7 @@ class UserServiceTest {
 
         UserFormDTO userForm = UserFixture.getUserForm();
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.saveUser(userForm));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.save(userForm));
     }
 
     @Test
@@ -81,7 +81,7 @@ class UserServiceTest {
     void searchUserShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
 
-        UserDTO user = service.searchUser(UserFixture.getUser().getId());
+        UserDTO user = service.search(UserFixture.getUser().getId());
 
         assertThat(user.getFirstName()).isEqualTo(UserFixture.getUser().getFirstName());
         assertThat(user.getEmail()).isEqualTo(UserFixture.getUser().getEmail());
@@ -92,7 +92,7 @@ class UserServiceTest {
     void searchUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.searchUser("1"));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.search("1"));
     }
 
     @Test
@@ -155,7 +155,7 @@ class UserServiceTest {
         user.setLastName("Test");
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser(UserFixture.getUser().getId(), userForm);
+        UserDTO saveUser = service.update(UserFixture.getUser().getId(), userForm);
 
         assertThat(saveUser.getFirstName()).isEqualTo(user.getFirstName());
     }
@@ -171,7 +171,7 @@ class UserServiceTest {
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(user);
 
-        UserDTO saveUser = service.updateUser(UserFixture.getUser().getId(), userForm);
+        UserDTO saveUser = service.update(UserFixture.getUser().getId(), userForm);
 
         assertThat(saveUser.getEmail()).isEqualTo(user.getEmail());
     }
@@ -186,7 +186,7 @@ class UserServiceTest {
 
         String id = UserFixture.getUser().getId();
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser(id, userForm));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.update(id, userForm));
     }
 
     @Test
@@ -196,7 +196,7 @@ class UserServiceTest {
 
         UserFormDTO userForm = UserFixture.getUserForm();
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.updateUser("1", userForm));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.update("1", userForm));
     }
 
     @Test
@@ -205,7 +205,7 @@ class UserServiceTest {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
         doNothing().when(repository).delete(any());
 
-        service.deleteUser(UserFixture.getUser().getId());
+        service.delete(UserFixture.getUser().getId());
 
         verify(repository, times(1)).delete(any());
     }
@@ -215,7 +215,7 @@ class UserServiceTest {
     void deleteUserShouldReturnNotFound() {
         when(repository.findById(anyString())).thenReturn(Optional.empty());
 
-        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.deleteUser("1"));
+        assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.delete("1"));
     }
 
     private Page<Draft> pageDraft() {

@@ -59,7 +59,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller save user")
     void saveUserShouldReturnSuccessful() throws Exception {
-        when(this.service.saveUser(UserFixture.getUserForm())).thenReturn(UserFixture.getUserDTO());
+        when(this.service.save(UserFixture.getUserForm())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
             .content(gson.toJson(UserFixture.getUserForm()))
@@ -83,7 +83,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller search user by id")
     void searchUserShouldReturnSuccessful() throws Exception {
-        when(this.service.searchUser(anyString())).thenReturn(UserFixture.getUserDTO());
+        when(this.service.search(anyString())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.get(
             String.format("%s/%s", PATH_USER, UserFixture.getUser().getId())
@@ -131,7 +131,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller update user by id")
     void updateUserShouldReturnSuccessful() throws Exception {
-        when(this.service.updateUser(anyString(), any())).thenReturn(UserFixture.getUserDTO());
+        when(this.service.update(anyString(), any())).thenReturn(UserFixture.getUserDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserFixture.getUser().getId()))
             .content(gson.toJson(UserFixture.getUserForm()))
@@ -144,7 +144,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller delete user by id")
     void deleteUserShouldReturnSuccessful() throws Exception {
-        doNothing().when(this.service).deleteUser(anyString());
+        doNothing().when(this.service).delete(anyString());
 
         RequestBuilder request = MockMvcRequestBuilders.delete(
             String.format("%s/%s", PATH_USER, UserFixture.getUser().getId())

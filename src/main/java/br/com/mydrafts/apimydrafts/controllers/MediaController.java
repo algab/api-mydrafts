@@ -22,11 +22,11 @@ public class MediaController {
     @GetMapping(path = "/movie/{id}")
     public ResponseEntity<MovieResponseDTO> getMovie(@PathVariable("id") Integer id) {
         long start = System.currentTimeMillis();
-        log.info("MediaController.getMovie - Start - Input: id [{}]", id);
+        log.debug("MediaController.getMovie - Start - Input: id [{}]", id);
 
         MovieResponseDTO movie = this.service.getMovie(id);
 
-        log.info("MediaController.getMovie - End - Input: id [{}] - Output: [{}] - time: {} ms",
+        log.debug("MediaController.getMovie - End - Input: id [{}] - Output: [{}] - time: {} ms",
             id, movie, System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(movie);
@@ -35,11 +35,11 @@ public class MediaController {
     @GetMapping(path = "/tv/{id}")
     public ResponseEntity<TvResponseDTO> getTV(@PathVariable("id") Integer id) {
         long start = System.currentTimeMillis();
-        log.info("MediaController.getTV - Start - Input: id [{}]", id);
+        log.debug("MediaController.getTV - Start - Input: id [{}]", id);
 
         TvResponseDTO tv = this.service.getTV(id);
 
-        log.info("MediaController.getTV - End - Input: id [{}] - Output: [{}] - time: {} ms",
+        log.debug("MediaController.getTV - End - Input: id [{}] - Output: [{}] - time: {} ms",
             id, tv, System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(tv);

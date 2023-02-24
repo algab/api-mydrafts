@@ -9,16 +9,16 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    UserDTO saveUser(UserFormDTO body);
+    UserDTO save(UserFormDTO body);
 
-    UserDTO searchUser(String id);
+    UserDTO search(String id);
 
     Page<DraftDTO> getDrafts(Pageable page, String id);
 
     Page<FavoriteDTO> getFavorites(Pageable page, String id);
 
-    UserDTO updateUser(String id, UserFormDTO body);
+    UserDTO update(String id, UserFormDTO body);
 
-    void deleteUser(String id);
+    void delete(String id);
 
 }

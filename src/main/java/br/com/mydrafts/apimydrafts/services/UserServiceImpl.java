@@ -41,11 +41,12 @@ public class UserServiceImpl implements UserService {
     private ModelMapper mapper;
 
     @Override
-    public UserDTO saveUser(UserFormDTO body) {
+    public UserDTO save(UserFormDTO body) {
         if (!this.repository.existsByEmail(body.getEmail())) {
             body.setPassword(new BCryptPasswordEncoder().encode(body.getPassword()));
-            User user = this.repository.save(mapper.map(body, User.class));
-            return mapper.map(user, UserDTO.class);
+            UserDTO user = mapper.map(this.repository.save(mapper.map(body, User.class)), UserDTO.class);
+            log.info("UserServiceImpl.saveUser - User saved - user: [{}]", user);
+            return user;
         } else {
             log.error("UserServiceImpl.saveUser - Error: {}", EMAIL_CONFLICT);
             throw new BusinessException(
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO searchUser(String id) {
+    public UserDTO search(String id) {
         User user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.searchUser - Error: {}", USER_NOT_FOUND);
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(String id, UserFormDTO body) {
+    public UserDTO update(String id, UserFormDTO body) {
         User user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.updateUser - Error: {}", USER_NOT_FOUND);
@@ -128,11 +129,13 @@ public class UserServiceImpl implements UserService {
                 );
             }
         }
-        return mapper.map(this.repository.save(user), UserDTO.class);
+        UserDTO userUpdated = mapper.map(this.repository.save(user), UserDTO.class);
+        log.info("UserServiceImpl.updateUser - User updated - user: [{}]", userUpdated);
+        return userUpdated;
     }
 
     @Override
-    public void deleteUser(String id) {
+    public void delete(String id) {
         User user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.deleteUser - Error: {}", USER_NOT_FOUND);
@@ -142,6 +145,7 @@ public class UserServiceImpl implements UserService {
                     USER_NOT_FOUND
                 );
             });
+        log.info("UserServiceImpl.deleteUser - User removed - id: [{}]", id);
         this.repository.delete(user);
     }
 

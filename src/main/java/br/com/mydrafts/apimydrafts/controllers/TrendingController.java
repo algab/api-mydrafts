@@ -23,11 +23,11 @@ public class TrendingController {
     @GetMapping
     public ResponseEntity<Page<ResultDTO>> trendingTMDB(@PageableDefault Pageable page) {
         long start = System.currentTimeMillis();
-        log.info("TrendingController.trendingTMDB - Start - Input: page [{}]", page);
+        log.debug("TrendingController.trendingTMDB - Start - Input: page [{}]", page);
 
         Page<ResultDTO> response = this.service.trendingTMDB(page);
 
-        log.info("TrendingController.trendingTMDB - End - Input: page [{}] - Output: [{}] - time: {} ms",
+        log.debug("TrendingController.trendingTMDB - End - Input: page [{}] - Output: [{}] - time: {} ms",
             page, response.getContent(), System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(response);

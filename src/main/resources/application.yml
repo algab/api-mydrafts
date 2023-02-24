@@ -1,9 +1,11 @@
 spring:
   application:
     name: api-mydrafts
+  profiles:
+    active: ${PROFILE:local}
   data:
     mongodb:
-      uri: ${MONGO_URI}
+      uri: ${MONGO_URI:mongodb://localhost:27017/api-mydrafts}
 server:
   port: ${PORT:8080}
 tmdb:
@@ -12,4 +14,4 @@ tmdb:
   host: https://api.themoviedb.org/3
   image: https://image.tmdb.org/t/p/original
 secret:
-  jwt: ${SECRET_JWT || aMH%Q#LHJL@oCWZko@x)+cYk,r:}kHz@T6rlj4st&UA(rZS:B**.KFY|yW[Aer@zOUBz?uJ5*JnZi7Xk}
+  jwt: ${SECRET_JWT:aMH%Q#LHJL@oCWZko@x)+cYk,r:}kHz@T6rlj4st&UA(rZS:B**.KFY|yW[Aer@zOUBz?uJ5*JnZi7Xk}

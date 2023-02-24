@@ -44,8 +44,9 @@ public class FavoriteServiceImpl implements FavoriteService {
                     USER_NOT_FOUND
                 );
             });
-        Favorite favorite = setDataFavorite(body, user);
-        return mapper.map(this.favoriteRepository.save(favorite), FavoriteDTO.class);
+        FavoriteDTO favorite = mapper.map(this.favoriteRepository.save(setDataFavorite(body, user)), FavoriteDTO.class);
+        log.info("FavoriteServiceImpl.save - Favorite saved - favorite: [{}]", favorite);
+        return favorite;
     }
 
     @Override
@@ -59,6 +60,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                     FAVORITE_NOT_FOUND
                 );
             });
+        log.info("FavoriteServiceImpl.delete - Favorite removed - id: [{}]", id);
         this.favoriteRepository.delete(favorite);
     }
 

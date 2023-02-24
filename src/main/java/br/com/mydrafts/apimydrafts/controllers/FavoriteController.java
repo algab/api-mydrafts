@@ -28,9 +28,7 @@ public class FavoriteController {
 
         FavoriteDTO favorite = this.service.save(body);
 
-        log.info("FavoriteController.save - End - Input: body [{}] - Output: [{}] - time: {} ms",
-            body, favorite, System.currentTimeMillis() - start
-        );
+        log.info("FavoriteController.save - End - Input: body [{}] - time: {} ms", body, System.currentTimeMillis() - start);
         return ResponseEntity.status(201).body(favorite);
     }
 

@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
         if (new BCryptPasswordEncoder().matches(login.getPassword(), user.getPassword())) {
             UserDTO userResponse = mapper.map(user, UserDTO.class);
             String token = jwtService.generateToken(userResponse);
+            log.info("LoginServiceImpl.login - Login successful - email: [{}]", login.getEmail());
             return LoginDTO.builder().token(token).user(userResponse).build();
         }
         log.error("LoginServiceImpl.login - Error: {}", PASSWORD_INCORRECT);

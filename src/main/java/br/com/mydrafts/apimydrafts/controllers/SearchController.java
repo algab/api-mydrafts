@@ -24,16 +24,16 @@ public class SearchController {
 
     @GetMapping
     public ResponseEntity<Page<ResultDTO>> searchTMDB(
-            @PageableDefault Pageable page,
-            @RequestParam(value = "media", required = false) String type,
-            @RequestParam("name") String name
+        @PageableDefault Pageable page,
+        @RequestParam(value = "media", required = false) String type,
+        @RequestParam("name") String name
     ) {
         long start = System.currentTimeMillis();
-        log.info("SearchController.searchTMDB - Start - Input: page [{}], type [{}], name [{}]", page, type, name);
+        log.debug("SearchController.searchTMDB - Start - Input: page [{}], type [{}], name [{}]", page, type, name);
 
         Page<ResultDTO> response = this.service.searchTMDB(page, Media.fromValue(type), name);
 
-        log.info("SearchController.searchTMDB - End - Input: page [{}], type [{}], name [{}] - Output: [{}] - time: {} ms",
+        log.debug("SearchController.searchTMDB - End - Input: page [{}], type [{}], name [{}] - Output: [{}] - time: {} ms",
             page, type, name, response.getContent(), System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(response);

@@ -29,9 +29,7 @@ public class DraftController {
 
         DraftDTO draft = this.service.save(body);
 
-        log.info("DraftController.save - End - Input: body [{}] - Output: [{}] - time: {} ms",
-            body, draft, System.currentTimeMillis() - start
-        );
+        log.info("DraftController.save - End - Input: body [{}] - time: {} ms", body, System.currentTimeMillis() - start);
         return ResponseEntity.status(201).body(draft);
     }
 
@@ -39,11 +37,11 @@ public class DraftController {
     @AuthorizeData("Draft")
     public ResponseEntity<DraftDTO> search(@PathVariable("id") String id) {
         long start = System.currentTimeMillis();
-        log.info("DraftController.search - Start - Input: id [{}]", id);
+        log.debug("DraftController.search - Start - Input: id [{}]", id);
 
         DraftDTO draft = this.service.searchDraft(id);
 
-        log.info("DraftController.search - End - Input: id [{}] - Output: [{}] - time: {} ms",
+        log.debug("DraftController.search - End - Input: id [{}] - Output: [{}] - time: {} ms",
             id, draft, System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(draft);
@@ -57,8 +55,8 @@ public class DraftController {
 
         DraftDTO draft = this.service.updateDraft(id, body);
 
-        log.info("DraftController.update - End - Input: id [{}], body [{}] - Output: [{}] - time: {} ms",
-            id, body, draft, System.currentTimeMillis() - start
+        log.info("DraftController.update - End - Input: id [{}], body [{}] - time: {} ms",
+            id, body, System.currentTimeMillis() - start
         );
         return ResponseEntity.ok(draft);
     }

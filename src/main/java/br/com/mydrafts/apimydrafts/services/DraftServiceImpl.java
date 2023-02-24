@@ -51,8 +51,9 @@ public class DraftServiceImpl implements DraftService {
                     USER_NOT_FOUND
                 );
             });
-        Draft draft = setDataDraft(body, user);
-        return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+        DraftDTO draft = mapper.map(this.draftRepository.save(setDataDraft(body, user)), DraftDTO.class);
+        log.info("DraftServiceImpl.save - Draft saved - draft: [{}]", draft);
+        return draft;
     }
 
     @Override
@@ -80,13 +81,13 @@ public class DraftServiceImpl implements DraftService {
                     DRAFT_NOT_FOUND
                 );
             });
-
         if (!this.userRepository.existsById(body.getUserID())) {
             log.error("DraftServiceImpl.updateDraft - Search user - Error: {}", USER_NOT_FOUND);
             throw new BusinessException(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), USER_NOT_FOUND);
         }
-        Draft draft = updateDataDraft(findDraft, body);
-        return mapper.map(this.draftRepository.save(draft), DraftDTO.class);
+        DraftDTO draft = mapper.map(this.draftRepository.save(updateDataDraft(findDraft, body)), DraftDTO.class);
+        log.info("DraftServiceImpl.updateDraft - Draft updated - draft: [{}]", draft);
+        return draft;
     }
 
     @Override
@@ -101,6 +102,7 @@ public class DraftServiceImpl implements DraftService {
                 );
             });
         this.draftRepository.delete(draft);
+        log.info("DraftServiceImpl.deleteDraft - Draft removed - id: [{}]", id);
     }
 
     private Draft setDataDraft(DraftFormDTO body, User user) {
