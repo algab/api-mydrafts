@@ -1,10 +1,10 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Draft;
-import br.com.mydrafts.apimydrafts.documents.Favorite;
-import br.com.mydrafts.apimydrafts.documents.Production;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.DraftDocument;
+import br.com.mydrafts.apimydrafts.documents.FavoriteDocument;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
@@ -99,7 +99,7 @@ class UserServiceTest {
     @DisplayName("Service get drafts by user")
     void getDraftsShouldReturnSuccessful() {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
-        when(draftRepository.findByUser(any(User.class), any())).thenReturn(pageDraft());
+        when(draftRepository.findByUser(any(UserDocument.class), any())).thenReturn(pageDraft());
 
         Page<DraftDTO> page = service.getDrafts(PageRequest.of(0, 10), UserFixture.getUser().getId());
 
@@ -146,7 +146,7 @@ class UserServiceTest {
     @Test
     @DisplayName("Service update user")
     void updateUserShouldReturnSuccessful() {
-        User user = UserFixture.getUser();
+        UserDocument user = UserFixture.getUser();
         when(repository.findById(anyString())).thenReturn(Optional.of(user));
         UserFormDTO userForm = UserFixture.getUserForm();
         userForm.setFirstName("User");
@@ -166,7 +166,7 @@ class UserServiceTest {
         when(repository.findById(anyString())).thenReturn(Optional.of(UserFixture.getUser()));
         UserFormDTO userForm = UserFixture.getUserForm();
         userForm.setEmail("alvarotest@email.com");
-        User user = UserFixture.getUser();
+        UserDocument user = UserFixture.getUser();
         user.setEmail("alvarotest@email.com");
         when(repository.existsByEmail(anyString())).thenReturn(false);
         when(repository.save(any())).thenReturn(user);
@@ -218,8 +218,8 @@ class UserServiceTest {
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> service.delete("1"));
     }
 
-    private Page<Draft> pageDraft() {
-        Production production = ProductionFixture.getProductionMovie();
+    private Page<DraftDocument> pageDraft() {
+        ProductionDocument production = ProductionFixture.getProductionMovie();
         return new PageImpl<>(
             Collections.singletonList(DraftFixture.getDraft(production)),
             PageRequest.of(0, 10),
@@ -227,7 +227,7 @@ class UserServiceTest {
         );
     }
 
-    private Page<Favorite> pageFavorite() {
+    private Page<FavoriteDocument> pageFavorite() {
         return new PageImpl<>(
             Collections.singletonList(FavoriteFixture.getFavorite()),
             PageRequest.of(0, 10),

@@ -1,9 +1,9 @@
 package br.com.mydrafts.apimydrafts.services;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Draft;
-import br.com.mydrafts.apimydrafts.documents.Production;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.DraftDocument;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
@@ -42,7 +42,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public DraftDTO save(DraftFormDTO body) {
-        User user = this.userRepository.findById(body.getUserID())
+        UserDocument user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.save - Error: {}", USER_NOT_FOUND);
                 return new BusinessException(
@@ -58,7 +58,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public DraftDTO searchDraft(String id) {
-        Draft draft = this.draftRepository.findById(id)
+        DraftDocument draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.searchDraft - Error: {}", DRAFT_NOT_FOUND);
                 return new BusinessException(
@@ -72,7 +72,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public DraftDTO updateDraft(String id, DraftUpdateFormDTO body) {
-        Draft findDraft = this.draftRepository.findById(id)
+        DraftDocument findDraft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.updateDraft - Search draft - Error: {}", DRAFT_NOT_FOUND);
                 return new BusinessException(
@@ -92,7 +92,7 @@ public class DraftServiceImpl implements DraftService {
 
     @Override
     public void deleteDraft(String id) {
-        Draft draft = this.draftRepository.findById(id)
+        DraftDocument draft = this.draftRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("DraftServiceImpl.updateDraft - Error: {}", DRAFT_NOT_FOUND);
                 return new BusinessException(
@@ -105,9 +105,9 @@ public class DraftServiceImpl implements DraftService {
         log.info("DraftServiceImpl.deleteDraft - Draft removed - id: [{}]", id);
     }
 
-    private Draft setDataDraft(DraftFormDTO body, User user) {
-        Draft draft = Draft.builder().description(body.getDescription()).rating(body.getRating()).build();
-        Production production = searchProduction(body.getTmdbID(), body.getSeason(), body.getMedia());
+    private DraftDocument setDataDraft(DraftFormDTO body, UserDocument user) {
+        DraftDocument draft = DraftDocument.builder().description(body.getDescription()).rating(body.getRating()).build();
+        ProductionDocument production = searchProduction(body.getTmdbID(), body.getSeason(), body.getMedia());
         if (this.draftRepository.existsByUserAndProduction(user, production)) {
             log.error("DraftServiceImpl.setDataDraft - Error: {}", DRAFT_CONFLICT);
             throw new BusinessException(
@@ -124,15 +124,15 @@ public class DraftServiceImpl implements DraftService {
         return draft;
     }
 
-    private Production searchProduction(Integer tmdbID, Integer season, Media media) {
+    private ProductionDocument searchProduction(Integer tmdbID, Integer season, Media media) {
         if (media.equals(Media.MOVIE)) {
-            Optional<Production> production = this.productionService.searchProduction(tmdbID, media);
+            Optional<ProductionDocument> production = this.productionService.searchProduction(tmdbID, media);
             return production.orElseGet(() -> this.productionService.mountProduction(tmdbID, media));
         }
         return verifyTV(tmdbID, season, media);
     }
 
-    private Production verifyTV(Integer tmdbID, Integer season, Media media) {
+    private ProductionDocument verifyTV(Integer tmdbID, Integer season, Media media) {
         if (Objects.isNull(season)) {
             log.error("DraftServiceImpl.verifyTV - Error: {}", DRAFT_TV_BAD_REQUEST);
             throw new BusinessException(
@@ -141,16 +141,16 @@ public class DraftServiceImpl implements DraftService {
                 DRAFT_TV_BAD_REQUEST
             );
         }
-        Optional<Production> production = this.productionService.searchProduction(tmdbID, media);
+        Optional<ProductionDocument> production = this.productionService.searchProduction(tmdbID, media);
         if (production.isPresent()) {
             return checkSeason(production.get(), season);
         } else {
-            Production productionSaved = this.productionService.mountProduction(tmdbID, media);
+            ProductionDocument productionSaved = this.productionService.mountProduction(tmdbID, media);
             return checkSeason(productionSaved, season);
         }
     }
 
-    private Production checkSeason(Production production, Integer season) {
+    private ProductionDocument checkSeason(ProductionDocument production, Integer season) {
         TvResponseDTO tv = (TvResponseDTO) production.getData();
         if (seasonNotExists(tv, season)) {
             log.error("DraftServiceImpl.checkSeason - Error: {}", DRAFT_TV_SEASON);
@@ -164,7 +164,7 @@ public class DraftServiceImpl implements DraftService {
         }
     }
 
-    private Draft updateDataDraft(Draft draft, DraftUpdateFormDTO body) {
+    private DraftDocument updateDataDraft(DraftDocument draft, DraftUpdateFormDTO body) {
         if (draft.getProduction().getMedia().equals(Media.TV)) {
             if (Objects.isNull(body.getSeason())) {
                 log.error("DraftServiceImpl.updateDataDraft - Error: {}", DRAFT_TV_BAD_REQUEST);

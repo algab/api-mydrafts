@@ -1,6 +1,6 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.dto.LoginFormDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public LoginDTO login(LoginFormDTO login) {
-        User user = repository.findByEmail(login.getEmail())
+        UserDocument user = repository.findByEmail(login.getEmail())
             .orElseThrow(() -> {
                 log.error("LoginServiceImpl.login - Error: {}", EMAIL_NOT_FOUND);
                 return new BusinessException(

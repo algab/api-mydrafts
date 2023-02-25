@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.fixtures;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Draft;
-import br.com.mydrafts.apimydrafts.documents.Production;
+import br.com.mydrafts.apimydrafts.documents.DraftDocument;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
@@ -30,8 +30,8 @@ public final class DraftFixture {
             .build();
     }
 
-    public static Draft getDraft(Production production) {
-        return Draft.builder()
+    public static DraftDocument getDraft(ProductionDocument production) {
+        return DraftDocument.builder()
             .id("61586ad5362766670067eda8")
             .description("Very Good")
             .rating(5)

@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.fixtures;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Favorite;
+import br.com.mydrafts.apimydrafts.documents.FavoriteDocument;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteFormDTO;
 
@@ -15,8 +15,8 @@ public final class FavoriteFixture {
             .build();
     }
 
-    public static Favorite getFavorite() {
-        return Favorite.builder()
+    public static FavoriteDocument getFavorite() {
+        return FavoriteDocument.builder()
             .id("1000")
             .user(UserFixture.getUser())
             .production(ProductionFixture.getProductionMovie())

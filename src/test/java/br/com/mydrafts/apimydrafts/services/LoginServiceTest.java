@@ -1,6 +1,6 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.LoginDTO;
 import br.com.mydrafts.apimydrafts.dto.LoginFormDTO;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
@@ -62,7 +62,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("Service login password incorrect")
     void loginUserShouldReturnPasswordIncorrect() {
-        User user = UserFixture.getUser();
+        UserDocument user = UserFixture.getUser();
         user.setPassword("12345678");
         when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
 

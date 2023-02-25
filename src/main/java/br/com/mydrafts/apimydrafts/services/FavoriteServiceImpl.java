@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.documents.Favorite;
-import br.com.mydrafts.apimydrafts.documents.Production;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.FavoriteDocument;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.*;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.repository.FavoriteRepository;
@@ -35,7 +35,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public FavoriteDTO save(FavoriteFormDTO body) {
-        User user = this.userRepository.findById(body.getUserID())
+        UserDocument user = this.userRepository.findById(body.getUserID())
             .orElseThrow(() -> {
                 log.error("FavoriteServiceImpl.save - Error: {}", USER_NOT_FOUND);
                 return new BusinessException(
@@ -51,7 +51,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public void delete(String id) {
-        Favorite favorite = this.favoriteRepository.findById(id)
+        FavoriteDocument favorite = this.favoriteRepository.findById(id)
             .orElseThrow(() -> {
                 log.error("FavoriteServiceImpl.delete - Error: {}", FAVORITE_NOT_FOUND);
                 return new BusinessException(
@@ -64,9 +64,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         this.favoriteRepository.delete(favorite);
     }
 
-    private Favorite setDataFavorite(FavoriteFormDTO body, User user) {
-        Favorite favorite = Favorite.builder().user(user).build();
-        Optional<Production> production = this.productionService.searchProduction(body.getTmdbID(), body.getMedia());
+    private FavoriteDocument setDataFavorite(FavoriteFormDTO body, UserDocument user) {
+        FavoriteDocument favorite = FavoriteDocument.builder().user(user).build();
+        Optional<ProductionDocument> production = this.productionService.searchProduction(body.getTmdbID(), body.getMedia());
         if (production.isPresent()) {
             if (this.favoriteRepository.existsByUserAndProduction(user, production.get())) {
                 log.error("FavoriteServiceImpl.setDataFavorite - Error: {}", FAVORITE_CONFLICT);
@@ -78,7 +78,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             }
             favorite.setProduction(production.get());
         } else {
-            Production productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia());
+            ProductionDocument productionResponse = this.productionService.mountProduction(body.getTmdbID(), body.getMedia());
             favorite.setProduction(productionResponse);
         }
         return favorite;

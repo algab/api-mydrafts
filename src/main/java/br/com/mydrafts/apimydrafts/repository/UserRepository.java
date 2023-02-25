@@ -1,14 +1,14 @@
 package br.com.mydrafts.apimydrafts.repository;
 
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<UserDocument, String> {
 
     boolean existsByEmail(String email);
 
-    Optional<User> findByEmail(String email);
+    Optional<UserDocument> findByEmail(String email);
 
 }

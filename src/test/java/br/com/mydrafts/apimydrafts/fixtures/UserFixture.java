@@ -1,7 +1,7 @@
 package br.com.mydrafts.apimydrafts.fixtures;
 
 import br.com.mydrafts.apimydrafts.constants.Gender;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 
@@ -17,8 +17,8 @@ public final class UserFixture {
             .build();
     }
 
-    public static User getUser() {
-        return User.builder()
+    public static UserDocument getUser() {
+        return UserDocument.builder()
             .id("61586ad5362766670067edd5")
             .firstName("Alvaro")
             .lastName("Oliveira")

@@ -1,8 +1,8 @@
 package br.com.mydrafts.apimydrafts.services;
 
-import br.com.mydrafts.apimydrafts.documents.Draft;
-import br.com.mydrafts.apimydrafts.documents.Favorite;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.DraftDocument;
+import br.com.mydrafts.apimydrafts.documents.FavoriteDocument;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
 import br.com.mydrafts.apimydrafts.dto.UserDTO;
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO save(UserFormDTO body) {
         if (!this.repository.existsByEmail(body.getEmail())) {
             body.setPassword(new BCryptPasswordEncoder().encode(body.getPassword()));
-            UserDTO user = mapper.map(this.repository.save(mapper.map(body, User.class)), UserDTO.class);
+            UserDTO user = mapper.map(this.repository.save(mapper.map(body, UserDocument.class)), UserDTO.class);
             log.info("UserServiceImpl.saveUser - User saved - user: [{}]", user);
             return user;
         } else {
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO search(String id) {
-        User user = this.repository.findById(id)
+        UserDocument user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.searchUser - Error: {}", USER_NOT_FOUND);
                 return new BusinessException(
@@ -73,13 +73,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<DraftDTO> getDrafts(Pageable page, String id) {
-        User user = this.repository.findById(id)
+        UserDocument user = this.repository.findById(id)
             .orElseThrow(() -> new BusinessException(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 USER_NOT_FOUND
             ));
-        Page<Draft> drafts = this.draftRepository.findByUser(user, page);
+        Page<DraftDocument> drafts = this.draftRepository.findByUser(user, page);
         List<DraftDTO> draftsDTO = drafts.getContent().stream()
             .map(draft -> mapper.map(draft, DraftDTO.class))
             .collect(Collectors.toList());
@@ -88,13 +88,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<FavoriteDTO> getFavorites(Pageable page, String id) {
-        User user = this.repository.findById(id)
+        UserDocument user = this.repository.findById(id)
             .orElseThrow(() -> new BusinessException(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
                 USER_NOT_FOUND
             ));
-        Page<Favorite> favorites = this.favoriteRepository.findByUser(user, page);
+        Page<FavoriteDocument> favorites = this.favoriteRepository.findByUser(user, page);
         List<FavoriteDTO> content = favorites.getContent().stream()
             .map(favorite -> mapper.map(favorite, FavoriteDTO.class))
             .collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(String id, UserFormDTO body) {
-        User user = this.repository.findById(id)
+        UserDocument user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.updateUser - Error: {}", USER_NOT_FOUND);
                 return new BusinessException(
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String id) {
-        User user = this.repository.findById(id)
+        UserDocument user = this.repository.findById(id)
             .orElseThrow(() -> {
                 log.error("UserServiceImpl.deleteUser - Error: {}", USER_NOT_FOUND);
                 return new BusinessException(

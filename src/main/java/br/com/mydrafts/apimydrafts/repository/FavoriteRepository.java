@@ -1,16 +1,16 @@
 package br.com.mydrafts.apimydrafts.repository;
 
-import br.com.mydrafts.apimydrafts.documents.Favorite;
-import br.com.mydrafts.apimydrafts.documents.Production;
-import br.com.mydrafts.apimydrafts.documents.User;
+import br.com.mydrafts.apimydrafts.documents.FavoriteDocument;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
+import br.com.mydrafts.apimydrafts.documents.UserDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface FavoriteRepository extends MongoRepository<Favorite, String> {
+public interface FavoriteRepository extends MongoRepository<FavoriteDocument, String> {
 
-    boolean existsByUserAndProduction(User user, Production production);
+    boolean existsByUserAndProduction(UserDocument user, ProductionDocument production);
 
-    Page<Favorite> findByUser(User user, Pageable page);
+    Page<FavoriteDocument> findByUser(UserDocument user, Pageable page);
 
 }

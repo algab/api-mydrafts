@@ -2,7 +2,7 @@ package br.com.mydrafts.apimydrafts.aspects;
 
 import br.com.mydrafts.apimydrafts.controllers.DraftController;
 import br.com.mydrafts.apimydrafts.controllers.FavoriteController;
-import br.com.mydrafts.apimydrafts.documents.Production;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
 import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
@@ -52,7 +52,7 @@ class AuthorizeDataAspectTest {
     @Test
     void validateDataDraftShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
-        Production production = ProductionFixture.getProductionMovie();
+        ProductionDocument production = ProductionFixture.getProductionMovie();
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
@@ -79,7 +79,7 @@ class AuthorizeDataAspectTest {
 
     @Test
     void whenUserAndDraftDifferentShouldReturnException() throws NoSuchMethodException {
-        Production production = ProductionFixture.getProductionMovie();
+        ProductionDocument production = ProductionFixture.getProductionMovie();
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);

@@ -5,7 +5,7 @@ import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.converters.TMDBTvToResponse;
-import br.com.mydrafts.apimydrafts.documents.Production;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
 import br.com.mydrafts.apimydrafts.repository.ProductionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,7 +48,7 @@ class ProductionServiceTest {
         when(proxy.getMovieCredits(anyInt())).thenReturn(MediaFixture.credits());
         when(productionRepository.save(any())).thenReturn(getProductionMovie());
 
-        Production production = service.mountProduction(10, Media.MOVIE);
+        ProductionDocument production = service.mountProduction(10, Media.MOVIE);
 
         assertThat(getProductionMovie().getData().getId()).isEqualTo(production.getData().getId());
     }
@@ -59,7 +59,7 @@ class ProductionServiceTest {
         when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
-        Production production = service.mountProduction(10, Media.TV);
+        ProductionDocument production = service.mountProduction(10, Media.TV);
 
         assertThat(production.getData().getId()).isEqualTo(getProductionTV().getData().getId());
     }
@@ -70,7 +70,7 @@ class ProductionServiceTest {
         when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
         when(productionRepository.save(any())).thenReturn(getProductionTV());
 
-        Production production = service.mountProduction(10, Media.TV);
+        ProductionDocument production = service.mountProduction(10, Media.TV);
 
         assertThat(getProductionTV().getData().getId()).isEqualTo(production.getData().getId());
     }
@@ -78,11 +78,11 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service search by tmdb id")
     void searchByTmdbIDShouldReturnSuccessful() {
-        Production productionMovie = ProductionFixture.getProductionMovie();
+        ProductionDocument productionMovie = ProductionFixture.getProductionMovie();
         when(productionRepository.findByTmdbIDAndMedia(anyInt(), any()))
             .thenReturn(Optional.of(productionMovie));
 
-        Optional<Production> production = service.searchProduction(10, Media.MOVIE);
+        Optional<ProductionDocument> production = service.searchProduction(10, Media.MOVIE);
 
         assertThat(production).isPresent();
         assertThat(production.get().getMedia()).isEqualTo(productionMovie.getMedia());
@@ -93,19 +93,19 @@ class ProductionServiceTest {
     void searchByTmdbIDShouldReturnNotFound() {
         when(productionRepository.findByTmdbIDAndMedia(anyInt(), any())).thenReturn(Optional.empty());
 
-        Optional<Production> production = service.searchProduction(10, Media.TV);
+        Optional<ProductionDocument> production = service.searchProduction(10, Media.TV);
 
         assertThat(production).isEmpty();
     }
 
-    private Production getProductionMovie() {
-        Production production = ProductionFixture.getProductionMovie();
+    private ProductionDocument getProductionMovie() {
+        ProductionDocument production = ProductionFixture.getProductionMovie();
         production.setData(MediaFixture.getMovie());
         return production;
     }
 
-    private Production getProductionTV() {
-        Production production = ProductionFixture.getProductionTV();
+    private ProductionDocument getProductionTV() {
+        ProductionDocument production = ProductionFixture.getProductionTV();
         production.setData(MediaFixture.getTV());
         return production;
     }

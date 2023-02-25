@@ -1,13 +1,13 @@
 package br.com.mydrafts.apimydrafts.repository;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
-import br.com.mydrafts.apimydrafts.documents.Production;
+import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-public interface ProductionRepository extends MongoRepository<Production, String> {
+public interface ProductionRepository extends MongoRepository<ProductionDocument, String> {
 
-    Optional<Production> findByTmdbIDAndMedia(Integer tmdbID, Media media);
+    Optional<ProductionDocument> findByTmdbIDAndMedia(Integer tmdbID, Media media);
 
 }
