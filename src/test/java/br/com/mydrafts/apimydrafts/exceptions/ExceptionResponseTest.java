@@ -1,9 +1,10 @@
 package br.com.mydrafts.apimydrafts.exceptions;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Tests for exception response")
 class ExceptionResponseTest {
@@ -14,14 +15,15 @@ class ExceptionResponseTest {
     @Test
     @DisplayName("Test attributes ExceptionResponse")
     void setAttributesExceptionResponseShouldReturnSuccessful() {
-        ExceptionResponse exception = new ExceptionResponse();
-        exception.setStatus(HttpStatus.BAD_REQUEST.value());
-        exception.setError(ERROR_HTTP);
-        exception.setMessage(MESSAGE_ERROR);
+        ExceptionResponse exception = new ExceptionResponse(
+            HttpStatus.BAD_REQUEST.value(),
+            ERROR_HTTP,
+            MESSAGE_ERROR
+        );
 
-        Assertions.assertThat(HttpStatus.BAD_REQUEST.value()).isEqualTo(exception.getStatus());
-        Assertions.assertThat(exception.getError()).isEqualTo(ERROR_HTTP);
-        Assertions.assertThat(exception.getMessage()).isEqualTo(MESSAGE_ERROR);
+        assertThat(HttpStatus.BAD_REQUEST.value()).isEqualTo(exception.getStatus());
+        assertThat(exception.getError()).isEqualTo(ERROR_HTTP);
+        assertThat(exception.getMessage()).isEqualTo(MESSAGE_ERROR);
     }
 
 }

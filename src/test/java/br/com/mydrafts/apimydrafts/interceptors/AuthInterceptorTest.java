@@ -33,6 +33,7 @@ class AuthInterceptorTest {
     }
 
     @Test
+    @DisplayName("Token with signature correct")
     void whenTheTokenSentHasTheCorrectSignatureItShouldReturnTrue() {
         when(jwtService.validateToken()).thenReturn(true);
         HttpServletResponse httpServletResponse = new MockHttpServletResponse();
@@ -45,6 +46,7 @@ class AuthInterceptorTest {
     }
 
     @Test
+    @DisplayName("Request in the white list")
     void whenRequestIsInTheListItShouldReturnTrue() {
         HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
@@ -57,6 +59,7 @@ class AuthInterceptorTest {
     }
 
     @Test
+    @DisplayName("Token with signature wrong")
     void whenTheTokenSentHasTheWrongSignatureItShouldReturnAnException() {
         when(jwtService.validateToken()).thenThrow(new JwtException("JWT Error"));
         HttpServletResponse httpServletResponse = new MockHttpServletResponse();
@@ -70,6 +73,7 @@ class AuthInterceptorTest {
     }
 
     @Test
+    @DisplayName("Request without token")
     void whenNotSendingTheTokenItShouldThrowAnException() {
         HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();

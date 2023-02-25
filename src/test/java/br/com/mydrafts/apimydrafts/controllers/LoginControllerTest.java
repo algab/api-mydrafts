@@ -1,5 +1,6 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.dto.LoginFormDTO;
 import br.com.mydrafts.apimydrafts.fixtures.LoginFixture;
 import br.com.mydrafts.apimydrafts.services.LoginService;
 import com.google.gson.Gson;
@@ -16,10 +17,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Login Controller")
+@DisplayName("Tests for LoginController")
 class LoginControllerTest {
 
     private MockMvc mockMvc;
@@ -41,14 +43,17 @@ class LoginControllerTest {
     @Test
     @DisplayName("Controller login")
     void loginUserShouldReturnSuccessful() throws Exception {
-        when(this.loginService.login(LoginFixture.getLoginForm())).thenReturn(LoginFixture.getLogin());
+        LoginFormDTO form = LoginFixture.getLoginForm();
+        when(this.loginService.login(form)).thenReturn(LoginFixture.getLogin());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_LOGIN)
-            .content(gson.toJson(LoginFixture.getLoginForm()))
+            .content(gson.toJson(form))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.user").isNotEmpty());
     }
 
 }

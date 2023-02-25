@@ -13,6 +13,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.USER_UNAUTHORIZED;
+
 @Aspect
 @Component
 @AllArgsConstructor
@@ -34,13 +36,21 @@ public class AuthorizeBodyAspect {
                 validateBody(body.getUserID(), id);
             }
         } catch (Exception e) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 
     private void validateBody(String userID, String id) {
         if (!userID.equals(id)) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 

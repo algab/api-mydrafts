@@ -19,11 +19,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException exception) {
-        ExceptionResponse response = ExceptionResponse.builder()
-            .status(exception.getStatus())
-            .error(exception.getError())
-            .message(exception.getMessage())
-            .build();
+        ExceptionResponse response = new ExceptionResponse(
+            exception.getStatus(),
+            exception.getError(),
+            exception.getMessage()
+        );
         return ResponseEntity.status(exception.getStatus()).body(response);
     }
 
@@ -37,11 +37,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         String message = ex.getFieldErrors().stream()
             .map(FieldError::getDefaultMessage)
             .collect(Collectors.joining(", "));
-        ExceptionResponse response = ExceptionResponse.builder()
-            .status(status.value())
-            .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-            .message(message)
-            .build();
+        ExceptionResponse response = new ExceptionResponse(
+            status.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
+            message
+        );
         return ResponseEntity.status(status.value()).body(response);
     }
 

@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for JWT Service")
+@DisplayName("Tests for JWTService")
 class JWTServiceTest {
 
     private JWTService jwtService;
@@ -46,8 +46,10 @@ class JWTServiceTest {
     }
 
     @Test
+    @DisplayName("Service that returns token id")
     void shouldReturnIdToken() {
-        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString()).getBody()).thenReturn(new DefaultClaims(Map.of("jti", "10")));
+        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString()).getBody())
+            .thenReturn(new DefaultClaims(Map.of("jti", "10")));
 
         String id = jwtService.getIdByToken();
 
@@ -55,6 +57,7 @@ class JWTServiceTest {
     }
 
     @Test
+    @DisplayName("Token generation service")
     void shouldReturnTokenGenerateToken() {
         String token = jwtService.generateToken(UserFixture.getUserDTO());
 
@@ -62,8 +65,10 @@ class JWTServiceTest {
     }
 
     @Test
+    @DisplayName("Validation service when token is correct")
     void shouldReturnTrueValidateToken() {
-        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString())).thenReturn(new DefaultJws<>(new DefaultJwsHeader(), null, "test"));
+        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString()))
+            .thenReturn(new DefaultJws<>(new DefaultJwsHeader(), null, "test"));
 
         boolean result = jwtService.validateToken();
 
@@ -71,8 +76,10 @@ class JWTServiceTest {
     }
 
     @Test
+    @DisplayName("Validation service when token is incorrect")
     void shouldReturnExceptionValidateToken() {
-        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString())).thenThrow(new JwtException("JWT Error"));
+        when(jwtParserBuilder.setSigningKey(any(SecretKey.class)).build().parseClaimsJws(anyString()))
+            .thenThrow(new JwtException("JWT Error"));
 
         assertThatExceptionOfType(BusinessException.class)
             .isThrownBy(() -> jwtService.validateToken());

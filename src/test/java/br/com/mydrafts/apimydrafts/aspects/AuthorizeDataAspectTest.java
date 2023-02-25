@@ -13,6 +13,7 @@ import br.com.mydrafts.apimydrafts.services.JWTService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Tests for AuthorizeDataAspect")
 class AuthorizeDataAspectTest {
 
     private AuthorizeDataAspect authorizeDataAspect;
@@ -50,6 +52,7 @@ class AuthorizeDataAspectTest {
     }
 
     @Test
+    @DisplayName("Validate data draft")
     void validateDataDraftShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
         ProductionDocument production = ProductionFixture.getProductionMovie();
@@ -57,27 +60,29 @@ class AuthorizeDataAspectTest {
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(production)));
+        when(draftRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.of(DraftFixture.getDraft(production)));
 
         authorizeDataAspect.authorizeData(joinPoint);
 
-        verify(jwtService, times(1)).getIdByToken();
-        verify(draftRepository, times(1)).findById(anyString());
+        verify(joinPoint, times(1)).getArgs();
+        verify(draftRepository, times(1)).findById("61586ad5362766670067eda8");
     }
 
     @Test
+    @DisplayName("Validate the request when draft not found")
     void whenDraftNotFoundShouldReturnException() throws NoSuchMethodException {
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(draftRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(draftRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }
 
     @Test
+    @DisplayName("Validate the request when the draft is not the correct user")
     void whenUserAndDraftDifferentShouldReturnException() throws NoSuchMethodException {
         ProductionDocument production = ProductionFixture.getProductionMovie();
         Method method = DraftController.class.getDeclaredMethod("search", String.class);
@@ -85,51 +90,55 @@ class AuthorizeDataAspectTest {
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd8");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(draftRepository.findById(anyString())).thenReturn(Optional.of(DraftFixture.getDraft(production)));
+        when(draftRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.of(DraftFixture.getDraft(production)));
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }
 
     @Test
+    @DisplayName("Validate data favorite")
     void validateDataFavoriteShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("delete", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
+        when(favoriteRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
 
         authorizeDataAspect.authorizeData(joinPoint);
 
-        verify(jwtService, times(1)).getIdByToken();
-        verify(favoriteRepository, times(1)).findById(anyString());
+        verify(joinPoint, times(1)).getArgs();
+        verify(favoriteRepository, times(1)).findById("61586ad5362766670067eda8");
     }
 
     @Test
+    @DisplayName("Validate the request when favorite not found")
     void whenFavoriteNotFoundShouldReturnException() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("delete", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(favoriteRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.empty());
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }
 
     @Test
+    @DisplayName("Validate the request when the favorite is not the correct user")
     void whenUserAndFavoriteDifferentShouldReturnException() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("delete", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
         when(methodSignature.getMethod()).thenReturn(method);
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd8");
         when(joinPoint.getArgs()).thenReturn(new Object[]{"61586ad5362766670067eda8"});
-        when(favoriteRepository.findById(anyString())).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
+        when(favoriteRepository.findById("61586ad5362766670067eda8")).thenReturn(Optional.of(FavoriteFixture.getFavorite()));
 
         assertThatExceptionOfType(BusinessException.class).isThrownBy(() -> authorizeDataAspect.authorizeData(joinPoint));
     }
 
     @Test
+    @DisplayName("Validate the request when the token is null")
     void whenTheRequestTokenIsNullItShouldReturnException() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("delete", String.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);

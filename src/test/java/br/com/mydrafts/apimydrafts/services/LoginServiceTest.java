@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Login Service")
+@DisplayName("Tests for LoginService")
 class LoginServiceTest {
 
     private LoginService service;
@@ -52,7 +52,7 @@ class LoginServiceTest {
     @Test
     @DisplayName("Service login user not found")
     void loginUserShouldReturnUserNotFound() {
-        when(repository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(repository.findByEmail("alvaro@email.com")).thenReturn(Optional.empty());
 
         LoginFormDTO loginForm = new LoginFormDTO("alvaro@email.com", "12345678");
 
@@ -64,7 +64,7 @@ class LoginServiceTest {
     void loginUserShouldReturnPasswordIncorrect() {
         UserDocument user = UserFixture.getUser();
         user.setPassword("12345678");
-        when(repository.findByEmail(anyString())).thenReturn(Optional.of(user));
+        when(repository.findByEmail("alvaro@email.com")).thenReturn(Optional.of(user));
 
         LoginFormDTO loginForm = new LoginFormDTO("alvaro@email.com", "12345678");
 

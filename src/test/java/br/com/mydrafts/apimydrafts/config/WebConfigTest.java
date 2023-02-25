@@ -38,6 +38,7 @@ class WebConfigTest {
     }
 
     @Test
+    @DisplayName("Test config cors")
     void whenConfigCorsMustExecuteTheMethodAddMapping() {
         var corsRegistration = Mockito.mock(CorsRegistration.class);
         when(corsRegistry.addMapping(anyString()).allowedMethods(anyString()).allowedOrigins(anyString()))
@@ -49,6 +50,7 @@ class WebConfigTest {
     }
 
     @Test
+    @DisplayName("Test register interceptors")
     void whenToRegisterInterceptorsMustExecuteMethodAddInterceptor() {
         var interceptorRegistration = Mockito.mock(InterceptorRegistration.class);
         when(interceptorRegistry.addInterceptor(any())).thenReturn(interceptorRegistration);

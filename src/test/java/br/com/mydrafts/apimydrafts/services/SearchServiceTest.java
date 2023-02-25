@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Search Service")
+@DisplayName("Tests for SearchService")
 class SearchServiceTest {
 
     private SearchService service;
@@ -34,7 +34,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search movie by name")
     void searchMovie() {
-        when(proxy.searchMovie(any(String.class))).thenReturn(SearchFixture.responseSearchMovie());
+        when(proxy.searchMovie("Shang-Chi")).thenReturn(SearchFixture.responseSearchMovie());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.MOVIE, "Shang-Chi");
 
@@ -47,7 +47,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search tv show by name")
      void searchTV() {
-        when(proxy.searchTV(any(String.class))).thenReturn(SearchFixture.responseSearchTV());
+        when(proxy.searchTV("What")).thenReturn(SearchFixture.responseSearchTV());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(0, 10), Media.TV, "What");
 
@@ -60,7 +60,7 @@ class SearchServiceTest {
     @Test
     @DisplayName("Search content empty")
     void searchEmpty() {
-        when(proxy.searchTV(any(String.class))).thenReturn(SearchFixture.responseSearchTV());
+        when(proxy.searchTV("What")).thenReturn(SearchFixture.responseSearchTV());
 
         Page<ResultDTO> page = service.searchTMDB(PageRequest.of(5, 20), Media.TV, "What");
 

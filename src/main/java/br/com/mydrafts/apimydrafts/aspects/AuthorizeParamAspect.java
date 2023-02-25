@@ -9,6 +9,8 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.USER_UNAUTHORIZED;
+
 @Aspect
 @Component
 @AllArgsConstructor
@@ -22,10 +24,18 @@ public class AuthorizeParamAspect {
             var id = jwtService.getIdByToken();
             var param = joinPoint.getArgs()[0];
             if (!param.equals(id)) {
-                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+                throw new BusinessException(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                    USER_UNAUTHORIZED
+                );
             }
         } catch (Exception e) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 

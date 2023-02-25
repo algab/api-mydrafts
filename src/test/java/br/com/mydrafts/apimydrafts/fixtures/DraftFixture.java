@@ -7,6 +7,11 @@ import br.com.mydrafts.apimydrafts.dto.DraftDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
 import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
 import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.Collections;
 
 public final class DraftFixture {
 
@@ -47,6 +52,25 @@ public final class DraftFixture {
             .rating(5)
             .production(production)
             .build();
+    }
+
+    public static Page<DraftDocument> getPageDraftDocument() {
+        ProductionDocument production = ProductionFixture.getProductionMovie();
+        return new PageImpl<>(
+            Collections.singletonList(DraftFixture.getDraft(production)),
+            PageRequest.of(0, 10),
+            1
+        );
+    }
+
+    public static Page<DraftDTO> getPageDraftDTO() {
+        ProductionDTO production = ProductionFixture.getProductionMovieDTO();
+        DraftDTO draft = DraftFixture.getDraftDTO(production);
+        return new PageImpl<>(
+            Collections.singletonList(draft),
+            PageRequest.of(0, 10),
+            1
+        );
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.mydrafts.apimydrafts.services;
 
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.fixtures.MediaFixture;
 import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
 import br.com.mydrafts.apimydrafts.clients.TMDBProxy;
@@ -19,11 +20,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Production Service")
+@DisplayName("Tests for ProductionService")
 class ProductionServiceTest {
 
     private ProductionService service;
@@ -44,70 +44,63 @@ class ProductionServiceTest {
     @Test
     @DisplayName("Service mount data production movie")
     void mountProductionMovieShouldReturnSuccessful() {
-        when(proxy.getMovie(anyInt())).thenReturn(MediaFixture.movie());
-        when(proxy.getMovieCredits(anyInt())).thenReturn(MediaFixture.credits());
-        when(productionRepository.save(any())).thenReturn(getProductionMovie());
+        ProductionDocument document = ProductionFixture.getProductionMovie();
+        when(proxy.getMovie(10)).thenReturn(MediaFixture.movie());
+        when(proxy.getMovieCredits(10)).thenReturn(MediaFixture.credits());
+        when(productionRepository.save(any(ProductionDocument.class))).thenReturn(document);
 
         ProductionDocument production = service.mountProduction(10, Media.MOVIE);
+        MovieResponseDTO movie = (MovieResponseDTO) production.getData();
 
-        assertThat(getProductionMovie().getData().getId()).isEqualTo(production.getData().getId());
+        assertThat(movie.getId()).isEqualTo(document.getData().getId());
+        assertThat(movie.getCrew()).isNotEmpty();
     }
 
     @Test
     @DisplayName("Service mount data production tv with season")
     void mountProductionTVSeasonShouldReturnSuccessful() {
-        when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
-        when(productionRepository.save(any())).thenReturn(getProductionTV());
+        ProductionDocument document = ProductionFixture.getProductionTV();
+        when(proxy.getTV(10)).thenReturn(MediaFixture.tv());
+        when(productionRepository.save(any(ProductionDocument.class))).thenReturn(document);
 
         ProductionDocument production = service.mountProduction(10, Media.TV);
 
-        assertThat(production.getData().getId()).isEqualTo(getProductionTV().getData().getId());
+        assertThat(production.getData().getId()).isEqualTo(document.getData().getId());
     }
 
     @Test
     @DisplayName("Service mount data production tv without season")
     void mountProductionTVShouldReturnSuccessful() {
-        when(proxy.getTV(anyInt())).thenReturn(MediaFixture.tv());
-        when(productionRepository.save(any())).thenReturn(getProductionTV());
+        ProductionDocument document = ProductionFixture.getProductionTV();
+        when(proxy.getTV(10)).thenReturn(MediaFixture.tv());
+        when(productionRepository.save(any(ProductionDocument.class))).thenReturn(document);
 
         ProductionDocument production = service.mountProduction(10, Media.TV);
 
-        assertThat(getProductionTV().getData().getId()).isEqualTo(production.getData().getId());
+        assertThat(production.getData().getId()).isEqualTo(document.getData().getId());
     }
 
     @Test
     @DisplayName("Service search by tmdb id")
     void searchByTmdbIDShouldReturnSuccessful() {
-        ProductionDocument productionMovie = ProductionFixture.getProductionMovie();
-        when(productionRepository.findByTmdbIDAndMedia(anyInt(), any()))
-            .thenReturn(Optional.of(productionMovie));
+        ProductionDocument document = ProductionFixture.getProductionMovie();
+        when(productionRepository.findByTmdbIDAndMedia(10, Media.MOVIE))
+            .thenReturn(Optional.of(document));
 
         Optional<ProductionDocument> production = service.searchProduction(10, Media.MOVIE);
 
         assertThat(production).isPresent();
-        assertThat(production.get().getMedia()).isEqualTo(productionMovie.getMedia());
+        assertThat(production.get().getMedia()).isEqualTo(document.getMedia());
     }
 
     @Test
     @DisplayName("Service search by tmdb id not found")
     void searchByTmdbIDShouldReturnNotFound() {
-        when(productionRepository.findByTmdbIDAndMedia(anyInt(), any())).thenReturn(Optional.empty());
+        when(productionRepository.findByTmdbIDAndMedia(10, Media.TV)).thenReturn(Optional.empty());
 
         Optional<ProductionDocument> production = service.searchProduction(10, Media.TV);
 
         assertThat(production).isEmpty();
-    }
-
-    private ProductionDocument getProductionMovie() {
-        ProductionDocument production = ProductionFixture.getProductionMovie();
-        production.setData(MediaFixture.getMovie());
-        return production;
-    }
-
-    private ProductionDocument getProductionTV() {
-        ProductionDocument production = ProductionFixture.getProductionTV();
-        production.setData(MediaFixture.getTV());
-        return production;
     }
 
 }

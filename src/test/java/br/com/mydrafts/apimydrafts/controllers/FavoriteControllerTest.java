@@ -1,5 +1,6 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
+import br.com.mydrafts.apimydrafts.dto.FavoriteFormDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.services.FavoriteService;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
@@ -14,14 +15,13 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Favorite Controller")
+@DisplayName("Tests for FavoriteController")
 class FavoriteControllerTest {
 
     private MockMvc mockMvc;
@@ -43,20 +43,23 @@ class FavoriteControllerTest {
     @Test
     @DisplayName("Controller save favorite")
     void saveFavoriteShouldReturnSuccessful() throws Exception {
-        when(this.service.save(any())).thenReturn(FavoriteFixture.getFavoriteDTO());
+        FavoriteFormDTO form = FavoriteFixture.getFavoriteForm();
+        when(this.service.save(form)).thenReturn(FavoriteFixture.getFavoriteDTO());
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_FAVORITE)
-            .content(gson.toJson(FavoriteFixture.getFavoriteForm()))
+            .content(gson.toJson(form))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isCreated());
+        mockMvc.perform(request)
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.production").isNotEmpty());
     }
 
     @Test
     @DisplayName("Controller delete favorite")
     void deleteFavoriteShouldReturnSuccessful() throws Exception {
-        doNothing().when(this.service).delete(anyString());
+        doNothing().when(this.service).delete("6158fb48b7179927e035ae7c");
 
         RequestBuilder request = MockMvcRequestBuilders.delete(
             String.format("%s/6158fb48b7179927e035ae7c", PATH_FAVORITE)

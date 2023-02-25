@@ -4,6 +4,7 @@ import br.com.mydrafts.apimydrafts.exceptions.BusinessException;
 import br.com.mydrafts.apimydrafts.services.JWTService;
 import org.aspectj.lang.JoinPoint;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Tests for AuthorizeParamAspect")
 class AuthorizeParamAspectTest {
 
     private AuthorizeParamAspect authorizeParamAspect;
@@ -30,16 +32,19 @@ class AuthorizeParamAspectTest {
     }
 
     @Test
+    @DisplayName("Validate request parameter")
     void validateParamShouldReturnSuccessful() {
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[] {"61586ad5362766670067edd5"});
 
         authorizeParamAspect.authorizeParam(joinPoint);
 
+        verify(joinPoint, times(1)).getArgs();
         verify(jwtService, times(1)).getIdByToken();
     }
 
     @Test
+    @DisplayName("Validate request parameter different")
     void whenTheValuesIsDifferentItShouldReturnException() {
         when(jwtService.getIdByToken()).thenReturn("61586ad5362766670067edd5");
         when(joinPoint.getArgs()).thenReturn(new Object[] {"61586ad5362766670067edd6"});
@@ -49,7 +54,8 @@ class AuthorizeParamAspectTest {
     }
 
     @Test
-    void whenTheRequestTokenIsNullItShouldReturnException() throws NoSuchMethodException {
+    @DisplayName("Validate the request when the token is null")
+    void whenTheRequestTokenIsNullItShouldReturnException() {
         when(jwtService.getIdByToken()).thenReturn(null);
         when(joinPoint.getArgs()).thenReturn(new Object[] {"61586ad5362766670067edd5"});
 

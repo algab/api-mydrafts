@@ -134,6 +134,7 @@
 						<exclude>**/dto/**</exclude>
 						<exclude>**/documents/*</exclude>
 						<exclude>**/serializer/*</exclude>
+						<exclude>**/MyDraftsApplication.class</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

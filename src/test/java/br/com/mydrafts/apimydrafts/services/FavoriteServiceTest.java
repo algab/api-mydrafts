@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Favorite Service")
+@DisplayName("Tests for FavoriteService")
 class FavoriteServiceTest {
 
     private FavoriteService service;

@@ -1,14 +1,11 @@
 package br.com.mydrafts.apimydrafts.controllers;
 
-import br.com.mydrafts.apimydrafts.dto.DraftDTO;
-import br.com.mydrafts.apimydrafts.dto.FavoriteDTO;
-import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
+import br.com.mydrafts.apimydrafts.dto.UserDTO;
 import br.com.mydrafts.apimydrafts.dto.UserFormDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
-import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
-import br.com.mydrafts.apimydrafts.services.UserService;
 import br.com.mydrafts.apimydrafts.fixtures.DraftFixture;
 import br.com.mydrafts.apimydrafts.fixtures.FavoriteFixture;
+import br.com.mydrafts.apimydrafts.services.UserService;
 import br.com.mydrafts.apimydrafts.fixtures.UserFixture;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
@@ -27,16 +22,13 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Collections;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for User Controller")
+@DisplayName("Tests for UserController")
 class UserControllerTest {
 
     private MockMvc mockMvc;
@@ -47,6 +39,7 @@ class UserControllerTest {
     private static final Gson gson = new Gson();
 
     private static final String PATH_USER = "/v1/users";
+    private static final String USER_ID = "61586ad5362766670067edd5";
 
     @BeforeEach
     void setup() {
@@ -59,14 +52,20 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller save user")
     void saveUserShouldReturnSuccessful() throws Exception {
-        when(this.service.save(UserFixture.getUserForm())).thenReturn(UserFixture.getUserDTO());
+        UserFormDTO form = UserFixture.getUserForm();
+        UserDTO user = UserFixture.getUserDTO();
+        when(this.service.save(form)).thenReturn(user);
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_USER)
-            .content(gson.toJson(UserFixture.getUserForm()))
+            .content(gson.toJson(form))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isCreated());
+        mockMvc.perform(request)
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").value(user.getId()))
+            .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+            .andExpect(jsonPath("$.lastName").value(user.getLastName()));
     }
 
     @Test
@@ -83,72 +82,69 @@ class UserControllerTest {
     @Test
     @DisplayName("Controller search user by id")
     void searchUserShouldReturnSuccessful() throws Exception {
-        when(this.service.search(anyString())).thenReturn(UserFixture.getUserDTO());
+        UserDTO user = UserFixture.getUserDTO();
+        when(this.service.search(USER_ID)).thenReturn(user);
 
-        RequestBuilder request = MockMvcRequestBuilders.get(
-            String.format("%s/%s", PATH_USER, UserFixture.getUser().getId())
-        );
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_USER, USER_ID));
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(user.getId()))
+            .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+            .andExpect(jsonPath("$.lastName").value(user.getLastName()));
     }
 
     @Test
     @DisplayName("Controller get drafts by user")
     void getDraftsByUserShouldReturnSuccessful() throws Exception {
-        ProductionDTO production = ProductionFixture.getProductionMovieDTO();
-        DraftDTO draft = DraftFixture.getDraftDTO(production);
-        Page<DraftDTO> drafts = new PageImpl<>(
-            Collections.singletonList(draft),
-            PageRequest.of(0, 10),
-            1
-        );
-        when(this.service.getDrafts(any(), anyString())).thenReturn(drafts);
+        when(this.service.getDrafts(PageRequest.of(0, 10), USER_ID))
+            .thenReturn(DraftFixture.getPageDraftDTO());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(
-            String.format("%s/%s/drafts", PATH_USER, UserFixture.getUser().getId())
-        );
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/drafts", PATH_USER, USER_ID));
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     @DisplayName("Controller get favorites by user")
     void getFavoritesByUserShouldReturnSuccessful() throws Exception {
-        Page<FavoriteDTO> favorites = new PageImpl<>(
-            Collections.singletonList(FavoriteFixture.getFavoriteDTO()),
-            PageRequest.of(0, 10),
-            1
-        );
-        when(this.service.getFavorites(any(), anyString())).thenReturn(favorites);
+        when(this.service.getFavorites(PageRequest.of(0, 10), USER_ID))
+            .thenReturn(FavoriteFixture.getPageFavoriteDTO());
 
-        RequestBuilder request = MockMvcRequestBuilders.get(
-            String.format("%s/%s/favorites", PATH_USER, UserFixture.getUser().getId())
-        );
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s/favorites", PATH_USER, USER_ID));
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content").isArray());
     }
 
     @Test
     @DisplayName("Controller update user by id")
     void updateUserShouldReturnSuccessful() throws Exception {
-        when(this.service.update(anyString(), any())).thenReturn(UserFixture.getUserDTO());
+        UserFormDTO form = UserFixture.getUserForm();
+        UserDTO user = UserFixture.getUserDTO();
+        when(this.service.update(USER_ID, form)).thenReturn(user);
 
-        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, UserFixture.getUser().getId()))
-            .content(gson.toJson(UserFixture.getUserForm()))
+        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_USER, USER_ID))
+            .content(gson.toJson(form))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(user.getId()))
+            .andExpect(jsonPath("$.firstName").value(user.getFirstName()))
+            .andExpect(jsonPath("$.lastName").value(user.getLastName()));
     }
 
     @Test
     @DisplayName("Controller delete user by id")
     void deleteUserShouldReturnSuccessful() throws Exception {
-        doNothing().when(this.service).delete(anyString());
+        doNothing().when(this.service).delete(USER_ID);
 
-        RequestBuilder request = MockMvcRequestBuilders.delete(
-            String.format("%s/%s", PATH_USER, UserFixture.getUser().getId())
-        );
+        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_USER, USER_ID));
 
         mockMvc.perform(request).andExpect(status().isNoContent());
     }

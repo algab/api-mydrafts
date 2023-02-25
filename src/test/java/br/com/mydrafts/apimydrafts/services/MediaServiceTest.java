@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Media Service")
+@DisplayName("Tests for MediaService")
 class MediaServiceTest {
 
     private MediaService service;
@@ -35,8 +35,8 @@ class MediaServiceTest {
     @Test
     @DisplayName("Get movie successful")
     void getMovie() {
-        when(proxy.getMovie(any(Integer.class))).thenReturn(MediaFixture.movie());
-        when(proxy.getMovieCredits(any(Integer.class))).thenReturn(MediaFixture.credits());
+        when(proxy.getMovie(1)).thenReturn(MediaFixture.movie());
+        when(proxy.getMovieCredits(1)).thenReturn(MediaFixture.credits());
 
         MovieResponseDTO result = service.getMovie(1);
 
@@ -47,7 +47,7 @@ class MediaServiceTest {
     @Test
     @DisplayName("Get tv successful")
     void getTV() {
-        when(proxy.getTV(any(Integer.class))).thenReturn(MediaFixture.tv());
+        when(proxy.getTV(1)).thenReturn(MediaFixture.tv());
 
         TvResponseDTO result = service.getTV(1);
 

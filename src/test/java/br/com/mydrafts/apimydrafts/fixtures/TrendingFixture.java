@@ -3,9 +3,13 @@ package br.com.mydrafts.apimydrafts.fixtures;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.ResultDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class TrendingFixture {
@@ -59,6 +63,12 @@ public final class TrendingFixture {
         return ResponseDTO.builder()
             .results(listTV)
             .build();
+    }
+
+    public static Page<ResultDTO> getPageTrending() {
+        PageRequest page = PageRequest.of(0, 10);
+        List<ResultDTO> contents = Collections.singletonList(TrendingFixture.trending());
+        return new PageImpl<>(contents, page, 1);
     }
 
 }

@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Draft Service")
+@DisplayName("Tests for DraftService")
 class DraftServiceTest {
 
     private DraftService service;
@@ -81,11 +81,26 @@ class DraftServiceTest {
 
     @Test
     @DisplayName("Service save draft production tv with season")
-    void saveDraftProductionTVShouldReturnSuccessful() {
+    void saveDraftProductionTVWithSeasonShouldReturnSuccessful() {
         ProductionDocument production = ProductionFixture.getProductionTV();
         DraftDocument draft = DraftFixture.getDraft(production);
         when(userRepository.findById("61586ad5362766670067edd5")).thenReturn(Optional.of(UserFixture.getUser()));
         when(productionService.searchProduction(550989, Media.TV)).thenReturn(Optional.empty());
+        when(productionService.mountProduction(550989, Media.TV)).thenReturn(production);
+        when(draftRepository.save(any(DraftDocument.class))).thenReturn(draft);
+
+        DraftDTO draftDTO = service.save(DraftFixture.getDraftForm(550989, Media.TV, 1));
+
+        assertThat(draftDTO.getProduction().getMedia()).isEqualTo(draft.getProduction().getMedia());
+    }
+
+    @Test
+    @DisplayName("Service save draft production tv already registered")
+    void saveDraftProductionTVAlreadyRegisteredShouldReturnSuccessful() {
+        ProductionDocument production = ProductionFixture.getProductionTV();
+        DraftDocument draft = DraftFixture.getDraft(production);
+        when(userRepository.findById("61586ad5362766670067edd5")).thenReturn(Optional.of(UserFixture.getUser()));
+        when(productionService.searchProduction(550989, Media.TV)).thenReturn(Optional.of(production));
         when(productionService.mountProduction(550989, Media.TV)).thenReturn(production);
         when(draftRepository.save(any(DraftDocument.class))).thenReturn(draft);
 

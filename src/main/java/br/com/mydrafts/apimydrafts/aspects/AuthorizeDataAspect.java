@@ -13,6 +13,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import static br.com.mydrafts.apimydrafts.constants.MyDraftsMessage.USER_UNAUTHORIZED;
+
 @Aspect
 @Component
 @AllArgsConstructor
@@ -38,7 +40,11 @@ public class AuthorizeDataAspect {
                 validateFavorite(idFavorite, id);
             }
         } catch (Exception e) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 
@@ -47,10 +53,18 @@ public class AuthorizeDataAspect {
         if (draft.isPresent()) {
             var idUser = draft.get().getUser().getId();
             if (!idUser.equals(id)) {
-                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+                throw new BusinessException(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                    USER_UNAUTHORIZED
+                );
             }
         } else {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 
@@ -59,10 +73,18 @@ public class AuthorizeDataAspect {
         if (favorite.isPresent()) {
             var idUser = favorite.get().getUser().getId();
             if (!idUser.equals(id)) {
-                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+                throw new BusinessException(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                    USER_UNAUTHORIZED
+                );
             }
         } else {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                USER_UNAUTHORIZED
+            );
         }
     }
 

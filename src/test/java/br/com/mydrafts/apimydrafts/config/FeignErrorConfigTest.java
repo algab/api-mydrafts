@@ -16,6 +16,7 @@ class FeignErrorConfigTest {
     private final FeignErrorConfig feignError = new FeignErrorConfig();
 
     @Test
+    @DisplayName("Test error feign")
     void decodeFeignShouldDecodeResponse() {
         Request request = Request.create(Request.HttpMethod.GET, "/test", new HashMap<>(), null, null, null);
         Response response = Response.builder()

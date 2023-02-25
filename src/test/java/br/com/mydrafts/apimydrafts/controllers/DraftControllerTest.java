@@ -2,6 +2,8 @@ package br.com.mydrafts.apimydrafts.controllers;
 
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.dto.DraftDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftFormDTO;
+import br.com.mydrafts.apimydrafts.dto.DraftUpdateFormDTO;
 import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
 import br.com.mydrafts.apimydrafts.exceptions.handler.RestExceptionHandler;
 import br.com.mydrafts.apimydrafts.fixtures.ProductionFixture;
@@ -18,13 +20,12 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Draft Controller")
+@DisplayName("Tests for DraftController")
 class DraftControllerTest {
 
     private MockMvc mockMvc;
@@ -35,6 +36,7 @@ class DraftControllerTest {
     private static final Gson gson = new Gson();
 
     private static final String PATH_DRAFT = "/v1/drafts";
+    private static final String DRAFT_ID = "6158fb48b7179927e035ae7c";
 
     @BeforeEach
     void setup() {
@@ -46,49 +48,62 @@ class DraftControllerTest {
     @Test
     @DisplayName("Controller save draft")
     void saveDraftShouldReturnSuccessful() throws Exception {
+        DraftFormDTO form = DraftFixture.getDraftForm(550988, Media.MOVIE, null);
         ProductionDTO production = ProductionFixture.getProductionMovieDTO();
         DraftDTO draft = DraftFixture.getDraftDTO(production);
-        when(this.service.save(any())).thenReturn(draft);
+        when(this.service.save(form)).thenReturn(draft);
 
         RequestBuilder request = MockMvcRequestBuilders.post(PATH_DRAFT)
-            .content(gson.toJson(DraftFixture.getDraftForm(550988, Media.MOVIE, null)))
+            .content(gson.toJson(form))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isCreated());
+        mockMvc.perform(request)
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").value(draft.getId()))
+            .andExpect(jsonPath("$.production").isNotEmpty());
     }
 
     @Test
     @DisplayName("Controller search draft by id")
     void searchDraftShouldReturnSuccessful() throws Exception {
         ProductionDTO production = ProductionFixture.getProductionMovieDTO();
-        when(this.service.searchDraft(anyString())).thenReturn(DraftFixture.getDraftDTO(production));
+        DraftDTO draft = DraftFixture.getDraftDTO(production);
+        when(this.service.searchDraft(DRAFT_ID)).thenReturn(draft);
 
-        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT));
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%s", PATH_DRAFT, DRAFT_ID));
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(draft.getId()))
+            .andExpect(jsonPath("$.production.id").value(production.getId()));
     }
 
     @Test
     @DisplayName("Controller update draft")
     void updateDraftShouldReturnSuccessful() throws Exception {
+        DraftUpdateFormDTO draftUpdate = DraftFixture.getDraftUpdateForm(null);
         ProductionDTO production = ProductionFixture.getProductionMovieDTO();
-        when(this.service.updateDraft(anyString(), any())).thenReturn(DraftFixture.getDraftDTO(production));
+        DraftDTO draft = DraftFixture.getDraftDTO(production);
+        when(this.service.updateDraft(DRAFT_ID, draftUpdate)).thenReturn(draft);
 
-        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT))
-            .content(gson.toJson(DraftFixture.getDraftUpdateForm(null)))
+        RequestBuilder request = MockMvcRequestBuilders.put(String.format("%s/%s", PATH_DRAFT, DRAFT_ID))
+            .content(gson.toJson(draftUpdate))
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(draft.getId()))
+            .andExpect(jsonPath("$.production").isNotEmpty());
     }
 
     @Test
     @DisplayName("Controller delete draft by id")
     void deleteDraftShouldReturnSuccessful() throws Exception {
-        doNothing().when(this.service).deleteDraft(anyString());
+        doNothing().when(this.service).deleteDraft(DRAFT_ID);
 
-        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/6158fb48b7179927e035ae7c", PATH_DRAFT));
+        RequestBuilder request = MockMvcRequestBuilders.delete(String.format("%s/%s", PATH_DRAFT, DRAFT_ID));
 
         mockMvc.perform(request).andExpect(status().isNoContent());
     }

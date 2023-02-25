@@ -10,6 +10,7 @@ import br.com.mydrafts.apimydrafts.services.JWTService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Tests for AuthorizeBodyAspect")
 class AuthorizeBodyAspectTest {
 
     private AuthorizeBodyAspect authorizeBodyAspect;
@@ -42,6 +44,7 @@ class AuthorizeBodyAspectTest {
     }
 
     @Test
+    @DisplayName("Validate body draft")
     void validateBodyDraftShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = DraftController.class.getDeclaredMethod("save", DraftFormDTO.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
@@ -51,10 +54,12 @@ class AuthorizeBodyAspectTest {
 
         authorizeBodyAspect.authorizeBody(joinPoint);
 
+        verify(joinPoint, times(1)).getArgs();
         verify(jwtService, times(1)).getIdByToken();
     }
 
     @Test
+    @DisplayName("Validate body favorite")
     void validateBodyFavoriteShouldReturnSuccessful() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("save", FavoriteFormDTO.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
@@ -64,10 +69,12 @@ class AuthorizeBodyAspectTest {
 
         authorizeBodyAspect.authorizeBody(joinPoint);
 
+        verify(joinPoint, times(1)).getArgs();
         verify(jwtService, times(1)).getIdByToken();
     }
 
     @Test
+    @DisplayName("Validate request when body invalid")
     void whenBodyIsInvalidShouldReturnException() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("save", FavoriteFormDTO.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);
@@ -80,6 +87,7 @@ class AuthorizeBodyAspectTest {
     }
 
     @Test
+    @DisplayName("Validate the request when the token is null")
     void whenTheRequestTokenIsNullItShouldReturnException() throws NoSuchMethodException {
         Method method = FavoriteController.class.getDeclaredMethod("save", FavoriteFormDTO.class);
         when(joinPoint.getSignature()).thenReturn(methodSignature);

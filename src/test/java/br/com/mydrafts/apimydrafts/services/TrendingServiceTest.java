@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
-@DisplayName("Tests for Trending Service")
+@DisplayName("Tests for TrendingService")
 class TrendingServiceTest {
 
     private TrendingService service;

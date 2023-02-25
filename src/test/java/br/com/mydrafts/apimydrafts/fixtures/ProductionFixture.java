@@ -3,6 +3,7 @@ package br.com.mydrafts.apimydrafts.fixtures;
 import br.com.mydrafts.apimydrafts.constants.Media;
 import br.com.mydrafts.apimydrafts.documents.ProductionDocument;
 import br.com.mydrafts.apimydrafts.dto.ProductionDTO;
+import br.com.mydrafts.apimydrafts.dto.tmdb.MovieResponseDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.SeasonDTO;
 import br.com.mydrafts.apimydrafts.dto.tmdb.TvResponseDTO;
 
@@ -15,6 +16,7 @@ public final class ProductionFixture {
             .id("6158fb48b7179927e035ae7b")
             .tmdbID(550988)
             .media(Media.MOVIE)
+            .data(movie())
             .build();
     }
 
@@ -35,12 +37,11 @@ public final class ProductionFixture {
             .build();
     }
 
-    public static ProductionDTO getProductionTvDTO() {
-        return ProductionDTO.builder()
-            .id("6158fb48b7179927e035ae7b")
-            .tmdbID(550989)
-            .media(Media.TV)
-            .data(tv())
+    private static MovieResponseDTO movie() {
+        return MovieResponseDTO.builder()
+            .id(MediaFixture.getMovie().getId())
+            .title(MediaFixture.getMovie().getTitle())
+            .crew(MediaFixture.getMovie().getCrew())
             .build();
     }
 

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,36 +29,40 @@ class TMDBProxyTest {
 
     private static final String NAME_MOVIE = "Shang-Chi";
     private static final String NAME_TV_SHOW = "What If";
+    private static final String API_KEY = "key";
+    private static final String LANGUAGE = "pt-BR";
 
     @BeforeEach
     void setup() {
         tmdbProxy = new TMDBProxy(tmdbClient);
+        ReflectionTestUtils.setField(tmdbProxy, "apiKey", API_KEY);
+        ReflectionTestUtils.setField(tmdbProxy, "language", LANGUAGE);
     }
 
     @Test
     @DisplayName("Trending movie successful")
     void trendingMovieSuccessful() {
-        when(tmdbClient.trendingMovie(any(), any())).thenReturn(TrendingFixture.responseTrendingMovie());
+        when(tmdbClient.trendingMovie(API_KEY, LANGUAGE)).thenReturn(TrendingFixture.responseTrendingMovie());
 
         ResponseDTO trendingMovie = tmdbProxy.trendingMovie();
 
-        assertThat(trendingMovie.getResults()).isNotEmpty();
+        assertThat(trendingMovie.getResults()).hasSize(TrendingFixture.responseTrendingMovie().getResults().size());
     }
 
     @Test
     @DisplayName("Trending tv successful")
     void trendingTVSuccessful() {
-        when(tmdbClient.trendingTv(any(), any())).thenReturn(TrendingFixture.responseTrendingTV());
+        when(tmdbClient.trendingTv(API_KEY, LANGUAGE)).thenReturn(TrendingFixture.responseTrendingTV());
 
         ResponseDTO trendingTV = tmdbProxy.trendingTV();
 
-        assertThat(trendingTV.getResults()).isNotEmpty();
+        assertThat(trendingTV.getResults()).hasSize(TrendingFixture.responseTrendingTV().getResults().size());
     }
 
     @Test
     @DisplayName("Search movie successful")
     void searchMovieSuccessful() {
-        when(tmdbClient.searchMovie(any(), any(), anyString())).thenReturn(SearchFixture.responseSearchMovie());
+        when(tmdbClient.searchMovie(API_KEY, LANGUAGE, NAME_MOVIE)).thenReturn(SearchFixture.responseSearchMovie());
 
         ResponseDTO searchMovie = tmdbProxy.searchMovie(NAME_MOVIE);
 
@@ -67,7 +72,7 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Search tv successful")
     void searchTVSuccessful() {
-        when(tmdbClient.searchTv(any(), any(), anyString())).thenReturn(SearchFixture.responseSearchTV());
+        when(tmdbClient.searchTv(API_KEY, LANGUAGE, NAME_TV_SHOW)).thenReturn(SearchFixture.responseSearchTV());
 
         ResponseDTO searchTV = tmdbProxy.searchTV(NAME_TV_SHOW);
 
@@ -77,7 +82,7 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Get movie successful")
     void getMovieSuccessful() {
-        when(tmdbClient.movie(anyInt(), any(), any())).thenReturn(MediaFixture.movie());
+        when(tmdbClient.movie(1, API_KEY, LANGUAGE)).thenReturn(MediaFixture.movie());
 
         MovieDTO movie = tmdbProxy.getMovie(1);
 
@@ -88,17 +93,18 @@ class TMDBProxyTest {
     @Test
     @DisplayName("Get movie credits successful")
     void getMovieCreditsSuccessful() {
-        when(tmdbClient.movieCredits(anyInt(), any(), any())).thenReturn(MediaFixture.credits());
+        when(tmdbClient.movieCredits(1, API_KEY, LANGUAGE)).thenReturn(MediaFixture.credits());
 
         CreditsDTO credits = tmdbProxy.getMovieCredits(1);
 
-        assertThat(credits.getCrew()).isNotEmpty();
+        assertThat(credits.getId()).isEqualTo(MediaFixture.credits().getId());
+        assertThat(credits.getCrew()).hasSize(3);
     }
 
     @Test
     @DisplayName("Get tv successful")
     void getTVSuccessful() {
-        when(tmdbClient.tv(anyInt(), any(), any())).thenReturn(MediaFixture.tv());
+        when(tmdbClient.tv(1, API_KEY, LANGUAGE)).thenReturn(MediaFixture.tv());
 
         TvDTO tv = tmdbProxy.getTV(1);
 
