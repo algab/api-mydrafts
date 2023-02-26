@@ -40,7 +40,8 @@ public class JWTServiceImpl implements JWTService {
     @Override
     public String generateToken(UserDTO user) {
         SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-        return jwtBuilder.setId(user.getId()).setSubject(String.format("%s %s", user.getFirstName(), user.getLastName()))
+        return jwtBuilder.setId(user.getId())
+            .setSubject(String.format("%s %s", user.getFirstName(), user.getLastName()))
             .setIssuedAt(new Date())
             .setExpiration(Date.from(LocalDateTime.now().plusDays(1L).atZone(ZoneId.systemDefault()).toInstant()))
             .signWith(key, SignatureAlgorithm.HS256)

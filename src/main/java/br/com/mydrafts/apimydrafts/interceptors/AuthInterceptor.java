@@ -34,10 +34,18 @@ public class AuthInterceptor implements HandlerInterceptor {
                 if (nonNull(authorization)) {
                     return jwtService.validateToken();
                 }
-                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+                throw new BusinessException(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                    HttpStatus.UNAUTHORIZED.toString()
+                );
             }
         } catch (Exception e) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.toString(), HttpStatus.UNAUTHORIZED.toString());
+            throw new BusinessException(
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                HttpStatus.UNAUTHORIZED.toString()
+            );
         }
     }
 
